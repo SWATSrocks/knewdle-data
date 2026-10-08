@@ -39,7 +39,7 @@ MAX_LINE = 160
 
 
 # Bump when the rules change, so places judged "none" under older rules get re-checked.
-RULES_VERSION = 3
+RULES_VERSION = 4
 
 # Named ramen broths. CLASSIC ones are needed to count a bowl; the others only count as extra choices.
 CLASSIC_BROTHS = {
@@ -126,7 +126,10 @@ def _dish_key(line: str) -> str:
     return re.sub(r"\s+", " ", key).strip()[:60]
 
 
-def classify(text: str) -> Verdict:
+NOODLE_NAME = re.compile(r"(?<![a-z])(?:ramen|noodle|broth|menya|men-ya|soba|udon|tsukemen|tonkotsu|ラーメン)", re.I)
+
+
+def classify(text: str, name: str = "") -> Verdict:
     lines = _lines(text)
     priced = sum(1 for l in lines if PRICE.search(l))
     dishes: dict[str, str] = {}
@@ -145,7 +148,9 @@ def classify(text: str) -> Verdict:
     n = len(dishes)
     size = max(priced, n)
     # "Ramen-focused" needs a menu we could actually size (8+ priced items) where ramen is a real share.
-    if n >= 5 and priced >= 8 and n / size >= 0.25:
+    focused_menu = priced >= 8 and n / size >= 0.25
+    noodle_place = bool(NOODLE_NAME.search(name or ""))  # e.g. "Bao and Broth", "Menya Hana"
+    if n >= 5 and (focused_menu or noodle_place):
         return Verdict("shop", n, priced, list(dishes.values())[:3], reason="5+ ramen dishes")
     if n >= 2:
         return Verdict("serves", n, priced, list(dishes.values())[:3], reason="2+ ramen dishes")

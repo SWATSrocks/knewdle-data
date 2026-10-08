@@ -164,6 +164,14 @@ def _pdf_with_text(text: str) -> bytes:
 
 
 SITES = {
+    # Site D: homepage -> /menus/ page -> PDF (like Cool Fish).
+    "d": {
+        "/robots.txt": (404, "text/plain", b""),
+        "/": (200, "text/html", b"<html><body><a href='/menus/'>View Now</a></body></html>"),
+        "/menus/": (200, "text/html", b"<html><body><h1>Menus</h1><a href='/files/Cool%20Fish%20Menu%20.pdf'>Download PDF</a></body></html>"),
+        "/files/Cool%20Fish%20Menu%20.pdf": (200, "application/pdf", _pdf_with_text(
+            "RAMEN 16.99\nTONKOTSU BROTH, MYOJO RAMEN NOODLES, PORK BELLY, MUSHROOMS,\nNARUTOMAKI, GREEN ONIONS, HARDBOILED EGG, SEAWEED")),
+    },
     # Site A: menu on a linked page, allowed.
     "a": {
         "/robots.txt": (200, "text/plain", b"User-agent: *\nDisallow: /private\n"),
@@ -307,3 +315,25 @@ def test_address_variants():
     from menucheck.crawl import _address_variants
     v = _address_variants("http://coolfishlkn.com/")
     assert v[0] == "http://coolfishlkn.com/" and "https://www.coolfishlkn.com/" in v and "https://coolfishlkn.com/" in v
+
+
+def test_noodle_named_place_is_ramen_focused_even_without_prices():
+    menu = "\n".join(["Tonkotsu Ramen", "Miso Ramen", "Shoyu Ramen", "Shio Ramen", "Spicy Tantanmen", "Pork Bao"])
+    assert classify(menu, "Bao and Broth").kind == "shop"
+    assert classify(menu, "Tokyo Sushi").kind == "serves"
+
+
+def test_website_builder_file_hosts_count_as_own_files():
+    from menucheck.crawl import ASSET_HOSTS
+    assert any("media-cdn.getbento.com".endswith(a) for a in ASSET_HOSTS)
+
+
+def test_crawler_follows_menus_page_to_pdf():
+    srv, base = _serve("d")
+    try:
+        r = Crawler("https://example.org/bot", delay=0).read_site(base + "/")
+        assert r.ok and len(r.pages) == 3, [p.url for p in r.pages]
+        v = classify("\n".join(p.text for p in r.pages))
+        assert v.kind == "serves" and v.reason == "1 genuine ramen bowl", v
+    finally:
+        srv.shutdown()

@@ -45,7 +45,8 @@ BLOCKED_HOSTS = (
 ASSET_HOSTS = (
     "squarespace-cdn.com", "static1.squarespace.com", "wixstatic.com", "website-files.com",
     "wp.com", "cdn.shopify.com", "img1.wsimg.com", "godaddysites.com", "weebly.com", "square.site",
-    "cloudfront.net", "amazonaws.com",
+    "cloudfront.net", "amazonaws.com", "getbento.com", "popmenucloud.com", "imgix.net", "ctfassets.net",
+    "googleusercontent.com", "filesusr.com", "website-files.com", "webflow.com", "spotapps.co",
 )
 
 MENU_HINT = re.compile(r"menu|food|dinner|lunch|ramen|noodle|eat|kitchen", re.IGNORECASE)
@@ -185,8 +186,10 @@ class Crawler:
         result = CrawlResult(True, [Page(home.url, home_text)])
         site = _site_key(_host(home.url))
         seen = {home.url}
-        for link in _rank_menu_links(links):
-            if len(result.pages) > MAX_MENU_PAGES or link in seen:
+        queue = _rank_menu_links(links)
+        while queue and len(result.pages) <= MAX_MENU_PAGES:
+            link = queue.pop(0)
+            if link in seen:
                 continue
             seen.add(link)
             h = _host(link)
@@ -201,9 +204,12 @@ class Crawler:
                 continue
             if r is None:
                 continue
-            text, _ = self._page_text(r)
+            text, sub_links = self._page_text(r)
             if text:
                 result.pages.append(Page(r.url, text))
+            # A "Menus" page often just links to the real menu (a PDF or a "Dinner" page): look there next.
+            deeper = [u for u in _rank_menu_links(sub_links) if u not in seen and u not in queue]
+            queue = deeper + queue
         return result
 
 

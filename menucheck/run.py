@@ -90,12 +90,13 @@ def check_group(crawler: Crawler, places: list[dict]) -> list[tuple[dict, dict]]
         rec = {"kind": status, "dishes": 0, "menu": None, "err": site.error}
     else:
         best = None
+        name = places[0]["name"]
         for page in site.pages:
-            v = classify(page.text)
+            v = classify(page.text, name)
             if best is None or v.dishes > best[0].dishes:
                 best = (v, page.url)
         # A menu split across pages: also judge everything together and keep the stronger answer.
-        combined = classify("\n".join(p.text for p in site.pages))
+        combined = classify("\n".join(p.text for p in site.pages), name)
         v, url = best
         if combined.dishes > v.dishes:
             v, url = combined, (url if v.dishes else site.pages[-1].url)
@@ -138,7 +139,8 @@ def main() -> int:
             prev = None  # its website is now on the skip list: re-evaluate (it will be dropped)
         if prev is None or prev.get("website") != c["website"]:
             due.append((0, c))
-        elif prev.get("kind") in ("none", "shop") and prev.get("rv", 1) < RULES_VERSION:
+        elif prev.get("rv", 1) < RULES_VERSION and (
+                prev.get("kind") in ("none", "shop") or (prev.get("kind") == "serves" and prev.get("dishes", 0) >= 5)):
             due.append((1, c))  # judged under older, stricter rules: look again
         elif days_since(prev.get("checked")) >= RECHECK_DAYS.get(prev.get("kind", "error"), 30):
             due.append((2, c))
