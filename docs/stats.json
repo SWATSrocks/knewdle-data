@@ -1,23 +1,23 @@
 {
   "generated": "2026-10-08",
   "overture_release": "2026-09-23.1",
-  "candidates": 109257,
-  "checked_this_run": 15865,
+  "candidates": 47692,
+  "checked_this_run": 29555,
   "results_this_run": {
-    "robots": 5276,
-    "error": 1390,
-    "none": 8553,
-    "platform": 385,
-    "serves": 176,
-    "shop": 85
+    "error": 9692,
+    "robots": 1409,
+    "none": 16052,
+    "serves": 1112,
+    "platform": 946,
+    "shop": 344
   },
   "all_known": {
-    "robots": 5276,
-    "error": 1390,
-    "none": 8553,
-    "platform": 385,
-    "serves": 176,
-    "shop": 85
+    "error": 10190,
+    "none": 21402,
+    "platform": 1129,
+    "serves": 1263,
+    "shop": 428,
+    "robots": 1409
   },
-  "published": 261
+  "published": 1691
 }
