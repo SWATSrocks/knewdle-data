@@ -1,0 +1,2 @@
+# Websites that asked not to be checked. One domain per line, e.g.:
+# example-ramen.com

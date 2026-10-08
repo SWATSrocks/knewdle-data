@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Knewdle NOW menu check</title>
+<style>
+  :root { --broth:#fff4dc; --ink:#2b2118; --yolk:#ffc93c; --chili:#e63946; --muted:#8a7457; }
+  body { margin:0; background:var(--broth); color:var(--ink); font:16px/1.55 system-ui, -apple-system, "Segoe UI", sans-serif; }
+  main { max-width:720px; margin:0 auto; padding:32px 16px 48px; }
+  h1 { font-size:2rem; margin:0 0 4px; }
+  .tag { display:inline-block; background:var(--yolk); border:2px solid var(--ink); border-radius:999px; padding:2px 12px; font-weight:800; font-size:.8rem; }
+  code { background:#fff; border:1px solid #e8d7b0; border-radius:6px; padding:1px 6px; }
+  pre { background:#fff; border:2px solid var(--ink); border-radius:12px; padding:12px; overflow-x:auto; }
+  .muted { color:var(--muted); }
+</style>
+</head>
+<body>
+<main>
+  <span class="tag">KnewdleNOW-MenuCheck</span>
+  <h1>Knewdle NOW menu check</h1>
+  <p>Knewdle NOW is a free app that helps people find ramen near them. Some restaurants serve great ramen
+    without "ramen" in their name, so once in a while we read the menu on a restaurant's <strong>own website</strong>
+    to see whether ramen is on it.</p>
+  <h2>What it does</h2>
+  <ul>
+    <li>Visits only the restaurant's own site (never delivery apps, review sites or social media), at most a few pages, roughly once a month.</li>
+    <li>Always follows <code>robots.txt</code>.</li>
+    <li>Keeps only a fact ("serves ramen", and how many ramen dishes) plus a link to your menu. It never copies menu text, prices or photos.</li>
+    <li>In the app, your restaurant gets a "Ramen on the menu" tag and a link to your own menu.</li>
+  </ul>
+  <h2>Opting out</h2>
+  <p>Add this to your website's <code>robots.txt</code> and the menu check will skip your site:</p>
+  <pre>User-agent: KnewdleNOW-MenuCheck
+Disallow: /</pre>
+  <p>Or email <a href="mailto:info@swats.rocks?subject=Knewdle%20NOW%20menu%20check">info@swats.rocks</a> with your website and we'll add it to the skip list.</p>
+  <p class="muted">Place data from <a href="https://overturemaps.org">Overture Maps Foundation</a> (CDLA-Permissive-2.0).
+    Results: <a href="menu_ramen.json">menu_ramen.json</a> · <a href="stats.json">stats</a></p>
+</main>
+</body>
+</html>

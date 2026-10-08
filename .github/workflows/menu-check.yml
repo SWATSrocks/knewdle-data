@@ -1,0 +1,40 @@
+name: Menu check
+
+# Weekly; each run only re-reads websites that are due (ramen places monthly, others every few months),
+# so after the first few runs it settles into a light monthly rhythm.
+on:
+  schedule:
+    - cron: "23 7 * * 1"     # Mondays 07:23 UTC
+  workflow_dispatch:
+    inputs:
+      max_sites:
+        description: "Max websites to read this run"
+        default: "6000"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: menu-check
+  cancel-in-progress: false
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 330
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -r requirements.txt
+      - name: Check menus
+        run: python -m menucheck.run --max-sites "${{ github.event.inputs.max_sites || '6000' }}"
+      - name: Publish results
+        run: |
+          git config user.name "knewdle-menu-check"
+          git config user.email "actions@users.noreply.github.com"
+          git add state docs
+          git diff --cached --quiet || git commit -m "Menu check $(date -u +%Y-%m-%d)"
+          git push
