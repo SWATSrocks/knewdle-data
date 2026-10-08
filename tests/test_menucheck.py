@@ -131,6 +131,14 @@ def test_blocked_hosts():
     assert is_blocked_host("https://www.facebook.com/kairu")
     assert not is_blocked_host("https://kairusushi.com/menu")
     assert not is_blocked_host("https://example.square.site/")
+    assert is_blocked_host("https://kouunasianeatery.toast.site/order")
+    assert is_blocked_host("https://en.wikipedia.org/wiki/Kura_Sushi")
+
+
+def test_clean_url_drops_tracking():
+    from menucheck.run import clean_url
+    assert clean_url("https://x.com/menu?rwg_token=ABC&utm_source=g&page=2") == "https://x.com/menu?page=2"
+    assert clean_url("https://x.com/menu#dinner") == "https://x.com/menu#dinner"
 
 
 # --- crawler against a tiny local website -------------------------------------------------------

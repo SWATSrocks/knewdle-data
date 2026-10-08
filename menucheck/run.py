@@ -14,6 +14,7 @@ from __future__ import annotations
 import argparse
 import datetime as dt
 import json
+import math
 import sys
 import time
 from collections import defaultdict
@@ -22,7 +23,7 @@ from pathlib import Path
 from urllib.parse import urlparse
 
 from .classify import classify
-from .crawl import Crawler
+from .crawl import Crawler, is_blocked_host
 
 ROOT = Path(__file__).resolve().parent.parent
 STATE = ROOT / "state" / "menu_state.json"
@@ -52,6 +53,19 @@ def load_json(p: Path, default):
 def host_of(url: str) -> str:
     u = url if url.startswith("http") else "https://" + url
     return (urlparse(u).hostname or "").lower().removeprefix("www.")
+
+
+TRACKING = ("rwg_token", "utm_", "fbclid", "gclid", "msclkid", "mc_", "_ga", "y_source")
+
+
+def clean_url(url: str | None) -> str | None:
+    """Drops tracking codes (e.g. Google's rwg_token) from links before they're published."""
+    if not url:
+        return url
+    from urllib.parse import parse_qsl, urlencode, urlsplit, urlunsplit
+    p = urlsplit(url)
+    q = [(k, v) for k, v in parse_qsl(p.query, keep_blank_values=True) if not k.lower().startswith(TRACKING)]
+    return urlunsplit((p.scheme, p.netloc, p.path, urlencode(q), p.fragment))
 
 
 def site_key(url: str) -> str:
@@ -96,6 +110,7 @@ def main() -> int:
     ap.add_argument("--workers", type=int, default=24)
     ap.add_argument("--candidates-limit", type=int, default=None, help="testing: only take N candidates")
     ap.add_argument("--release", default=None, help="Overture release (default: latest)")
+    ap.add_argument("--focus", default="", help="'lat,lon': check places near here first (e.g. to test one city)")
     ap.add_argument("--dry-run", action="store_true", help="don't write files")
     args = ap.parse_args()
 
@@ -118,11 +133,23 @@ def main() -> int:
         if any(h == o or h.endswith("." + o) for o in optout):
             continue
         prev = places_state.get(c["id"])
+        if prev is not None and prev.get("kind") in ("shop", "serves") and is_blocked_host(c["website"]):
+            prev = None  # its website is now on the skip list: re-evaluate (it will be dropped)
         if prev is None or prev.get("website") != c["website"]:
             due.append((0, c))
         elif days_since(prev.get("checked")) >= RECHECK_DAYS.get(prev.get("kind", "error"), 30):
             due.append((1, c))
     due.sort(key=lambda x: (x[0], places_state.get(x[1]["id"], {}).get("checked") or ""))
+    if args.focus.strip():
+        flat, flon = (float(v) for v in args.focus.split(","))
+
+        def miles(c: dict) -> float:
+            dlat = (c["lat"] - flat) * 69.0
+            dlon = (c["lon"] - flon) * 69.0 * math.cos(math.radians(flat))
+            return math.hypot(dlat, dlon)
+
+        due.sort(key=lambda x: miles(x[1]))  # nearest first, everything else after
+        print(f"Focus {flat},{flon}: {sum(1 for _, c in due if miles(c) < 60)} due within 60 miles")
 
     # Places listing the exact same website (e.g. one small chain's site) are read once.
     groups: dict[str, list[dict]] = defaultdict(list)
@@ -164,7 +191,8 @@ def main() -> int:
     published = [
         {
             "id": pid, "n": s["name"], "la": s["lat"], "lo": s["lon"], "a": s.get("address"),
-            "w": s.get("website"), "m": s.get("menu"), "k": s["kind"], "d": s["dishes"], "c": s["checked"],
+            "w": clean_url(s.get("website")), "m": clean_url(s.get("menu")), "k": s["kind"], "d": s["dishes"],
+            "c": s["checked"],
         }
         for pid, s in sorted(places_state.items())
         if s.get("kind") in ("shop", "serves")

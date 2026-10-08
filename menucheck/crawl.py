@@ -37,6 +37,8 @@ BLOCKED_HOSTS = (
     "facebook.com", "fb.com", "instagram.com", "tiktok.com", "twitter.com", "x.com",
     "linktr.ee", "linkin.bio", "google.com", "goo.gl", "g.page", "maps.app.goo.gl",
     "slicelife.com", "foodboss.com", "wanderlog.com", "ezcater.com", "giftly.com",
+    "toast.site", "wikipedia.org", "wikimedia.org", "wikidata.org", "squareup.com", "order.app.hiro.io",
+    "spoton.com", "owner.com", "orderonlinemenus.com", "menusifu.com", "chinesemenuonline.com",
 )
 
 # Website builders often keep menu PDFs/images on these asset hosts; they're still the restaurant's own files.

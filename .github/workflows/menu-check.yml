@@ -10,6 +10,9 @@ on:
       max_sites:
         description: "Max websites to read this run"
         default: "25000"
+      focus:
+        description: "Optional 'lat,lon' to check nearby places first (e.g. 35.23,-80.84 for Charlotte)"
+        default: ""
 
 permissions:
   contents: write
@@ -30,11 +33,13 @@ jobs:
           cache: pip
       - run: pip install -r requirements.txt
       - name: Check menus
-        run: python -m menucheck.run --max-sites "${{ github.event.inputs.max_sites || '25000' }}"
+        run: python -m menucheck.run --max-sites "${{ github.event.inputs.max_sites || '25000' }}" --focus "${{ github.event.inputs.focus || '' }}"
       - name: Publish results
         run: |
           git config user.name "knewdle-menu-check"
           git config user.email "actions@users.noreply.github.com"
           git add state docs
           git diff --cached --quiet || git commit -m "Menu check $(date -u +%Y-%m-%d)"
+          # If anything else was pushed while this ran, keep this run's results on top of it.
+          git pull --rebase -X theirs origin main || true
           git push
