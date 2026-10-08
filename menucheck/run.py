@@ -92,7 +92,7 @@ def check_group(crawler: Crawler, places: list[dict]) -> list[tuple[dict, dict]]
 
 def main() -> int:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--max-sites", type=int, default=6000, help="max websites to read this run")
+    ap.add_argument("--max-sites", type=int, default=25000, help="max websites to read this run")
     ap.add_argument("--workers", type=int, default=24)
     ap.add_argument("--candidates-limit", type=int, default=None, help="testing: only take N candidates")
     ap.add_argument("--release", default=None, help="Overture release (default: latest)")

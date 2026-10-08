@@ -50,8 +50,9 @@ def _category_expr(cols: dict[str, str]) -> str:
     parts = []
     tax = cols.get("taxonomy", "")
     if tax:
+        # Only the place's own category and alternates, not the parent levels: Chinese, Thai and
+        # Vietnamese restaurants all sit under "asian_restaurant" in the hierarchy, and rarely serve ramen.
         parts.append("coalesce(taxonomy.\"primary\", '')")
-        parts.append("coalesce(array_to_string(taxonomy.hierarchy, ' '), '')")
         for alt in ("alternates", "alternate"):
             if re.search(rf"\b{alt}\b", tax):
                 parts.append(f"coalesce(array_to_string(taxonomy.{alt}, ' '), '')")

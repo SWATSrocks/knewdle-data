@@ -96,6 +96,12 @@ class Crawler:
 
     # ---------- robots.txt ----------
 
+    def robots_reachable(self, url: str) -> bool:
+        """False when robots.txt couldn't even be fetched (network trouble), as opposed to a real "no"."""
+        p = urlparse(url)
+        self.allowed(url)
+        return self._robots.get(f"{p.scheme}://{p.netloc}") is not None
+
     def allowed(self, url: str) -> bool:
         p = urlparse(url)
         base = f"{p.scheme}://{p.netloc}"
@@ -154,6 +160,8 @@ class Crawler:
         if is_blocked_host(url):
             return CrawlResult(False, error="third-party platform")
         if not self.allowed(url):
+            if not self.robots_reachable(url):
+                return CrawlResult(False, error="site unreachable")   # try again next month
             return CrawlResult(False, error="robots.txt", blocked_by_robots=True)
         try:
             home = self._get(url, MAX_HTML)

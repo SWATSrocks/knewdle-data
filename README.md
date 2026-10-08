@@ -38,7 +38,7 @@ No servers, no keys, no card.
 7. In the app project's `local.properties`, add:
    `MENU_DATA_URL=https://SWATSrocks.github.io/knewdle-data/menu_ramen.json`
 
-The first few weekly runs work through the backlog (up to 6,000 websites each); after that each run is short.
+The first few weekly runs work through the backlog (up to 25,000 websites each); after that each run is short.
 
 ## Opt-outs
 
