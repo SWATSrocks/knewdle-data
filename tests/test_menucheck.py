@@ -237,3 +237,60 @@ def test_crawler_reads_pdf_menu():
         assert classify(r.pages[1].text).dishes == 2, r.pages[1].text
     finally:
         srv.shutdown()
+
+
+# --- single-bowl rules ---------------------------------------------------------------------------
+
+COOL_FISH_LIKE = """
+POKE BOWLS
+Classic Poke 15.99
+Spicy Tuna Poke 15.99
+RAMEN 16.99
+TONKOTSU BROTH, MYOJO RAMEN NOODLES, PORK BELLY, MUSHROOMS,
+NARUTOMAKI, GREEN ONIONS, HARDBOILED EGG, KIMCHI, SEAWEED
+AND SESAME SEEDS SPICE IT UP WITH OPTIONAL HOT CHILI OIL!
+TACOS
+Fish Tacos 13.99
+"""
+
+BROTH_CHOICE = """
+Sushi Rolls
+California Roll 9
+Spicy Tuna Roll 10
+House Ramen $15
+Choice of broth: Tonkotsu, Shoyu or Spicy Miso. Topped with chashu and egg.
+"""
+
+TWO_BROTHS_OR = """
+Ramen Bowl 16 - tonkotsu or vegan miso broth, noodles
+Gyoza 7
+"""
+
+PLAIN_NOODLE_BOWL = """
+Ramen Bowl $14 with chicken or veggie broth
+Burger $12
+"""
+
+
+def test_single_genuine_bowl_counts():
+    v = classify(COOL_FISH_LIKE)
+    assert v.kind == "serves" and v.dishes == 1 and v.reason == "1 genuine ramen bowl", v
+
+
+def test_one_bowl_with_broth_choices_counts():
+    v = classify(BROTH_CHOICE)
+    assert v.kind == "serves" and v.dishes == 1 and v.broths == 3, v
+
+
+def test_one_bowl_with_two_broths_counts():
+    v = classify(TWO_BROTHS_OR)
+    assert v.kind == "serves" and v.broths >= 2, v
+
+
+def test_generic_noodle_bowl_without_ramen_broth_ignored():
+    v = classify(PLAIN_NOODLE_BOWL)
+    assert v.kind == "none", v
+
+
+def test_short_rib_special_still_ignored():
+    assert classify(ONE_SPECIAL).kind == "none"

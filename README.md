@@ -18,7 +18,8 @@ No servers, no keys, no card.
    - Each restaurant is read at most monthly (ramen places) or every 3–6 months (others).
 3. **Verdict** (`menucheck/classify.py`):
    - **shop**: 5+ ramen dishes making up a real share of the menu.
-   - **serves**: 2+ ramen dishes.
+   - **serves**: 2+ ramen dishes, or one ramen bowl offered with 2+ broth choices, or one genuine
+     ramen bowl (a named broth like tonkotsu/shoyu/miso/shio plus 2+ classic toppings).
    - **none**: 0–1 mentions. "Ramen salad", "ramen burger", one-off specials and "Sacramento" don't count.
 4. **Publish**: `docs/menu_ramen.json` (served by GitHub Pages). Only facts are kept: name, location, website,
    menu link, how many ramen dishes. Never menu text, prices or photos.

@@ -22,7 +22,7 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 from urllib.parse import urlparse
 
-from .classify import classify
+from .classify import RULES_VERSION, classify
 from .crawl import Crawler, is_blocked_host
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -99,8 +99,9 @@ def check_group(crawler: Crawler, places: list[dict]) -> list[tuple[dict, dict]]
         v, url = best
         if combined.dishes > v.dishes:
             v, url = combined, (url if v.dishes else site.pages[-1].url)
-        rec = {"kind": v.kind, "dishes": v.dishes, "menu": url if v.kind != "none" else None, "err": None,
-               "examples": v.examples}
+        rec = {"kind": v.kind, "dishes": v.dishes, "broths": v.broths,
+               "menu": url if v.kind != "none" else None, "err": None,
+               "examples": v.examples, "reason": v.reason, "rv": RULES_VERSION}
     return [(p, rec) for p in places]
 
 
@@ -137,8 +138,10 @@ def main() -> int:
             prev = None  # its website is now on the skip list: re-evaluate (it will be dropped)
         if prev is None or prev.get("website") != c["website"]:
             due.append((0, c))
+        elif prev.get("kind") == "none" and prev.get("rv", 1) < RULES_VERSION:
+            due.append((1, c))  # judged under older, stricter rules: look again
         elif days_since(prev.get("checked")) >= RECHECK_DAYS.get(prev.get("kind", "error"), 30):
-            due.append((1, c))
+            due.append((2, c))
     due.sort(key=lambda x: (x[0], places_state.get(x[1]["id"], {}).get("checked") or ""))
     if args.focus.strip():
         flat, flon = (float(v) for v in args.focus.split(","))
@@ -175,11 +178,11 @@ def main() -> int:
                 examples = rec.get("examples")
                 places_state[place["id"]] = {
                     **{k: place[k] for k in ("name", "lat", "lon", "address", "website")},
-                    **{k: v for k, v in rec.items() if k != "examples"},
+                    **{k: v for k, v in rec.items() if k not in ("examples", "reason")},
                     "checked": today(),
                 }
                 if rec["kind"] in ("shop", "serves"):
-                    print(f"  🍜 {place['name']} ({rec['kind']}, {rec['dishes']} dishes) e.g. {examples}")
+                    print(f"  🍜 {place['name']} ({rec['kind']}: {rec.get('reason')}) e.g. {examples}")
             done += 1
             if done % 250 == 0:
                 print(f"  …{done}/{len(groups)} websites")
@@ -192,6 +195,7 @@ def main() -> int:
         {
             "id": pid, "n": s["name"], "la": s["lat"], "lo": s["lon"], "a": s.get("address"),
             "w": clean_url(s.get("website")), "m": clean_url(s.get("menu")), "k": s["kind"], "d": s["dishes"],
+            **({"b": s["broths"]} if s.get("broths", 0) >= 2 else {}),
             "c": s["checked"],
         }
         for pid, s in sorted(places_state.items())
