@@ -110,7 +110,7 @@ class Crawler:
         if base not in self._robots:
             rp = urllib.robotparser.RobotFileParser()
             try:
-                r = self.session.get(base + "/robots.txt", timeout=TIMEOUT, allow_redirects=True)
+                r = self.session.get(base + "/robots.txt", timeout=(6, TIMEOUT), allow_redirects=True)
                 if r.status_code in (401, 403):
                     rp.disallow_all = True
                 elif r.status_code >= 400:
@@ -126,7 +126,7 @@ class Crawler:
     # ---------- fetching ----------
 
     def _get(self, url: str, limit: int) -> requests.Response | None:
-        r = self.session.get(url, timeout=TIMEOUT, stream=True, allow_redirects=True)
+        r = self.session.get(url, timeout=(6, TIMEOUT), stream=True, allow_redirects=True)
         if r.status_code != 200:
             r.close()
             return None

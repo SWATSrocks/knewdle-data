@@ -33,8 +33,12 @@ jobs:
           cache: pip
       - run: pip install -r requirements.txt
       - name: Check menus
+        # Stops in time for the results to be saved below, even on a very long run.
+        timeout-minutes: 300
+        continue-on-error: true
         run: python -m menucheck.run --max-sites "${{ github.event.inputs.max_sites || '25000' }}" --focus "${{ github.event.inputs.focus || '' }}"
       - name: Publish results
+        if: always()
         run: |
           git config user.name "knewdle-menu-check"
           git config user.email "actions@users.noreply.github.com"

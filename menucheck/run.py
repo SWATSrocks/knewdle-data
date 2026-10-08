@@ -186,7 +186,15 @@ def main() -> int:
             done += 1
             if done % 250 == 0:
                 print(f"  …{done}/{len(groups)} websites")
+            if done % 1000 == 0:
+                # Save progress, so a run stopped by the time limit still keeps what it finished.
+                publish(state, places_state, current, candidates, release, found, args.dry_run, quiet=True)
 
+    publish(state, places_state, current, candidates, release, found, args.dry_run)
+    return 0
+
+
+def publish(state, places_state, current, candidates, release, found, dry_run, quiet=False) -> None:
     # Forget places Overture no longer lists (closed/removed), then publish.
     for pid in list(places_state):
         if pid not in current:
@@ -207,9 +215,10 @@ def main() -> int:
     stats = {"generated": today(), "overture_release": release, "candidates": len(candidates),
              "checked_this_run": sum(found.values()), "results_this_run": dict(found),
              "all_known": dict(kinds), "published": len(published)}
-    print(json.dumps(stats, indent=2))
+    if not quiet:
+        print(json.dumps(stats, indent=2))
 
-    if not args.dry_run:
+    if not dry_run:
         STATE.parent.mkdir(parents=True, exist_ok=True)
         STATE.write_text(json.dumps(state, separators=(",", ":"), ensure_ascii=False))
         OUT.parent.mkdir(parents=True, exist_ok=True)
@@ -220,7 +229,6 @@ def main() -> int:
             "places": published,
         }, separators=(",", ":"), ensure_ascii=False))
         STATS.write_text(json.dumps(stats, indent=2))
-    return 0
 
 
 if __name__ == "__main__":
