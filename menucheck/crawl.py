@@ -161,16 +161,25 @@ class Crawler:
         url = website if website.startswith("http") else "https://" + website
         if is_blocked_host(url):
             return CrawlResult(False, error="third-party platform")
-        if not self.allowed(url):
-            if not self.robots_reachable(url):
-                return CrawlResult(False, error="site unreachable")   # try again next month
-            return CrawlResult(False, error="robots.txt", blocked_by_robots=True)
-        try:
-            home = self._get(url, MAX_HTML)
-        except requests.RequestException as e:
-            return CrawlResult(False, error=type(e).__name__)
+        # Listings often have an old form of the address ("http://name.com"); the live site may only
+        # answer at https:// and/or www. Try the listed address first, then those variants.
+        home = None
+        last_error = "site unreachable"
+        for candidate in _address_variants(url):
+            if not self.allowed(candidate):
+                if self.robots_reachable(candidate):
+                    return CrawlResult(False, error="robots.txt", blocked_by_robots=True)
+                continue
+            try:
+                home = self._get(candidate, MAX_HTML)
+            except requests.RequestException as e:
+                last_error = type(e).__name__
+                continue
+            if home is not None:
+                break
+            last_error = "no homepage"
         if home is None:
-            return CrawlResult(False, error="no homepage")
+            return CrawlResult(False, error=last_error)
 
         home_text, links = self._page_text(home)
         result = CrawlResult(True, [Page(home.url, home_text)])
@@ -196,6 +205,22 @@ class Crawler:
             if text:
                 result.pages.append(Page(r.url, text))
         return result
+
+
+def _address_variants(url: str) -> list[str]:
+    p = urlparse(url)
+    host = (p.hostname or "").lower()
+    bare = host.removeprefix("www.")
+    path = p.path or "/"
+    if p.query:
+        path += "?" + p.query
+    out = [url]
+    for scheme in ("https", "http"):
+        for h in (host, "www." + bare if not host.startswith("www.") else bare):
+            v = f"{scheme}://{h}{path}"
+            if v not in out:
+                out.append(v)
+    return out
 
 
 def _rank_menu_links(links: list[str]) -> list[str]:

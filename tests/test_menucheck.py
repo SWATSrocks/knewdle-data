@@ -49,6 +49,8 @@ Seafood Champon Ramen 17.95 calamari, scallops, shrimp
 
 RAMEN_SHOP = """
 Our Ramen
+Shoyu Ramen Special $16
+Kids Ramen $8
 Tonkotsu Ramen $15
 Spicy Miso Ramen $16
 Shio Ramen $14
@@ -101,7 +103,7 @@ def test_rusans_like_serves_ramen():
 
 def test_dedicated_shop():
     v = classify(RAMEN_SHOP)
-    assert v.kind == "shop" and v.dishes == 6, v
+    assert v.kind == "shop" and v.dishes == 8, v
 
 
 def test_one_special_and_salad_dont_count():
@@ -294,3 +296,14 @@ def test_generic_noodle_bowl_without_ramen_broth_ignored():
 
 def test_short_rib_special_still_ignored():
     assert classify(ONE_SPECIAL).kind == "none"
+
+
+def test_unpriced_menu_is_not_called_ramen_focused():
+    menu = "\n".join(["Tonkotsu Ramen", "Miso Ramen", "Shoyu Ramen", "Shio Ramen", "Spicy Tantanmen", "California Roll"])
+    assert classify(menu).kind == "serves"
+
+
+def test_address_variants():
+    from menucheck.crawl import _address_variants
+    v = _address_variants("http://coolfishlkn.com/")
+    assert v[0] == "http://coolfishlkn.com/" and "https://www.coolfishlkn.com/" in v and "https://coolfishlkn.com/" in v

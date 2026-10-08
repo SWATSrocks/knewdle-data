@@ -99,7 +99,7 @@ def check_group(crawler: Crawler, places: list[dict]) -> list[tuple[dict, dict]]
         v, url = best
         if combined.dishes > v.dishes:
             v, url = combined, (url if v.dishes else site.pages[-1].url)
-        rec = {"kind": v.kind, "dishes": v.dishes, "broths": v.broths,
+        rec = {"kind": v.kind, "dishes": v.dishes, "broths": v.broths, "items": v.menu_items,
                "menu": url if v.kind != "none" else None, "err": None,
                "examples": v.examples, "reason": v.reason, "rv": RULES_VERSION}
     return [(p, rec) for p in places]
@@ -138,7 +138,7 @@ def main() -> int:
             prev = None  # its website is now on the skip list: re-evaluate (it will be dropped)
         if prev is None or prev.get("website") != c["website"]:
             due.append((0, c))
-        elif prev.get("kind") == "none" and prev.get("rv", 1) < RULES_VERSION:
+        elif prev.get("kind") in ("none", "shop") and prev.get("rv", 1) < RULES_VERSION:
             due.append((1, c))  # judged under older, stricter rules: look again
         elif days_since(prev.get("checked")) >= RECHECK_DAYS.get(prev.get("kind", "error"), 30):
             due.append((2, c))

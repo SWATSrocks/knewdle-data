@@ -39,7 +39,7 @@ MAX_LINE = 160
 
 
 # Bump when the rules change, so places judged "none" under older rules get re-checked.
-RULES_VERSION = 2
+RULES_VERSION = 3
 
 # Named ramen broths. CLASSIC ones are needed to count a bowl; the others only count as extra choices.
 CLASSIC_BROTHS = {
@@ -144,7 +144,8 @@ def classify(text: str) -> Verdict:
 
     n = len(dishes)
     size = max(priced, n)
-    if n >= 5 and (size == 0 or n / size >= 0.25):
+    # "Ramen-focused" needs a menu we could actually size (8+ priced items) where ramen is a real share.
+    if n >= 5 and priced >= 8 and n / size >= 0.25:
         return Verdict("shop", n, priced, list(dishes.values())[:3], reason="5+ ramen dishes")
     if n >= 2:
         return Verdict("serves", n, priced, list(dishes.values())[:3], reason="2+ ramen dishes")
