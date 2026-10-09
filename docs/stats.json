@@ -21,12 +21,20 @@
   "published": 2438,
   "more": {
     "generated": "2026-10-09",
-    "published": 136,
+    "published": 349,
     "by_way_found": {
-      "chain": 136
+      "chain": 58,
+      "noodle": 85,
+      "brand": 1,
+      "name": 39,
+      "site": 166
     },
     "names": {
-      "failed": "BinderException: Binder Error: Referenced table \"brand\" not found!\nCandidate tables: \"p\"\n\nLINE 27:                OR brand.wikidata IN ('Q109237427','Q111204601','Q11326388...\n                        "
+      "app": 4975,
+      "noodle": 114,
+      "name": 123,
+      "brand": 3,
+      "site": 216
     },
     "chains": {
       "JINYA Ramen Bar": 57,
@@ -42,16 +50,18 @@
       "Ramen-San": 3,
       "Tsujita LA": 0,
       "Daikokuya": 0,
-      "Shin-Sen-Gumi Hakata Ramen": 13,
       "RAKKAN Ramen": 9,
       "Momosan Ramen": 5,
       "Hinodeya Ramen": 8,
-      "KYURAMEN": 33,
-      "Silverlake Ramen": 0,
+      "KYURAMEN": 34,
+      "Silverlake Ramen": 32,
       "Kinton Ramen": 0,
       "Yoshiharu Ramen": 0,
       "Ichicoro Ramen": 0
+    },
+    "web": {
+      "crt.sh unavailable": 1
     }
   },
-  "more_published": 136
+  "more_published": 349
 }

@@ -1,0 +1,222 @@
+Names: scanning Overture…
+  Overture 2026-09-23.1: {'app': 4975, 'noodle': 114, 'name': 123, 'brand': 3, 'site': 216} (1906s)
+  (names: 1906s)
+{
+  "generated": "2026-10-09",
+  "published": 334,
+  "by_way_found": {
+    "chain": 45,
+    "noodle": 85,
+    "brand": 1,
+    "name": 37,
+    "site": 166
+  },
+  "names": {
+    "app": 4975,
+    "noodle": 114,
+    "name": 123,
+    "brand": 3,
+    "site": 216
+  }
+}
+Chains: reading store locators…
+  JINYA Ramen Bar: 57 US locations (82 pages read)
+  Ramen Kizuki: 16 US locations (1 pages read)
+  Ippudo: 3 US locations (2 pages read)
+  Ichiran: 3 US locations (4 pages read)
+  Hokkaido Ramen Santouka: 4 US locations (1 pages read)
+  Marufuku Ramen: 1 US locations (16 pages read)
+  Mensho: 6 US locations (29 pages read)
+  Ramen Tatsu-ya: 7 US locations (1 pages read)
+  Ramen Danbo: 3 US locations (1 pages read)
+  HiroNori Craft Ramen: 1 US locations (1 pages read)
+  Ramen-San: 3 US locations (1 pages read)
+    Tsujita LA: couldn't read https://www.tsujita-la.com/ (not allowed or unavailable)
+  Tsujita LA: 0 US locations (1 pages read)
+  Daikokuya: 0 US locations (1 pages read)
+  RAKKAN Ramen: 9 US locations (1 pages read)
+  Momosan Ramen: 5 US locations (7 pages read)
+  Hinodeya Ramen: 8 US locations (1 pages read)
+  KYURAMEN: 34 US locations (61 pages read)
+  Silverlake Ramen: 32 US locations (1 pages read)
+  Kinton Ramen: 0 US locations (65 pages read)
+  Yoshiharu Ramen: 0 US locations (1 pages read)
+    Ichicoro Ramen: couldn't read https://www.ichicororamen.com/ (not allowed or unavailable)
+  Ichicoro Ramen: 0 US locations (1 pages read)
+  (chains: 397s)
+{
+  "generated": "2026-10-09",
+  "published": 349,
+  "by_way_found": {
+    "chain": 58,
+    "noodle": 85,
+    "brand": 1,
+    "name": 39,
+    "site": 166
+  },
+  "names": {
+    "app": 4975,
+    "noodle": 114,
+    "name": 123,
+    "brand": 3,
+    "site": 216
+  },
+  "chains": {
+    "JINYA Ramen Bar": 57,
+    "Ramen Kizuki": 16,
+    "Ippudo": 3,
+    "Ichiran": 3,
+    "Hokkaido Ramen Santouka": 4,
+    "Marufuku Ramen": 1,
+    "Mensho": 6,
+    "Ramen Tatsu-ya": 7,
+    "Ramen Danbo": 3,
+    "HiroNori Craft Ramen": 1,
+    "Ramen-San": 3,
+    "Tsujita LA": 0,
+    "Daikokuya": 0,
+    "RAKKAN Ramen": 9,
+    "Momosan Ramen": 5,
+    "Hinodeya Ramen": 8,
+    "KYURAMEN": 34,
+    "Silverlake Ramen": 32,
+    "Kinton Ramen": 0,
+    "Yoshiharu Ramen": 0,
+    "Ichicoro Ramen": 0
+  }
+}
+Certificate logs: searching crt.sh…
+    crt.sh %ramen.com: HTTP 502
+    crt.sh %ramen.com: HTTP 502
+    crt.sh %ramen.com: no answer
+    crt.sh %ramen.net: HTTP 502
+    crt.sh %ramen.net: HTTP 502
+    crt.sh %ramen.net: no answer
+    crt.sh %ramen.us: HTTP 502
+    crt.sh %ramen.us: HTTP 502
+    crt.sh %ramen.us: no answer
+    crt.sh %ramen.co: JSONDecodeError
+    crt.sh %ramen.co: JSONDecodeError
+    crt.sh %ramen.co: no answer
+    crt.sh %ramen.org: HTTP 404
+    crt.sh %ramen.org: HTTP 404
+    crt.sh %ramen.org: no answer
+    crt.sh %ramen.biz: HTTP 502
+    crt.sh %ramen.biz: HTTP 502
+    crt.sh %ramen.biz: no answer
+    crt.sh %ramen.restaurant: HTTP 502
+    crt.sh %ramen.restaurant: HTTP 502
+    crt.sh %ramen.restaurant: no answer
+    crt.sh %ramen.kitchen: HTTP 502
+    crt.sh %ramen.kitchen: HTTP 502
+    crt.sh %ramen.kitchen: no answer
+    crt.sh %ramen.menu: HTTP 502
+    crt.sh %ramen.menu: HTTP 502
+    crt.sh %ramen.menu: no answer
+    crt.sh %ramen.shop: HTTP 502
+    crt.sh %ramen.shop: HTTP 502
+    crt.sh %ramen.shop: no answer
+    crt.sh %ramen.store: HTTP 502
+    crt.sh %ramen.store: HTTP 502
+    crt.sh %ramen.store: no answer
+    crt.sh %ramen.online: HTTP 502
+    crt.sh %ramen.online: HTTP 502
+    crt.sh %ramen.online: no answer
+    crt.sh %ramen.site: HTTP 502
+    crt.sh %ramen.site: HTTP 502
+    crt.sh %ramen.site: no answer
+    crt.sh %ramenbar.com: HTTP 502
+    crt.sh %ramenbar.com: HTTP 502
+    crt.sh %ramenbar.com: no answer
+    crt.sh %ramenhouse.com: HTTP 502
+    crt.sh %ramenhouse.com: HTTP 502
+    crt.sh %ramenhouse.com: no answer
+    crt.sh %ramenshop.com: HTTP 502
+    crt.sh %ramenshop.com: HTTP 502
+    crt.sh %ramenshop.com: no answer
+    crt.sh %ramenco.com: HTTP 502
+    crt.sh %ramenco.com: ConnectionError
+    crt.sh %ramenco.com: no answer
+    crt.sh %ramenkitchen.com: HTTP 502
+    crt.sh %ramenkitchen.com: HTTP 502
+    crt.sh %ramenkitchen.com: no answer
+    crt.sh %ramenlab.com: HTTP 502
+    crt.sh %ramenlab.com: ConnectionError
+    crt.sh %ramenlab.com: no answer
+    crt.sh %ramenbar.net: HTTP 502
+    crt.sh %ramenbar.net: HTTP 502
+    crt.sh %ramenbar.net: no answer
+    crt.sh %ramenya.com: HTTP 502
+    crt.sh %ramenya.com: HTTP 502
+    crt.sh %ramenya.com: no answer
+    crt.sh %ramenspot.com: HTTP 502
+    crt.sh %ramenspot.com: HTTP 502
+    crt.sh %ramenspot.com: no answer
+    crt.sh %ramenexpress.com: HTTP 502
+    crt.sh %ramenexpress.com: HTTP 502
+    crt.sh %ramenexpress.com: no answer
+    crt.sh %ramenclub.com: HTTP 502
+    crt.sh %ramenclub.com: HTTP 502
+    crt.sh %ramenclub.com: no answer
+    crt.sh %ramenhub.com: HTTP 502
+    crt.sh %ramenhub.com: HTTP 502
+    crt.sh %ramenhub.com: no answer
+    crt.sh %ramenstudio.com: HTTP 502
+    crt.sh %ramenstudio.com: HTTP 502
+    crt.sh %ramenstudio.com: no answer
+    crt.sh %ramennoodle.com: HTTP 502
+    crt.sh %ramennoodle.com: HTTP 502
+    crt.sh %ramennoodle.com: no answer
+    crt.sh %ramennoodles.com: HTTP 502
+    crt.sh %ramennoodles.com: HTTP 502
+    crt.sh %ramennoodles.com: no answer
+    crt.sh %ramenandsushi.com: HTTP 502
+    crt.sh %ramenandsushi.com: HTTP 502
+    crt.sh %ramenandsushi.com: no answer
+    crt.sh: out of time, 14 searches left for next run
+  0 ramen-named domains in certificate logs (0 searches answered)
+  (web: 1237s)
+{
+  "generated": "2026-10-09",
+  "published": 349,
+  "by_way_found": {
+    "chain": 58,
+    "noodle": 85,
+    "brand": 1,
+    "name": 39,
+    "site": 166
+  },
+  "names": {
+    "app": 4975,
+    "noodle": 114,
+    "name": 123,
+    "brand": 3,
+    "site": 216
+  },
+  "chains": {
+    "JINYA Ramen Bar": 57,
+    "Ramen Kizuki": 16,
+    "Ippudo": 3,
+    "Ichiran": 3,
+    "Hokkaido Ramen Santouka": 4,
+    "Marufuku Ramen": 1,
+    "Mensho": 6,
+    "Ramen Tatsu-ya": 7,
+    "Ramen Danbo": 3,
+    "HiroNori Craft Ramen": 1,
+    "Ramen-San": 3,
+    "Tsujita LA": 0,
+    "Daikokuya": 0,
+    "RAKKAN Ramen": 9,
+    "Momosan Ramen": 5,
+    "Hinodeya Ramen": 8,
+    "KYURAMEN": 34,
+    "Silverlake Ramen": 32,
+    "Kinton Ramen": 0,
+    "Yoshiharu Ramen": 0,
+    "Ichicoro Ramen": 0
+  },
+  "web": {
+    "crt.sh unavailable": 1
+  }
+}
