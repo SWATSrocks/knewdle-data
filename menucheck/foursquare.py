@@ -19,8 +19,12 @@ from .places import RAMEN_WORD
 
 REPO = "foursquare/fsq-os-places"
 API = f"https://huggingface.co/api/datasets/{REPO}/tree/main/release"
-RULES_VERSION = 1
+RULES_VERSION = 2
 MAX_AGE_YEARS = 3   # places nobody has confirmed in this long are often gone
+# Filed as ramen but named for another cuisine: usually a mis-filed listing.
+OTHER_CUISINE = re.compile(r"(?<![a-z])(?:pho|phở|taco|taqueria|pizza|pizzeria|burger|bbq|barbecue|wings?|mexican|"
+                           r"cantina|tex-mex|bagel|donut|doughnut|pancake|steakhouse|seafood boil|crawfish)(?![a-z])",
+                           re.IGNORECASE)
 CREDIT = "Contains data from Foursquare Open Source Places, © Foursquare Labs, Inc. (Apache License 2.0)"
 
 
@@ -95,6 +99,10 @@ def fetch(release: str) -> list[dict]:
         filed = "ramen" in (labels_txt or "")
         named = bool(RAMEN_WORD.search(name) or EXTRA_WORDS.search(name) or CHAIN_WORDS.search(name))
         if not (filed or named):
+            continue
+        if not street:
+            continue  # no street address: the pin is often just the middle of the city
+        if not named and OTHER_CUISINE.search(name):
             continue
         site = website if website and website.startswith("http") else (f"http://{website}" if website else None)
         out.append({
