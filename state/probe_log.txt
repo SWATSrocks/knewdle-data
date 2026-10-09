@@ -1,3 +1,6 @@
-tsquery nemar:* (names ending in ramen): OK in 64s -> 20000 names, 2132 with ramen, e.g. ['*.1045-hidechanramen-nyc.pages.dev', '*.18ctea-ramen-badajoz.es', '*.20-minute-vegan-ramen-noodles-with-tuna-spicy-peanut-sauce.pages.dev', '*.20-ramen-recipes-that-go-way-beyond-basic-noodles.pages.dev', '*.303ramen.com', '*.3ramen.workers.dev', '*.86ramen.pages.dev', '*.airamen-granada.es', '*.ait-ramen-bar.es', '*.akane-ramen-prod.pages.dev', '*.akiba-ramen-valladolid.es', '*.aluminium-ramen-aludb.be', '*.aluminium-ramen-offerte.be', '*.amp-legitoto-utusan-ultramen-berak.pages.dev', '*.aramen-wiki.pages.dev', '*.arigator-ramen-shop-warszawa.pages.dev', '*.asahikawa-ramen-namarashokudo.pages.dev', '*.asian-ramen-chicken-chopped-salad.pages.dev', '*.auramen-store.com', '*.autoramen-blinderen.nl', '*.bauwens-ramen-deuren.be', '*.bincho-ramen-tarzana.pages.dev', '*.biz-ramen-v.pages.dev', '*.bozeramen-rincondelavictoria.pages.dev', '*.bramen-official.com']
-tsquery ramen:* (names starting with ramen): FAILED in 97s -> QueryCanceled: canceling statement due to statement timeout
-tsquery ramen: OK in 79s -> 32 names, 5 with ramen, e.g. ['dijkema ramen en deuren b.v.', 'japanische-ramen-suppe-rezept--746107166.helpclean.de', 'samyang-hot-chicken-flavour-ramen-carbonara--65023368.silkjob.de', 'shinyokohama ramen museum', 'www.japanische-ramen-suppe-rezept--746107166.helpclean.de']
+nemar:* & moc: FAILED in 77s -> QueryCanceled: canceling statement due to statement timeout
+nemar:* & com: FAILED in 1s -> OperationalError: connection is bad: connection to server at "2a0e:ac00:c7:d449::5bc7:d449", port 5432 failed: Network is unreachable
+	Is the server running on that host and accepting TCP/IP connections?
+Multiple connection attempts failed. All failures were:
+- host: 'crt.sh', port: 5432, hostaddr: '91.199.212.73': c
+rabnemar:*: OK in 29s -> 8 names, 0 ramen .com, e.g. []
