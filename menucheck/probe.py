@@ -58,7 +58,7 @@ def commoncrawl():
 
 TSQ = """SELECT lower(cai.NAME_VALUE), min(x509_notBefore(cai.CERTIFICATE))::date FROM certificate_and_identities cai
          WHERE to_tsquery('certwatch', %s) @@ identities(cai.CERTIFICATE)
-           AND x509_notAfter(cai.CERTIFICATE) > now() GROUP BY 1 LIMIT 20000"""
+           AND x509_notAfter(cai.CERTIFICATE) > now() GROUP BY 1 LIMIT 100000"""
 
 
 def db_names(q):
@@ -72,7 +72,18 @@ def db_names(q):
     return f"{len(rows)} names, {len(ramen)} with ramen, e.g. {ramen[:25]}"
 
 
+def db_count(q):
+    import psycopg
+    with psycopg.connect(host="crt.sh", port=5432, dbname="certwatch", user="guest", connect_timeout=30,
+                         autocommit=True) as c, c.cursor() as cur:
+        cur.execute("SET statement_timeout = '170s'")
+        cur.execute(TSQ, (q,))
+        rows = cur.fetchall()
+    ramen = sorted({r[0] for r in rows if "ramen" in r[0] and r[0].endswith(".com")})
+    return f"{len(rows)} names, {len(ramen)} ramen .com, e.g. {ramen[:12]}"
+
+
 if __name__ == "__main__":
-    t("tsquery nemar:* (names ending in ramen)", lambda: db_names("nemar:*"))
-    t("tsquery ramen:* (names starting with ramen)", lambda: db_names("ramen:*"))
-    t("tsquery ramen", lambda: db_names("ramen"))
+    t("nemar:* & moc", lambda: db_count("nemar:* & moc"))
+    t("nemar:* & com", lambda: db_count("nemar:* & com"))
+    t("rabnemar:*", lambda: db_count("rabnemar:*"))
