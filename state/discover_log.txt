@@ -1,18 +1,18 @@
 Foursquare: reading release 2026-09-15…
-  4176 US ramen places (74s)
-  (foursquare: 74s)
+  3556 US ramen places (172s)
+  (foursquare: 173s)
 {
   "generated": "2026-10-09",
-  "published": 1552,
+  "published": 1238,
   "by_way_found": {
     "chain": 58,
     "noodle": 86,
     "brand": 1,
     "name": 17,
     "site": 45,
-    "fsq": 1345
+    "fsq": 1031
   },
   "foursquare": {
-    "ramen places": 4176
+    "ramen places": 3556
   }
 }
