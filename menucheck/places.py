@@ -52,7 +52,7 @@ _ADDRESS = re.compile(
     rf"(?:[A-Za-z0-9.'&\- ]{{1,40}}?\s)?(?:{_SUFFIX})\b\.?(?:\s+(?:[NSEW]{{1,2}})\b\.?)?)"
     rf"(?:[\s,]+(?P<unit>{_UNIT}))?"
     rf"[\s,]+(?P<city>[A-Z][A-Za-z.'\-]+(?:\s[A-Z][A-Za-z.'\-]+){{0,3}}),?\s+"
-    rf"(?P<state>{_STATE_ALT})\.?,?\s+(?P<zip>\d{{5}})(?:-\d{{4}})?\b"
+    rf"(?P<state>{_STATE_ALT})\b\.?(?:,?\s+(?P<zip>\d{{5}})(?:-\d{{4}})?\b)?"
 )
 _COORD_PATTERNS = (
     re.compile(r"!3d(-?\d{1,2}\.\d{3,})!4d(-?\d{1,3}\.\d{3,})"),
@@ -72,6 +72,9 @@ class Location:
     lon: float | None = None
     name: str | None = None
     soon: bool = False
+    unit: str | None = None
+    # A map pin found near the address on the page: used only if the geocoder can't place the address.
+    pin: tuple[float, float] | None = None
 
     @property
     def address(self) -> str:
@@ -79,11 +82,11 @@ class Location:
 
     @property
     def oneline(self) -> str:
-        return f"{self.street}, {self.city}, {self.state} {self.zip}"
+        return f"{self.street}, {self.city}, {self.state} {self.zip}".strip()
 
     @property
     def key(self) -> str:
-        return re.sub(r"[^a-z0-9]", "", (self.street.split()[0] + self.zip).lower())
+        return re.sub(r"[^a-z0-9]", "", (self.street.split()[0] + (self.zip or self.city)).lower())
 
 
 def _state_code(s: str) -> str | None:
@@ -108,9 +111,10 @@ def addresses_in_text(text: str) -> list[tuple[Location, int]]:
         if not st:
             continue
         street = _clean(m.group("street"))
-        if m.group("unit"):
-            street += " " + _clean(m.group("unit"))
-        loc = Location(street, _clean(m.group("city")), st, m.group("zip"))
+        unit = _clean(m.group("unit")) if m.group("unit") else None
+        if unit:
+            street += " " + unit
+        loc = Location(street, _clean(m.group("city")), st, m.group("zip") or "", unit=unit)
         if loc.key in seen:
             continue
         seen.add(loc.key)
@@ -211,9 +215,9 @@ def find_locations(html: bytes | str) -> tuple[list[Location], str, str | None]:
         if loc.key not in keys:
             keys.add(loc.key)
             found.append(loc)
-    # One address and one map pin on the page: the pin is that address.
+    # One address and one map pin on the page: keep the pin as a fallback for that address.
     if len(found) == 1 and len(pins) == 1 and found[0].lat is None:
-        found[0].lat, found[0].lon = pins[0]
+        found[0].pin = pins[0]
     return found, text, title
 
 
@@ -262,6 +266,12 @@ class Geocoder:
     def locate(self, loc: Location) -> bool:
         if loc.lat is None:
             p = self(loc)
+            if p is None and loc.unit:
+                # New buildings' suite numbers often trip the geocoder: try the street address alone.
+                bare = Location(loc.street.removesuffix(" " + loc.unit), loc.city, loc.state, loc.zip)
+                p = self(bare)
+            if p is None and loc.pin:
+                p = loc.pin
             if p:
                 loc.lat, loc.lon = p
         return loc.lat is not None

@@ -59,7 +59,8 @@ def opted_out(website: str | None, optout: set[str]) -> bool:
     return bool(h) and any(h == o or h.endswith("." + o) for o in optout)
 
 
-def run_web(state: dict, crawler: Crawler, geocode: Geocoder, max_domains: int, optout: set[str]) -> Counter:
+def run_web(state: dict, crawler: Crawler, geocode: Geocoder, max_domains: int, optout: set[str],
+            save=lambda: None, read_budget_s: float = 25 * 60) -> Counter:
     from .ctlog import all_domains, read_domain
     domains: dict = state.setdefault("domains", {})
     first_run = "baseline" not in state
@@ -88,10 +89,13 @@ def run_web(state: dict, crawler: Crawler, geocode: Geocoder, max_domains: int, 
     due.sort(key=lambda d: domains[d].get("first", ""), reverse=True)
     due = due[:max_domains]
     print(f"  reading {len(due)} of them this run")
+    save()  # keep the domain list even if reading runs out of time
     tally = Counter()
-    with ThreadPoolExecutor(max_workers=16) as pool:
-        futures = {pool.submit(read_domain, crawler, d, geocode): d for d in due}
-        for f in as_completed(futures):
+    deadline = time.time() + read_budget_s
+    pool = ThreadPoolExecutor(max_workers=16)
+    futures = {pool.submit(read_domain, crawler, d, geocode): d for d in due}
+    try:
+        for f in as_completed(futures, timeout=max(60.0, deadline - time.time())):
             d = futures[f]
             try:
                 res = f.result()
@@ -105,6 +109,14 @@ def run_web(state: dict, crawler: Crawler, geocode: Geocoder, max_domains: int, 
             tally[res["status"]] += 1
             if res["status"] == "ok":
                 print(f"  🍜 {d}: {res['name']} ({len(res['locations'])} location(s))")
+            if tally.total() % 100 == 0:
+                save()
+    except TimeoutError:
+        print(f"  out of time: {sum(1 for f in futures if not f.done())} domains left for next run")
+    finally:
+        for f in futures:
+            f.cancel()
+        pool.shutdown(wait=False, cancel_futures=True)
     return tally
 
 
@@ -113,6 +125,13 @@ def run_chains(state: dict, crawler: Crawler, geocode: Geocoder, only: str | Non
     print("Chains: reading store locators…")
     chains: dict = state.setdefault("chains", {})
     results = read_all(crawler, geocode, only)
+    if not only:
+        import json as _json
+        from .chains import CONFIG as _CHAINS
+        configured = {c["name"] for c in _json.loads(_CHAINS.read_text())["chains"]}
+        for name in list(chains):
+            if name not in configured:
+                del chains[name]
     tally = Counter()
     for name, places in results.items():
         prev = chains.get(name, {}).get("places", [])
@@ -177,16 +196,20 @@ def build_published(state: dict, optout: set[str]) -> tuple[list[dict], Counter]
     return out, why
 
 
-def write_outputs(state: dict, published: list[dict], why: Counter, run_stats: dict, dry_run: bool) -> None:
+def write_outputs(state: dict, published: list[dict], why: Counter, run_stats: dict, dry_run: bool,
+                  quiet: bool = False) -> None:
     state["published"] = published
     stats = load_json(STATS, {})
     stats["more"] = {"generated": today(), "published": len(published), "by_way_found": dict(why), **run_stats}
     stats["more_published"] = len(published)
-    print(json.dumps(stats["more"], indent=2, ensure_ascii=False))
+    if not quiet:
+        print(json.dumps(stats["more"], indent=2, ensure_ascii=False), flush=True)
     if dry_run:
         return
     EXTRA.parent.mkdir(parents=True, exist_ok=True)
-    EXTRA.write_text(json.dumps(state, separators=(",", ":"), ensure_ascii=False))
+    # Reading threads may still be adding geocodes: save a copy (copying a dict is atomic in CPython).
+    snapshot = {**state, "geocode": dict(state.get("geocode", {}))}
+    EXTRA.write_text(json.dumps(snapshot, separators=(",", ":"), ensure_ascii=False))
     data = load_json(OUT, {"v": 1, "places": []})
     data["more"] = published
     data["generated"] = today()
@@ -210,9 +233,13 @@ def main() -> int:
     optout = load_optout()
     run_stats = {}
 
+    def save():
+        published, why = build_published(state, optout)
+        write_outputs(state, published, why, run_stats, args.dry_run, quiet=True)
+
     steps = [("names", lambda: run_names(state)[0]),
              ("chains", lambda: run_chains(state, crawler, geocode, args.chain)),
-             ("web", lambda: run_web(state, crawler, geocode, args.max_domains, optout))]
+             ("web", lambda: run_web(state, crawler, geocode, args.max_domains, optout, save))]
     for name, step in steps:
         if name in skip:
             continue

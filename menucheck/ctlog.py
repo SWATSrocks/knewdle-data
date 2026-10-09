@@ -60,16 +60,16 @@ def ramen_domain(domain: str) -> bool:
 
 def search_crtsh(pattern: str, session: requests.Session, log=print) -> dict[str, str] | None:
     """{domain: earliest certificate date seen} for one crt.sh pattern. None on trouble (logged)."""
-    for attempt in range(3):
+    for attempt in range(2):
         try:
-            r = session.get(CRTSH, params={"q": pattern, "output": "json", "exclude": "expired"}, timeout=180)
+            r = session.get(CRTSH, params={"q": pattern, "output": "json", "exclude": "expired"}, timeout=(15, 75))
             if r.status_code == 200:
                 rows = r.json()
                 break
             log(f"    crt.sh {pattern}: HTTP {r.status_code}")
         except (requests.RequestException, ValueError) as e:
             log(f"    crt.sh {pattern}: {type(e).__name__}")
-        time.sleep(15 * (attempt + 1))
+        time.sleep(10)
     else:
         return None
     out: dict[str, str] = {}
@@ -84,14 +84,19 @@ def search_crtsh(pattern: str, session: requests.Session, log=print) -> dict[str
     return out
 
 
-def all_domains(log=print) -> tuple[dict[str, str], dict[str, set[str]], set[str]]:
-    """({domain: earliest cert date}, {domain: patterns that found it}, patterns that answered)."""
+def all_domains(log=print, budget_s: float = 20 * 60) -> tuple[dict[str, str], dict[str, set[str]], set[str]]:
+    """({domain: earliest cert date}, {domain: patterns that found it}, patterns that answered).
+    Stops starting new searches after budget_s seconds (crt.sh is free and sometimes slow)."""
+    deadline = time.time() + budget_s
     s = requests.Session()
     s.headers["User-Agent"] = "KnewdleNOW-MenuCheck/1.0 (+https://swatsrocks.github.io/knewdle-data/)"
     found: dict[str, str] = {}
     by: dict[str, set[str]] = {}
     ok: set[str] = set()
     for p in PATTERNS:
+        if time.time() > deadline:
+            log(f"    crt.sh: out of time, {len(PATTERNS) - PATTERNS.index(p)} searches left for next run")
+            break
         got = search_crtsh(p, s, log)
         if got is not None:
             ok.add(p)

@@ -43,7 +43,13 @@ def test_structured_data_and_map_pin():
       <p>55 Elm St, Austin, TX 78701</p><a href="https://www.google.com/maps/place/x/@30.2672,-97.7431,17z">Map</a>
     </body></html>"""
     locs, text, title = find_locations(html)
-    assert title == "Kaiyo Ramen" and len(locs) == 1 and (locs[0].lat, locs[0].lon) == (30.2672, -97.7431), locs
+    # The pin is only a fallback: the free geocoder's answer for the address comes first.
+    assert title == "Kaiyo Ramen" and len(locs) == 1 and locs[0].lat is None and locs[0].pin == (30.2672, -97.7431), locs
+
+
+def test_address_without_zip_and_lowercase_or_ignored():
+    got = [l.oneline for l, _ in addresses_in_text("2170 S Atlantic Blvd,\nMonterey Park, CA\nTea or coffee, 12 Main St, Portland or anywhere")]
+    assert got == ["2170 S Atlantic Blvd, Monterey Park, CA"], got
 
 
 def test_name_rules():

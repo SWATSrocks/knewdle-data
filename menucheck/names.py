@@ -86,7 +86,7 @@ def fetch_ramen_places(release: str | None = None, limit: int | None = None) -> 
              "afuri|mensho|marufuku|tsujita|daikokuya|sen-gumi|sengumi|sen gumi|hironori|rakkan|momosan|kinton|"
              "yoshiharu|ichicoro|ikkousha|misoya|tatsu-ya|hachiban|ajisen|tenkaippin|danbo|noodle")
     brand_ids = ",".join(f"'{q}'" for q in RAMEN_BRANDS)
-    brand_sql = f"OR {brand_wd} IN ({brand_ids})" if has_brand else ""
+    brand_sql = f"OR brand_wd IN ({brand_ids})" if has_brand else ""
     sql = f"""
         WITH p AS (
             SELECT
