@@ -1,6 +1,0 @@
-nemar:* & moc: FAILED in 77s -> QueryCanceled: canceling statement due to statement timeout
-nemar:* & com: FAILED in 1s -> OperationalError: connection is bad: connection to server at "2a0e:ac00:c7:d449::5bc7:d449", port 5432 failed: Network is unreachable
-	Is the server running on that host and accepting TCP/IP connections?
-Multiple connection attempts failed. All failures were:
-- host: 'crt.sh', port: 5432, hostaddr: '91.199.212.73': c
-rabnemar:*: OK in 29s -> 8 names, 0 ramen .com, e.g. []

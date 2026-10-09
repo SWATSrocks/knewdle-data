@@ -38,23 +38,18 @@ jobs:
           python-version: "3.12"
           cache: pip
       - run: pip install -r requirements.txt
-      - name: Probe free sources (testing)
-        if: ${{ github.event.inputs.steps == 'probe' }}
-        timeout-minutes: 30
-        continue-on-error: true
-        run: python -u -m menucheck.probe 2>&1 | tee state/probe_log.txt
       - name: Find more ramen (names, chains, new websites)
-        if: ${{ github.event.inputs.steps != 'menus' && github.event.inputs.steps != 'probe' }}
-        timeout-minutes: 75
+        if: ${{ github.event.inputs.steps != 'menus' }}
+        timeout-minutes: 100
         continue-on-error: true
         # The log is saved with the results (state/discover_log.txt) so problems can be looked into later.
         run: |
           set -o pipefail
           python -u -m menucheck.discover ${{ github.event.inputs.more_args || '' }} 2>&1 | tee state/discover_log.txt
       - name: Check menus
-        if: ${{ github.event.inputs.steps != 'more' && github.event.inputs.steps != 'probe' }}
+        if: ${{ github.event.inputs.steps != 'more' }}
         # Stops in time for the results to be saved below, even on a very long run.
-        timeout-minutes: 270
+        timeout-minutes: 245
         continue-on-error: true
         run: python -m menucheck.run --max-sites "${{ github.event.inputs.max_sites || '25000' }}" --focus "${{ github.event.inputs.focus || '' }}"
       - name: Publish results
