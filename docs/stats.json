@@ -18,5 +18,40 @@
     "error": 14494,
     "robots": 2144
   },
-  "published": 2438
+  "published": 2438,
+  "more": {
+    "generated": "2026-10-09",
+    "published": 136,
+    "by_way_found": {
+      "chain": 136
+    },
+    "names": {
+      "failed": "BinderException: Binder Error: Referenced table \"brand\" not found!\nCandidate tables: \"p\"\n\nLINE 27:                OR brand.wikidata IN ('Q109237427','Q111204601','Q11326388...\n                        "
+    },
+    "chains": {
+      "JINYA Ramen Bar": 57,
+      "Ramen Kizuki": 16,
+      "Ippudo": 3,
+      "Ichiran": 3,
+      "Hokkaido Ramen Santouka": 4,
+      "Marufuku Ramen": 1,
+      "Mensho": 6,
+      "Ramen Tatsu-ya": 7,
+      "Ramen Danbo": 3,
+      "HiroNori Craft Ramen": 1,
+      "Ramen-San": 3,
+      "Tsujita LA": 0,
+      "Daikokuya": 0,
+      "Shin-Sen-Gumi Hakata Ramen": 13,
+      "RAKKAN Ramen": 9,
+      "Momosan Ramen": 5,
+      "Hinodeya Ramen": 8,
+      "KYURAMEN": 33,
+      "Silverlake Ramen": 0,
+      "Kinton Ramen": 0,
+      "Yoshiharu Ramen": 0,
+      "Ichicoro Ramen": 0
+    }
+  },
+  "more_published": 136
 }
