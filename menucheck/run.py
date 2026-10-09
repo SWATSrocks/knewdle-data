@@ -30,6 +30,9 @@ STATE = ROOT / "state" / "menu_state.json"
 OUT = ROOT / "docs" / "menu_ramen.json"
 STATS = ROOT / "docs" / "stats.json"
 EXTRA = ROOT / "state" / "extra_state.json"
+CREDITS = ("Places from Overture Maps Foundation (CDLA-Permissive-2.0). Contains data from Foursquare Open "
+           "Source Places, (c) Foursquare Labs, Inc. (Apache License 2.0, see NOTICE-foursquare.txt). "
+           "Menu checks, chain locations and new-website finds by Knewdle NOW.")
 CONFIG = ROOT / "config.json"
 OPTOUT = ROOT / "optout.txt"
 
@@ -235,6 +238,7 @@ def publish(state, places_state, current, candidates, release, found, dry_run, q
             # Ramen places found other ways (Overture names/brands, chains' own locators, new websites).
             # Older app versions ignore this list.
             "more": more,
+            "credits": CREDITS,
         }, separators=(",", ":"), ensure_ascii=False))
         STATS.write_text(json.dumps(stats, indent=2))
 

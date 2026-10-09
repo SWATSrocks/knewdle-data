@@ -42,6 +42,8 @@ jobs:
         if: ${{ github.event.inputs.steps != 'menus' }}
         timeout-minutes: 100
         continue-on-error: true
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
         # The log is saved with the results (state/discover_log.txt) so problems can be looked into later.
         run: |
           set -o pipefail

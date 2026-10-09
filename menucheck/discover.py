@@ -1,6 +1,6 @@
 """Finds ramen places the app's other sources miss, and publishes them in menu_ramen.json ("more").
 
-    python -m menucheck.discover [--skip names,chains,web] [--chain NAME] [--max-domains 1500] [--dry-run]
+    python -m menucheck.discover [--skip names,foursquare,chains,web] [--chain NAME] [--max-domains 1500] [--dry-run]
 
   names  - Overture places that show ramen by other words, brands or their website address (names.py)
   chains - ramen chains' own store locators (chains.py, chains.json)
@@ -30,6 +30,9 @@ STATS = ROOT / "docs" / "stats.json"
 CONFIG = ROOT / "config.json"
 OPTOUT = ROOT / "optout.txt"
 
+CREDITS = ("Places from Overture Maps Foundation (CDLA-Permissive-2.0). Contains data from Foursquare Open "
+           "Source Places, (c) Foursquare Labs, Inc. (Apache License 2.0, see NOTICE-foursquare.txt). "
+           "Menu checks, chain locations and new-website finds by Knewdle NOW.")
 DOMAIN_RECHECK_DAYS = {"ok": 60, "no US address": 60, "unreachable": 30, "empty": 45, "parked": 45}
 DEFAULT_RECHECK = 120
 NEW_FOR_DAYS = 120       # a website first seen within this many days (after the first run) is marked new
@@ -164,6 +167,28 @@ def run_names(state: dict) -> tuple[Counter, list[dict]]:
     return tally, places
 
 
+def run_foursquare(state: dict) -> Counter:
+    from . import foursquare as fsq
+    if not fsq.token():
+        print("Foursquare: no HF_TOKEN secret, skipping")
+        return Counter({"skipped (no HF_TOKEN)": 1})
+    prev = state.get("foursquare", {})
+    release = fsq.latest_release()
+    if prev.get("release") == release and prev.get("rules") == fsq.RULES_VERSION:
+        print(f"Foursquare: release {release} already read; skipping (new releases about monthly)")
+        return Counter(prev.get("tally", {}))
+    print(f"Foursquare: reading release {release}…")
+    t0 = time.time()
+    places = fsq.fetch(release)
+    tally = Counter({"ramen places": len(places)})
+    print(f"  {len(places)} US ramen places ({time.time() - t0:.0f}s)")
+    state["foursquare"] = {"release": release, "rules": fsq.RULES_VERSION, "tally": dict(tally), "places": places}
+    notice = fsq.notice_text()
+    if notice:
+        (ROOT / "docs" / "NOTICE-foursquare.txt").write_text(notice)
+    return tally
+
+
 def build_published(state: dict, optout: set[str]) -> tuple[list[dict], Counter]:
     """One list, nothing twice, nothing the app already shows from Overture or the menu check."""
     known = PlaceIndex(state.get("app_known", []))
@@ -187,6 +212,8 @@ def build_published(state: dict, optout: set[str]) -> tuple[list[dict], Counter]
             add(p, "chain")
     for p in state.get("overture", {}).get("places", []):
         add(p, p["f"])
+    for p in state.get("foursquare", {}).get("places", []):
+        add(p, "fsq")
     baseline = state.get("baseline")
     for d, rec in sorted(state.get("domains", {}).items()):
         if rec.get("status") != "ok":
@@ -221,13 +248,14 @@ def write_outputs(state: dict, published: list[dict], why: Counter, run_stats: d
     data = load_json(OUT, {"v": 1, "places": []})
     data["more"] = published
     data["generated"] = today()
+    data["credits"] = CREDITS
     OUT.write_text(json.dumps(data, separators=(",", ":"), ensure_ascii=False))
     STATS.write_text(json.dumps(stats, indent=2, ensure_ascii=False))
 
 
 def main() -> int:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--skip", default="", help="comma list of: names,chains,web")
+    ap.add_argument("--skip", default="", help="comma list of: names,foursquare,chains,web")
     ap.add_argument("--chain", default=None, help="testing: only read chains whose name contains this")
     ap.add_argument("--max-domains", type=int, default=1500)
     ap.add_argument("--dry-run", action="store_true")
@@ -246,6 +274,7 @@ def main() -> int:
         write_outputs(state, published, why, run_stats, args.dry_run, quiet=True)
 
     steps = [("names", lambda: run_names(state)[0]),
+             ("foursquare", lambda: run_foursquare(state)),
              ("chains", lambda: run_chains(state, crawler, geocode, args.chain)),
              ("web", lambda: run_web(state, crawler, geocode, args.max_domains, optout, save))]
     for name, step in steps:

@@ -31,6 +31,10 @@ Runs at the start of each weekly job and publishes its finds in the same file, u
 - **Names** (`names.py`): Overture places the app's own name rule misses: other ramen words
   (tsukemen, mazesoba, chuka soba, 中華そば, 麺屋…), ramen chains whose names don't say ramen, known ramen brands
   (from OpenStreetMap's open name-suggestion-index), websites with "ramen" in the address, and Japanese "noodle bars".
+- **Foursquare** (`foursquare.py`): US places Foursquare's open data (FSQ OS Places, Apache 2.0) files as
+  "Ramen Restaurant" or names like ramen, not closed, confirmed in the last 3 years. Needs the `HF_TOKEN`
+  repository secret (free Hugging Face account approved for `foursquare/fsq-os-places`); skipped without it.
+  Credit is required: see `docs/NOTICE-foursquare.txt` and the `credits` field in `menu_ramen.json`.
 - **Chains** (`chains.py`, list in `chains.json`): each ramen chain's own Locations pages, read politely
   (robots.txt and Crawl-delay honoured). Edit `chains.json` to add or remove a chain.
 - **New websites** (`ctlog.py`): ramen-named domains from public Certificate Transparency logs (crt.sh). Each new one's
