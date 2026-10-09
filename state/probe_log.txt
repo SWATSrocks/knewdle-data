@@ -1,12 +1,3 @@
-crt.sh web q=ramen: OK in 1s -> HTTP 502
-crt.sh web q=ramen.com: OK in 0s -> HTTP 502
-crt.sh web q=%kaiyoramen.com: OK in 1s -> HTTP 502
-crt.sh db FTS ramen: OK in 44s -> 32 rows, e.g. [('www.new-nemar-development.com.ph',), ('japanische-ramen-suppe-rezept--746107166.helpclean.de',), ('nemar-dashboard.pages.dev',), ('nemar-techniek.nl',), ('*.nemar-cli.pages.dev',), ('nemar-website.pages.dev',), ('*.nemar-docs.pages.dev',), ('jp',)]
-crt.sh db FTS jinyaramenbar.com: OK in 34s -> 7 rows, e.g. [('www.jinyaramenbar.com',), ('*.jinyaramenbar.com',), ('order.jinyaramenbar.com',), ('uniforms.jinyaramenbar.com',), ('jinyaramenbar.com',), ('pay.jinyaramenbar.com',), ('www.pay.jinyaramenbar.com',)]
-crt.sh db prefix ramen%: FAILED in 61s -> QueryCanceled: canceling statement due to statement timeout
-commoncrawl one index file: FAILED in 1s -> HTTPException: HTTP Error: HTTP GET error reading 's3://commoncrawl/cc-index/table/cc-main/warc/crawl=CC-MAIN-2026-39/subset=warc/part-00000-' in region 'us-east-1' (HTTP 403 Forbidden)
-
-AccessDenied: Access Denied
-
-Authentication Failure - this is usually caused by invalid or missing credentials.
-* No credentials
+tsquery nemar:* (names ending in ramen): OK in 64s -> 20000 names, 2132 with ramen, e.g. ['*.1045-hidechanramen-nyc.pages.dev', '*.18ctea-ramen-badajoz.es', '*.20-minute-vegan-ramen-noodles-with-tuna-spicy-peanut-sauce.pages.dev', '*.20-ramen-recipes-that-go-way-beyond-basic-noodles.pages.dev', '*.303ramen.com', '*.3ramen.workers.dev', '*.86ramen.pages.dev', '*.airamen-granada.es', '*.ait-ramen-bar.es', '*.akane-ramen-prod.pages.dev', '*.akiba-ramen-valladolid.es', '*.aluminium-ramen-aludb.be', '*.aluminium-ramen-offerte.be', '*.amp-legitoto-utusan-ultramen-berak.pages.dev', '*.aramen-wiki.pages.dev', '*.arigator-ramen-shop-warszawa.pages.dev', '*.asahikawa-ramen-namarashokudo.pages.dev', '*.asian-ramen-chicken-chopped-salad.pages.dev', '*.auramen-store.com', '*.autoramen-blinderen.nl', '*.bauwens-ramen-deuren.be', '*.bincho-ramen-tarzana.pages.dev', '*.biz-ramen-v.pages.dev', '*.bozeramen-rincondelavictoria.pages.dev', '*.bramen-official.com']
+tsquery ramen:* (names starting with ramen): FAILED in 97s -> QueryCanceled: canceling statement due to statement timeout
+tsquery ramen: OK in 79s -> 32 names, 5 with ramen, e.g. ['dijkema ramen en deuren b.v.', 'japanische-ramen-suppe-rezept--746107166.helpclean.de', 'samyang-hot-chicken-flavour-ramen-carbonara--65023368.silkjob.de', 'shinyokohama ramen museum', 'www.japanische-ramen-suppe-rezept--746107166.helpclean.de']
