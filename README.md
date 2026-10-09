@@ -24,6 +24,22 @@ No servers, no keys, no card.
 4. **Publish**: `docs/menu_ramen.json` (served by GitHub Pages). Only facts are kept: name, location, website,
    menu link, how many ramen dishes. Never menu text, prices or photos.
 
+## More ways it finds ramen (`menucheck/discover.py`)
+
+Runs at the start of each weekly job and publishes its finds in the same file, under `"more"`:
+
+- **Names** (`names.py`): Overture places the app's own name rule misses: other ramen words
+  (tsukemen, mazesoba, chuka soba, 中華そば, 麺屋…), ramen chains whose names don't say ramen, known ramen brands
+  (from OpenStreetMap's open name-suggestion-index), websites with "ramen" in the address, and Japanese "noodle bars".
+- **Chains** (`chains.py`, list in `chains.json`): each ramen chain's own Locations pages, read politely
+  (robots.txt and Crawl-delay honoured). Edit `chains.json` to add or remove a chain.
+- **New websites** (`ctlog.py`): ramen-named domains from public Certificate Transparency logs (crt.sh). Each new one's
+  homepage/contact page is read once for a US address. Ones first seen after the first run are marked new (`"nw"`),
+  and "coming soon" ones are marked (`"so"`).
+- Addresses become map points with the free U.S. Census Bureau geocoder. Nothing already shown by the app is repeated.
+
+Run only this part: **Actions → Menu check → Run workflow → steps: `more`**.
+
 ## One-time setup (about 10 minutes)
 
 1. Create a free GitHub account if you don't have one, then a **new public repository** named `knewdle-data`.

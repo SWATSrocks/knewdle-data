@@ -124,6 +124,50 @@ class Crawler:
         rp = self._robots[base]
         return bool(rp and rp.can_fetch(self.ua, url) and rp.can_fetch(BOT_NAME, url))
 
+    def crawl_delay(self, url: str) -> float:
+        """Seconds the site asks bots to wait between requests (robots.txt Crawl-delay), at least our own delay."""
+        p = urlparse(url)
+        self.allowed(url)
+        rp = self._robots.get(f"{p.scheme}://{p.netloc}")
+        asked = None
+        if rp:
+            for agent in (BOT_NAME, "*"):
+                try:
+                    asked = rp.crawl_delay(agent)
+                except Exception:  # noqa: BLE001
+                    asked = None
+                if asked:
+                    break
+        return max(self.delay, float(asked or 0))
+
+    def sitemaps(self, url: str) -> list[str]:
+        """Sitemap URLs the site lists in robots.txt."""
+        p = urlparse(url)
+        self.allowed(url)
+        rp = self._robots.get(f"{p.scheme}://{p.netloc}")
+        try:
+            return list(rp.site_maps() or []) if rp else []
+        except Exception:  # noqa: BLE001
+            return []
+
+    def fetch(self, url: str, limit: int = MAX_HTML) -> requests.Response | None:
+        """One page from a site's own domain, only if robots.txt allows it. None if not allowed/unavailable."""
+        if is_blocked_host(url) or not self.allowed(url):
+            return None
+        try:
+            return self._get(url, limit)
+        except requests.RequestException:
+            return None
+
+    def fetch_home(self, website: str) -> requests.Response | None:
+        """A homepage, trying the http/https and www variants of the address."""
+        url = website if website.startswith("http") else "https://" + website
+        for candidate in _address_variants(url):
+            r = self.fetch(candidate)
+            if r is not None:
+                return r
+        return None
+
     # ---------- fetching ----------
 
     def _get(self, url: str, limit: int) -> requests.Response | None:
@@ -232,10 +276,11 @@ def _address_variants(url: str) -> list[str]:
     path = p.path or "/"
     if p.query:
         path += "?" + p.query
+    port = f":{p.port}" if p.port else ""
     out = [url]
     for scheme in ("https", "http"):
         for h in (host, "www." + bare if not host.startswith("www.") else bare):
-            v = f"{scheme}://{h}{path}"
+            v = f"{scheme}://{h}{port}{path}"
             if v not in out:
                 out.append(v)
     return out

@@ -1,0 +1,28 @@
+{
+  "about": "US ramen chains whose OWN websites list their locations. 'start' pages are read first; 'pages' is a pattern for one-page-per-location links (found on the start pages or in the site's sitemap). 'require' keeps only locations whose page/section mentions that word (for groups that also run other restaurants). Remove a chain to stop reading it.",
+  "chains": [
+    {"name": "JINYA Ramen Bar", "site": "https://www.jinyaramenbar.com/", "start": ["https://www.jinyaramenbar.com/locations/"],
+     "pages": "jinyaramenbar\\.com/locations/[a-z0-9-]+/?$", "sitemaps": ["https://www.jinyaramenbar.com/jrb_locations-sitemap.xml"]},
+    {"name": "Ramen Kizuki", "site": "https://www.kizuki.com/", "start": ["https://www.kizuki.com/locations/"]},
+    {"name": "Ippudo", "site": "https://www.ippudous.com/", "start": ["https://www.ippudous.com/new-york-city", "https://www.ippudous.com/locations-california"]},
+    {"name": "Ichiran", "site": "https://www.ichiranusa.com/", "start": ["https://www.ichiranusa.com/"], "pages": "ichiranusa\\.com/location/[a-z0-9-]+/?$"},
+    {"name": "Hokkaido Ramen Santouka", "site": "https://www.santouka-usa.com/", "start": ["https://www.santouka-usa.com/locations"]},
+    {"name": "Marufuku Ramen", "site": "https://www.marufukuramen.com/", "start": ["https://www.marufukuramen.com/franchise-locations"], "follow": true},
+    {"name": "Mensho", "site": "https://mensho.com/", "start": ["https://mensho.com/location/"], "pages": "mensho\\.com/location/[a-z0-9-]+/?$"},
+    {"name": "Ramen Tatsu-ya", "site": "https://www.ramen-tatsuya.com/", "start": ["https://www.ramen-tatsuya.com/locations"]},
+    {"name": "Ramen Danbo", "site": "https://ramendanbo.com/", "start": ["https://ramendanbo.com/locations/"]},
+    {"name": "HiroNori Craft Ramen", "site": "https://hironori.com/", "start": ["https://hironori.com/"], "follow": true},
+    {"name": "Ramen-San", "site": "https://www.ramensan.com/", "start": ["https://www.ramensan.com/locations/"]},
+    {"name": "Tsujita LA", "site": "https://www.tsujita-la.com/", "start": ["https://www.tsujita-la.com/"], "follow": true},
+    {"name": "Daikokuya", "site": "https://www.daikoku-ten.com/", "start": ["https://www.daikoku-ten.com/"]},
+    {"name": "Shin-Sen-Gumi Hakata Ramen", "site": "https://shinsengumigroup.com/", "start": ["https://shinsengumigroup.com/restaurants/"], "require": "ramen"},
+    {"name": "RAKKAN Ramen", "site": "https://rakkanramen.com/", "start": ["https://rakkanramen.com/locations/"]},
+    {"name": "Momosan Ramen", "site": "https://momosanramen.com/", "start": ["https://momosanramen.com/"], "pages": "momosanramen\\.com/restaurants/[a-z0-9-]+/?$"},
+    {"name": "Hinodeya Ramen", "site": "https://hinodeyaramen.com/", "start": ["https://hinodeyaramen.com/page/locations"]},
+    {"name": "KYURAMEN", "site": "https://www.kyuramen.com/", "start": ["https://www.kyuramen.com/locations"], "pages": "kyuramen\\.com/locations/[a-z0-9-]+/?$"},
+    {"name": "Silverlake Ramen", "site": "https://www.silverlakeramen.com/", "start": ["https://www.silverlakeramen.com/location.php"]},
+    {"name": "Kinton Ramen", "site": "https://www.kintonramen.com/", "start": ["https://www.kintonramen.com/location/"], "pages": "kintonramen\\.com/location/[a-z0-9-]+/?$"},
+    {"name": "Yoshiharu Ramen", "site": "https://yoshiharuramen.com/", "start": ["https://yoshiharuramen.com/"], "follow": true},
+    {"name": "Ichicoro Ramen", "site": "https://www.ichicororamen.com/", "start": ["https://www.ichicororamen.com/"], "follow": true}
+  ]
+}

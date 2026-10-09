@@ -29,6 +29,15 @@
     <li>Keeps only a fact ("serves ramen", and how many ramen dishes) plus a link to your menu. It never copies menu text, prices or photos.</li>
     <li>In the app, your restaurant gets a "Ramen on the menu" tag and a link to your own menu.</li>
   </ul>
+  <h2>Other ways we find ramen</h2>
+  <ul>
+    <li><strong>Chain locations:</strong> for ramen chains, we read the chain's own "Locations" pages about once a week
+      and keep each location's address. We honour <code>robots.txt</code>, including <code>Crawl-delay</code>.</li>
+    <li><strong>New ramen websites:</strong> new website certificates are published in public
+      <a href="https://certificate.transparency.dev/">Certificate Transparency</a> logs. When a ramen-named website appears,
+      we read its homepage (and a contact page) once to find the shop's address, so new shops show up in the app.</li>
+    <li>Addresses become map points with the U.S. Census Bureau's free public geocoder.</li>
+  </ul>
   <h2>Opting out</h2>
   <p>Add this to your website's <code>robots.txt</code> and the menu check will skip your site:</p>
   <pre>User-agent: KnewdleNOW-MenuCheck

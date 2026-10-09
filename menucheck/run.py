@@ -29,6 +29,7 @@ ROOT = Path(__file__).resolve().parent.parent
 STATE = ROOT / "state" / "menu_state.json"
 OUT = ROOT / "docs" / "menu_ramen.json"
 STATS = ROOT / "docs" / "stats.json"
+EXTRA = ROOT / "state" / "extra_state.json"
 CONFIG = ROOT / "config.json"
 OPTOUT = ROOT / "optout.txt"
 
@@ -214,9 +215,11 @@ def publish(state, places_state, current, candidates, release, found, dry_run, q
     kinds = defaultdict(int)
     for s in places_state.values():
         kinds[s.get("kind", "?")] += 1
+    more = load_json(EXTRA, {}).get("published", [])
     stats = {"generated": today(), "overture_release": release, "candidates": len(candidates),
              "checked_this_run": sum(found.values()), "results_this_run": dict(found),
-             "all_known": dict(kinds), "published": len(published)}
+             "all_known": dict(kinds), "published": len(published),
+             "more_published": len(more), **({"more": load_json(STATS, {}).get("more")} if more else {})}
     if not quiet:
         print(json.dumps(stats, indent=2))
 
@@ -229,6 +232,9 @@ def publish(state, places_state, current, candidates, release, found, dry_run, q
             "about": "Places whose own website menu lists ramen. Places from Overture Maps Foundation "
                      "(CDLA-Permissive-2.0); menu checks by Knewdle NOW.",
             "places": published,
+            # Ramen places found other ways (Overture names/brands, chains' own locators, new websites).
+            # Older app versions ignore this list.
+            "more": more,
         }, separators=(",", ":"), ensure_ascii=False))
         STATS.write_text(json.dumps(stats, indent=2))
 
