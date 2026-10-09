@@ -185,17 +185,23 @@ class Crawler:
         home_text, links = self._page_text(home)
         result = CrawlResult(True, [Page(home.url, home_text)])
         site = _site_key(_host(home.url))
-        seen = {home.url}
+        seen = {_norm(home.url)}
         queue = _rank_menu_links(links)
         while queue and len(result.pages) <= MAX_MENU_PAGES:
             link = queue.pop(0)
-            if link in seen:
+            if _norm(link) in seen:
                 continue
-            seen.add(link)
+            seen.add(_norm(link))
             h = _host(link)
-            own = _site_key(h) == site or any(h.endswith(a) for a in ASSET_HOSTS)
-            if not own or is_blocked_host(link) or not self.allowed(link):
+            same_site = _site_key(h) == site
+            asset = any(h.endswith(a) for a in ASSET_HOSTS)
+            if not (same_site or asset) or is_blocked_host(link):
                 continue
+            if not self.allowed(link):
+                # A website builder's file server that doesn't publish robots rules: the file belongs to
+                # the restaurant, so the restaurant's own site rules (already checked above) apply.
+                if not (asset and not self.robots_reachable(link)):
+                    continue
             time.sleep(self.delay)
             try:
                 is_pdf = link.lower().split("?")[0].endswith(".pdf")
@@ -208,9 +214,15 @@ class Crawler:
             if text:
                 result.pages.append(Page(r.url, text))
             # A "Menus" page often just links to the real menu (a PDF or a "Dinner" page): look there next.
-            deeper = [u for u in _rank_menu_links(sub_links) if u not in seen and u not in queue]
+            deeper = [u for u in _rank_menu_links(sub_links) if _norm(u) not in seen and u not in queue]
             queue = deeper + queue
         return result
+
+
+def _norm(url: str) -> str:
+    """Same page, different spelling: drop scheme, www., trailing slash and #fragment."""
+    p = urlparse(url)
+    return (p.hostname or "").lower().removeprefix("www.") + (p.path or "/").rstrip("/") + ("?" + p.query if p.query else "")
 
 
 def _address_variants(url: str) -> list[str]:

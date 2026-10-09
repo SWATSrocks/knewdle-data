@@ -39,7 +39,7 @@ MAX_LINE = 160
 
 
 # Bump when the rules change, so places judged "none" under older rules get re-checked.
-RULES_VERSION = 4
+RULES_VERSION = 5
 
 # Named ramen broths. CLASSIC ones are needed to count a bowl; the others only count as extra choices.
 CLASSIC_BROTHS = {

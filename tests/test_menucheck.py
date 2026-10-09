@@ -337,3 +337,23 @@ def test_crawler_follows_menus_page_to_pdf():
         assert v.kind == "serves" and v.reason == "1 genuine ramen bowl", v
     finally:
         srv.shutdown()
+
+
+def test_asset_host_without_robots_rules_still_read():
+    import menucheck.crawl as crawl
+    srv, base = _serve("d")
+    try:
+        c = Crawler("https://example.org/bot", delay=0)
+        real_allowed, real_reach = c.allowed, c.robots_reachable
+        # Pretend the PDF lives on a website-builder file server whose robots.txt can't be fetched.
+        c.allowed = lambda u: False if u.endswith(".pdf") else real_allowed(u)
+        c.robots_reachable = lambda u: False if u.endswith(".pdf") else real_reach(u)
+        old = crawl.ASSET_HOSTS
+        crawl.ASSET_HOSTS = old + ("127.0.0.1",)
+        try:
+            r = c.read_site(base + "/")
+        finally:
+            crawl.ASSET_HOSTS = old
+        assert any(p.url.endswith(".pdf") for p in r.pages), [p.url for p in r.pages]
+    finally:
+        srv.shutdown()
