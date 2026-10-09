@@ -1,67 +1,171 @@
-Certificate logs: searching crt.sh…
-    crt.sh %ramen.com: HTTP 502
-    crt.sh %ramen.com: no answer
-    crt.sh %ramen.net: HTTP 502
-    crt.sh %ramen.net: no answer
-    crt.sh %ramen.us: HTTP 502
-    crt.sh %ramen.us: no answer
-    crt.sh website isn't answering: switching to its public database
-    crt.sh database %ramen.com: QueryCanceled: canceling statement due to statement timeout
-    crt.sh database %ramen.net: ProtocolViolation: client_idle_timeout
-    crt.sh database %ramen.us: OperationalError: the connection is closed
-    crt.sh database %ramen.co: OperationalError: the connection is closed
-    crt.sh database %ramen.org: OperationalError: the connection is closed
-    crt.sh database %ramen.biz: OperationalError: the connection is closed
-    crt.sh database %ramen.restaurant: OperationalError: the connection is closed
-    crt.sh database %ramen.kitchen: OperationalError: the connection is closed
-    crt.sh database %ramen.menu: OperationalError: the connection is closed
-    crt.sh database %ramen.shop: OperationalError: the connection is closed
-    crt.sh database %ramen.store: OperationalError: the connection is closed
-    crt.sh database %ramen.online: OperationalError: the connection is closed
-    crt.sh database %ramen.site: OperationalError: the connection is closed
-    crt.sh database %ramenbar.com: OperationalError: the connection is closed
-    crt.sh database %ramenhouse.com: OperationalError: the connection is closed
-    crt.sh database %ramenshop.com: OperationalError: the connection is closed
-    crt.sh database %ramenco.com: OperationalError: the connection is closed
-    crt.sh database %ramenkitchen.com: OperationalError: the connection is closed
-    crt.sh database %ramenlab.com: OperationalError: the connection is closed
-    crt.sh database %ramenbar.net: OperationalError: the connection is closed
-    crt.sh database %ramenya.com: OperationalError: the connection is closed
-    crt.sh database %ramenspot.com: OperationalError: the connection is closed
-    crt.sh database %ramenexpress.com: OperationalError: the connection is closed
-    crt.sh database %ramenclub.com: OperationalError: the connection is closed
-    crt.sh database %ramenhub.com: OperationalError: the connection is closed
-    crt.sh database %ramenstudio.com: OperationalError: the connection is closed
-    crt.sh database %ramennoodle.com: OperationalError: the connection is closed
-    crt.sh database %ramennoodles.com: OperationalError: the connection is closed
-    crt.sh database %ramenandsushi.com: OperationalError: the connection is closed
-    crt.sh database %ramenonline.com: OperationalError: the connection is closed
-    crt.sh database %ramenrestaurant.com: OperationalError: the connection is closed
-    crt.sh database %ramenusa.com: OperationalError: the connection is closed
-    crt.sh database %ramentx.com: OperationalError: the connection is closed
-    crt.sh database %ramenla.com: OperationalError: the connection is closed
-    crt.sh database %ramennyc.com: OperationalError: the connection is closed
-    crt.sh database %ramenatx.com: OperationalError: the connection is closed
-    crt.sh database %ramenpdx.com: OperationalError: the connection is closed
-    crt.sh database %ramensf.com: OperationalError: the connection is closed
-    crt.sh database %ramenchicago.com: OperationalError: the connection is closed
-    crt.sh database ramen%.com: OperationalError: the connection is closed
-    crt.sh database ramen%.net: OperationalError: the connection is closed
-    crt.sh database ramen%.us: OperationalError: the connection is closed
-    crt.sh database ramen%.co: OperationalError: the connection is closed
-  0 ramen-named domains in certificate logs (0 searches answered)
-  (web: 185s)
+Names: scanning Overture…
+  Overture 2026-09-23.1: {'app': 4975, 'noodle': 115, 'name': 96, 'brand': 3, 'site': 86} (3431s)
+  (names: 3431s)
 {
   "generated": "2026-10-09",
-  "published": 349,
+  "published": 207,
   "by_way_found": {
     "chain": 58,
-    "noodle": 85,
+    "noodle": 86,
     "brand": 1,
-    "name": 39,
-    "site": 166
+    "name": 17,
+    "site": 45
+  },
+  "names": {
+    "app": 4975,
+    "noodle": 115,
+    "name": 96,
+    "brand": 3,
+    "site": 86
+  }
+}
+Chains: reading store locators…
+  JINYA Ramen Bar: 57 US locations (82 pages read)
+  Ramen Kizuki: 16 US locations (1 pages read)
+  Ippudo: 3 US locations (2 pages read)
+  Ichiran: 3 US locations (4 pages read)
+  Hokkaido Ramen Santouka: 4 US locations (1 pages read)
+  Marufuku Ramen: 1 US locations (16 pages read)
+  Mensho: 6 US locations (29 pages read)
+  Ramen Tatsu-ya: 7 US locations (1 pages read)
+  Ramen Danbo: 3 US locations (1 pages read)
+  HiroNori Craft Ramen: 1 US locations (1 pages read)
+  Ramen-San: 3 US locations (1 pages read)
+    Tsujita LA: couldn't read https://www.tsujita-la.com/ (not allowed or unavailable)
+  Tsujita LA: 0 US locations (1 pages read)
+  Daikokuya: 0 US locations (1 pages read)
+  RAKKAN Ramen: 9 US locations (1 pages read)
+  Momosan Ramen: 5 US locations (7 pages read)
+  Hinodeya Ramen: 8 US locations (1 pages read)
+  KYURAMEN: 34 US locations (61 pages read)
+    Silverlake Ramen: couldn't read https://www.silverlakeramen.com/location.php (not allowed or unavailable)
+  Silverlake Ramen: 0 US locations (1 pages read)
+  Kinton Ramen: 0 US locations (65 pages read)
+    Yoshiharu Ramen: couldn't read https://yoshiharuramen.com/ (not allowed or unavailable)
+  Yoshiharu Ramen: 0 US locations (1 pages read)
+    Ichicoro Ramen: couldn't read https://www.ichicororamen.com/ (not allowed or unavailable)
+  Ichicoro Ramen: 0 US locations (1 pages read)
+  (chains: 325s)
+{
+  "generated": "2026-10-09",
+  "published": 207,
+  "by_way_found": {
+    "chain": 58,
+    "noodle": 86,
+    "brand": 1,
+    "name": 17,
+    "site": 45
+  },
+  "names": {
+    "app": 4975,
+    "noodle": 115,
+    "name": 96,
+    "brand": 3,
+    "site": 86
+  },
+  "chains": {
+    "JINYA Ramen Bar": 57,
+    "Ramen Kizuki": 16,
+    "Ippudo": 3,
+    "Ichiran": 3,
+    "Hokkaido Ramen Santouka": 4,
+    "Marufuku Ramen": 1,
+    "Mensho": 6,
+    "Ramen Tatsu-ya": 7,
+    "Ramen Danbo": 3,
+    "HiroNori Craft Ramen": 1,
+    "Ramen-San": 3,
+    "Tsujita LA": 0,
+    "Daikokuya": 0,
+    "RAKKAN Ramen": 9,
+    "Momosan Ramen": 5,
+    "Hinodeya Ramen": 8,
+    "KYURAMEN": 34,
+    "Silverlake Ramen": 32,
+    "Kinton Ramen": 0,
+    "Yoshiharu Ramen": 0,
+    "Ichicoro Ramen": 0
+  }
+}
+Certificate logs: searching crt.sh…
+    crt.sh nemar: 3632 names, 476 new ramen domains (62s)
+    crt.sh nemara:*: 168 names, 14 new ramen domains (56s)
+    crt.sh nemarb:*: 23 names, 1 new ramen domains (75s)
+    crt.sh nemarc:*: 106 names, 0 new ramen domains (79s)
+    crt.sh nemard:*: 16 names, 0 new ramen domains (73s)
+    crt.sh nemare:*: 95 names, 4 new ramen domains (62s)
+    crt.sh nemarf:*: 9 names, 1 new ramen domains (89s)
+    crt.sh nemarg:*: 93 names, 2 new ramen domains (86s)
+    crt.sh nemarh:*: 30 names, 0 new ramen domains (61s)
+    crt.sh nemari:*: 409 names, 12 new ramen domains (72s)
+    crt.sh nemarj:*: 4 names, 0 new ramen domains (45s)
+    crt.sh nemark:*: 24550 names, 1 new ramen domains (73s)
+    crt.sh nemarl:*: 11 names, 1 new ramen domains (69s)
+    crt.sh nemarm:*: 9 names, 0 new ramen domains (38s)
+    crt.sh nemarn:*: 70 names, 6 new ramen domains (61s)
+    crt.sh nemaro:*: 435 names, 16 new ramen domains (49s)
+    crt.sh nemarp:*: 93 names, 2 new ramen domains (57s)
+    crt.sh nemarq:*: 13 names, 1 new ramen domains (59s)
+    crt.sh nemarr:*: 3 names, 0 new ramen domains (70s)
+    crt.sh nemars:*: 18 names, 2 new ramen domains (84s)
+    crt.sh nemart:*: 181 names, 1 new ramen domains (79s)
+    crt.sh nemaru:*: OperationalError: consuming input failed: server closed the connection unexpectedly
+    crt.sh: out of time, 15 searches left for next run
+  540 ramen-named domains in certificate logs (21 searches answered)
+  reading 540 of them this run
+  🍜 ramen-tatsuya.com: Ramen Tatsu-ya (7 location(s))
+  🍜 ramen-yamadaya.com: Ramen Yamadaya - Downtown Los Angeles (2 location(s))
+  🍜 takkiiramen-quakertown.com: Takkii Ramen - Quakertown (1 location(s))
+  🍜 8banramen-sushi.com: Hachiban Ramen Sushi Bar & Grill (1 location(s))
+  🍜 misoramen-pokebar.com: MISO Ramen and Poke Bar (1 location(s))
+  🍜 sappororamen-ma.com: Sapporo Ramen & Sushi @Canal Side Food Hall (1 location(s))
+  (web: 1665s)
+{
+  "generated": "2026-10-09",
+  "published": 207,
+  "by_way_found": {
+    "chain": 58,
+    "noodle": 86,
+    "brand": 1,
+    "name": 17,
+    "site": 45
+  },
+  "names": {
+    "app": 4975,
+    "noodle": 115,
+    "name": 96,
+    "brand": 3,
+    "site": 86
+  },
+  "chains": {
+    "JINYA Ramen Bar": 57,
+    "Ramen Kizuki": 16,
+    "Ippudo": 3,
+    "Ichiran": 3,
+    "Hokkaido Ramen Santouka": 4,
+    "Marufuku Ramen": 1,
+    "Mensho": 6,
+    "Ramen Tatsu-ya": 7,
+    "Ramen Danbo": 3,
+    "HiroNori Craft Ramen": 1,
+    "Ramen-San": 3,
+    "Tsujita LA": 0,
+    "Daikokuya": 0,
+    "RAKKAN Ramen": 9,
+    "Momosan Ramen": 5,
+    "Hinodeya Ramen": 8,
+    "KYURAMEN": 34,
+    "Silverlake Ramen": 32,
+    "Kinton Ramen": 0,
+    "Yoshiharu Ramen": 0,
+    "Ichicoro Ramen": 0
   },
   "web": {
-    "crt.sh unavailable": 1
+    "no US address": 291,
+    "elsewhere": 12,
+    "unreachable": 156,
+    "not ramen": 26,
+    "empty": 49,
+    "ok": 6
   }
 }

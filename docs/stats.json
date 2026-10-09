@@ -21,17 +21,52 @@
   "published": 2438,
   "more": {
     "generated": "2026-10-09",
-    "published": 349,
+    "published": 207,
     "by_way_found": {
       "chain": 58,
-      "noodle": 85,
+      "noodle": 86,
       "brand": 1,
-      "name": 39,
-      "site": 166
+      "name": 17,
+      "site": 45
+    },
+    "names": {
+      "app": 4975,
+      "noodle": 115,
+      "name": 96,
+      "brand": 3,
+      "site": 86
+    },
+    "chains": {
+      "JINYA Ramen Bar": 57,
+      "Ramen Kizuki": 16,
+      "Ippudo": 3,
+      "Ichiran": 3,
+      "Hokkaido Ramen Santouka": 4,
+      "Marufuku Ramen": 1,
+      "Mensho": 6,
+      "Ramen Tatsu-ya": 7,
+      "Ramen Danbo": 3,
+      "HiroNori Craft Ramen": 1,
+      "Ramen-San": 3,
+      "Tsujita LA": 0,
+      "Daikokuya": 0,
+      "RAKKAN Ramen": 9,
+      "Momosan Ramen": 5,
+      "Hinodeya Ramen": 8,
+      "KYURAMEN": 34,
+      "Silverlake Ramen": 32,
+      "Kinton Ramen": 0,
+      "Yoshiharu Ramen": 0,
+      "Ichicoro Ramen": 0
     },
     "web": {
-      "crt.sh unavailable": 1
+      "no US address": 291,
+      "elsewhere": 12,
+      "unreachable": 156,
+      "not ramen": 26,
+      "empty": 49,
+      "ok": 6
     }
   },
-  "more_published": 349
+  "more_published": 207
 }
