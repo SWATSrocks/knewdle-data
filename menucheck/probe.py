@@ -56,11 +56,23 @@ def commoncrawl():
     return f"{crawl}: one file has {n} urls; {len(rows)} ramen domains e.g. {[r[0] for r in rows[:10]]} ({time.time()-t0:.0f}s)"
 
 
+TSQ = """SELECT lower(cai.NAME_VALUE), min(x509_notBefore(cai.CERTIFICATE))::date FROM certificate_and_identities cai
+         WHERE to_tsquery('certwatch', %s) @@ identities(cai.CERTIFICATE)
+           AND x509_notAfter(cai.CERTIFICATE) > now() GROUP BY 1 LIMIT 20000"""
+
+
+def db_names(q):
+    import psycopg
+    with psycopg.connect(host="crt.sh", port=5432, dbname="certwatch", user="guest", connect_timeout=30,
+                         autocommit=True) as c, c.cursor() as cur:
+        cur.execute("SET statement_timeout = '170s'")
+        cur.execute(TSQ, (q,))
+        rows = cur.fetchall()
+    ramen = sorted({r[0] for r in rows if "ramen" in r[0]})
+    return f"{len(rows)} names, {len(ramen)} with ramen, e.g. {ramen[:25]}"
+
+
 if __name__ == "__main__":
-    t("crt.sh web q=ramen", lambda: web("ramen"))
-    t("crt.sh web q=ramen.com", lambda: web("ramen.com"))
-    t("crt.sh web q=%kaiyoramen.com", lambda: web("%.jinyaramenbar.com"))
-    t("crt.sh db FTS ramen", lambda: db(FTS, "ramen"))
-    t("crt.sh db FTS jinyaramenbar.com", lambda: db(FTS, "jinyaramenbar.com"))
-    t("crt.sh db prefix ramen%", lambda: db(PREFIX, "ramen%"))
-    t("commoncrawl one index file", commoncrawl)
+    t("tsquery nemar:* (names ending in ramen)", lambda: db_names("nemar:*"))
+    t("tsquery ramen:* (names starting with ramen)", lambda: db_names("ramen:*"))
+    t("tsquery ramen", lambda: db_names("ramen"))
