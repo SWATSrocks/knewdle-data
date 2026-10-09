@@ -1,0 +1,12 @@
+crt.sh web q=ramen: OK in 1s -> HTTP 502
+crt.sh web q=ramen.com: OK in 0s -> HTTP 502
+crt.sh web q=%kaiyoramen.com: OK in 1s -> HTTP 502
+crt.sh db FTS ramen: OK in 44s -> 32 rows, e.g. [('www.new-nemar-development.com.ph',), ('japanische-ramen-suppe-rezept--746107166.helpclean.de',), ('nemar-dashboard.pages.dev',), ('nemar-techniek.nl',), ('*.nemar-cli.pages.dev',), ('nemar-website.pages.dev',), ('*.nemar-docs.pages.dev',), ('jp',)]
+crt.sh db FTS jinyaramenbar.com: OK in 34s -> 7 rows, e.g. [('www.jinyaramenbar.com',), ('*.jinyaramenbar.com',), ('order.jinyaramenbar.com',), ('uniforms.jinyaramenbar.com',), ('jinyaramenbar.com',), ('pay.jinyaramenbar.com',), ('www.pay.jinyaramenbar.com',)]
+crt.sh db prefix ramen%: FAILED in 61s -> QueryCanceled: canceling statement due to statement timeout
+commoncrawl one index file: FAILED in 1s -> HTTPException: HTTP Error: HTTP GET error reading 's3://commoncrawl/cc-index/table/cc-main/warc/crawl=CC-MAIN-2026-39/subset=warc/part-00000-' in region 'us-east-1' (HTTP 403 Forbidden)
+
+AccessDenied: Access Denied
+
+Authentication Failure - this is usually caused by invalid or missing credentials.
+* No credentials
