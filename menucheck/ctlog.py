@@ -54,13 +54,12 @@ def registrable(name: str) -> str | None:
 
 
 def ramen_domain(domain: str) -> bool:
-    label = domain.split(".")[0]
-    return bool(RAMEN_IN_DOMAIN.search(label))
+    return bool(RAMEN_IN_DOMAIN.search(domain.split(".")[0]))
 
 
 def search_crtsh(pattern: str, session: requests.Session, log=print) -> dict[str, str] | None:
     """{domain: earliest certificate date seen} for one crt.sh pattern. None on trouble (logged)."""
-    for attempt in range(2):
+    for attempt in range(1):
         try:
             r = session.get(CRTSH, params={"q": pattern, "output": "json", "exclude": "expired"}, timeout=(15, 75))
             if r.status_code == 200:
@@ -84,21 +83,97 @@ def search_crtsh(pattern: str, session: requests.Session, log=print) -> dict[str
     return out
 
 
+def _add(found: dict, by: dict, pattern: str, name: str, day: str) -> None:
+    d = registrable(name)
+    if d and ramen_domain(d):
+        by.setdefault(d, set()).add(pattern)
+        if d not in found or (day and day < found[d]):
+            found[d] = day
+
+
+def _search_db(log=print, budget_s: float = 20 * 60):
+    """The same logs through crt.sh's free public database (guest access), used when its website is busy.
+    Returns ({domain: earliest cert date}, {domain: patterns}, patterns answered) or None if unreachable."""
+    try:
+        import psycopg
+    except ImportError:
+        log("    crt.sh database: psycopg not installed")
+        return None
+    found: dict[str, str] = {}
+    by: dict[str, set[str]] = {}
+    ok: set[str] = set()
+    deadline = time.time() + budget_s
+    try:
+        conn = psycopg.connect(host="crt.sh", port=5432, dbname="certwatch", user="guest",
+                               connect_timeout=30, autocommit=True, application_name="KnewdleNOW-MenuCheck")
+    except Exception as e:  # noqa: BLE001
+        log(f"    crt.sh database: can't connect ({type(e).__name__}: {str(e)[:120]})")
+        return None
+    with conn:
+        for p in PATTERNS:
+            if time.time() > deadline:
+                log("    crt.sh database: out of time for this run")
+                break
+            if p.startswith("%"):
+                # Ending-with search: crt.sh indexes reversed names, so this is a fast lookup.
+                where, arg = "reverse(lower(cai.NAME_VALUE)) LIKE reverse(lower(%s))", p
+            else:
+                where, arg = "lower(cai.NAME_VALUE) LIKE lower(%s)", p.split("%")[0] + "%"
+            sql = f"""
+                SELECT lower(cai.NAME_VALUE), min(x509_notBefore(cai.CERTIFICATE))::date
+                FROM certificate_and_identities cai
+                WHERE {where} AND x509_notAfter(cai.CERTIFICATE) > now()
+                GROUP BY 1 LIMIT 20000"""
+            try:
+                with conn.cursor() as cur:
+                    cur.execute("SET statement_timeout = '90s'")
+                    cur.execute(sql, (arg,))
+                    rows = cur.fetchall()
+            except Exception as e:  # noqa: BLE001
+                log(f"    crt.sh database {p}: {type(e).__name__}: {str(e)[:150]}")
+                continue
+            ok.add(p)
+            n0 = len(found)
+            suffix = p.split("%")[-1]
+            for name, day in rows:
+                if suffix and not name.endswith(suffix):
+                    continue
+                _add(found, by, p, name, str(day or ""))
+            log(f"    crt.sh database {p}: {len(rows)} names, {len(found) - n0} new domains")
+            time.sleep(1)
+    return found, by, ok
+
+
 def all_domains(log=print, budget_s: float = 20 * 60) -> tuple[dict[str, str], dict[str, set[str]], set[str]]:
     """({domain: earliest cert date}, {domain: patterns that found it}, patterns that answered).
-    Stops starting new searches after budget_s seconds (crt.sh is free and sometimes slow)."""
+    Tries crt.sh's website first; if it's busy (it often is), uses crt.sh's public database instead.
+    Stops starting new searches after budget_s seconds."""
     deadline = time.time() + budget_s
     s = requests.Session()
     s.headers["User-Agent"] = "KnewdleNOW-MenuCheck/1.0 (+https://swatsrocks.github.io/knewdle-data/)"
     found: dict[str, str] = {}
     by: dict[str, set[str]] = {}
     ok: set[str] = set()
+    misses = 0
     for p in PATTERNS:
         if time.time() > deadline:
             log(f"    crt.sh: out of time, {len(PATTERNS) - PATTERNS.index(p)} searches left for next run")
             break
+        if misses >= 3 and not ok:
+            log("    crt.sh website isn't answering: switching to its public database")
+            db = _search_db(log, max(60.0, deadline - time.time()))
+            if db:
+                f2, b2, ok2 = db
+                for d, day in f2.items():
+                    if d not in found or (day and day < found[d]):
+                        found[d] = day
+                    by.setdefault(d, set()).update(b2.get(d, set()))
+                ok |= ok2
+            break
         got = search_crtsh(p, s, log)
-        if got is not None:
+        if got is None:
+            misses += 1
+        else:
             ok.add(p)
         for d, day in (got or {}).items():
             by.setdefault(d, set()).add(p)

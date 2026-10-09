@@ -53,16 +53,23 @@ def test_address_without_zip_and_lowercase_or_ignored():
 
 
 def test_name_rules():
+    jr = "japanese_restaurant"
     assert why("JINYA Ramen Bar", "", [], None, None) == "app"          # the app finds these already
-    assert why("Tsujita LA Artisan Noodle", "japanese_restaurant", [], None, None) == "name"
-    assert why("Mazesoba Hero", "", [], None, None) == "name"
-    assert why("中華そば 一心", "", [], None, None) == "name"
-    assert why("Some Place", "", [], "Q6065417", None) == "brand"     # Ippudo's Wikidata id
-    assert why("Kaiyo", "japanese_restaurant", ["https://kaiyoramen.com/"], None, None) == "site"
-    assert why("Kairu Sushi and Noodle Bar", "japanese_restaurant", [], None, None) == "noodle"
-    assert why("Udon Noodle Bar", "japanese_restaurant", [], None, None) is None
+    assert why("Tsujita LA Artisan Noodle", jr, [], None, None) == "name"
+    assert why("Mazesoba Hero", "restaurant", [], None, None) == "name"
+    assert why("中華そば 一心", jr, [], None, None) == "name"
+    assert why("Some Place", "restaurant", [], "Q6065417", None) == "brand"     # Ippudo's Wikidata id
+    assert why("Kaiyo", jr, ["https://kaiyoramen.com/"], None, None) == "site"
+    assert why("Kairu Sushi and Noodle Bar", jr + " sushi_restaurant", [], None, None, jr) == "noodle"
+    assert why("Udon Noodle Bar", jr, [], None, None, jr) is None
     assert why("Thai Noodle House", "asian_restaurant", [], None, None) is None
-    assert why("Sacramento Sushi", "japanese_restaurant", ["http://sacramentosushi.com"], None, None) is None
+    assert why("Sacramento Sushi", jr, ["http://sacramentosushi.com"], None, None) is None
+    # Not somewhere to eat, or ramen only by accident of spelling:
+    assert why("Go Outdoor Amenities", "outdoor_furniture_store", ["http://gooutdooramenities.com"], None, None) is None
+    assert why("Dr. Pramenko", "doctor", ["http://www.drpramenko.com"], None, None) is None
+    assert why("Gramener Inc", "software_development", ["gramener.com"], None, None) is None
+    assert why("Kinton Guns", "gun_store", [], None, None) is None
+    assert why("Walala 兰州拉面 Noodle House", "chinese_restaurant", [], None, None) is None
 
 
 def test_domains():

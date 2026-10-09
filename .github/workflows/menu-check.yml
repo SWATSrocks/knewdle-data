@@ -16,6 +16,9 @@ on:
       steps:
         description: "What to run: all, more (only names/chains/new websites), or menus"
         default: "all"
+      more_args:
+        description: "Testing only: extra options for the 'more' step (e.g. --skip names,chains)"
+        default: ""
 
 permissions:
   contents: write
@@ -42,7 +45,7 @@ jobs:
         # The log is saved with the results (state/discover_log.txt) so problems can be looked into later.
         run: |
           set -o pipefail
-          python -u -m menucheck.discover 2>&1 | tee state/discover_log.txt
+          python -u -m menucheck.discover ${{ github.event.inputs.more_args || '' }} 2>&1 | tee state/discover_log.txt
       - name: Check menus
         if: ${{ github.event.inputs.steps != 'more' }}
         # Stops in time for the results to be saved below, even on a very long run.

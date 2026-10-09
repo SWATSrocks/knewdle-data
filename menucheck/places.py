@@ -20,7 +20,30 @@ from bs4 import BeautifulSoup
 
 # "ramen" as a word start, so "Sacramento" (sac-RAMEN-to) doesn't count.
 RAMEN_WORD = re.compile(r"(?<![a-z])(?:ramen|ラーメン|らーめん|拉麺|拉麵)", re.IGNORECASE)
-RAMEN_IN_DOMAIN = re.compile(r"(?<!sac)ramen", re.IGNORECASE)
+# Ramen in a website name: at the start or end of the name, or followed by a clear word ("kaiyoramen",
+# "ramenbar", "ramen-nyc"), so "amenities", "dramendolagine" or "gramener" don't count.
+_RAMEN_LABEL = re.compile(
+    r"^ramen|[-0-9]ramen|ramen$|ramen(?=[-0-9]|bar|house|shop|ya\b|ya$|kitchen|lab|spot|club|hub|express|noodle|"
+    r"and|usa|nyc|atx|pdx|online|restaurant|studio|lover|story|street|time|world|king|boy|girl|works|place|joint|den|co$)",
+    re.IGNORECASE,
+)
+
+
+def ramen_label(label: str) -> bool:
+    """True if a website name (one label, like "kaiyoramen") reads as ramen."""
+    return bool(_RAMEN_LABEL.search(label.lower().replace("sacramento", "")))
+
+
+class _DomainMatcher:
+    """Kept for callers that use .search(host): checks the website's own name (the label before .com)."""
+    @staticmethod
+    def search(text: str):
+        parts = text.lower().split(".")
+        label = parts[-2] if len(parts) >= 2 else parts[0]
+        return ramen_label(label) or None
+
+
+RAMEN_IN_DOMAIN = _DomainMatcher()
 
 STATES = {
     "AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "DC", "FL", "GA", "HI", "ID", "IL", "IN", "IA", "KS",

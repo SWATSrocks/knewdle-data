@@ -146,12 +146,20 @@ def run_chains(state: dict, crawler: Crawler, geocode: Geocoder, only: str | Non
 
 def run_names(state: dict) -> tuple[Counter, list[dict]]:
     from .names import fetch_ramen_places
+    from .candidates import latest_release
+    from .names import RULES_VERSION
+    prev = state.get("overture", {})
+    latest = latest_release()
+    if prev.get("release") == latest and prev.get("rules") == RULES_VERSION and "app_known" in state:
+        print(f"Names: Overture {latest} already scanned with these rules; skipping (new release monthly)")
+        return Counter(prev.get("tally", {})), []
     print("Names: scanning Overture…")
     t0 = time.time()
-    release, places = fetch_ramen_places()
+    release, places = fetch_ramen_places(latest)
     tally = Counter(p["f"] for p in places)
     print(f"  Overture {release}: {dict(tally)} ({time.time() - t0:.0f}s)")
-    state["overture"] = {"release": release, "places": [p for p in places if p["f"] != "app"]}
+    state["overture"] = {"release": release, "rules": RULES_VERSION, "tally": dict(tally),
+                         "places": [p for p in places if p["f"] != "app"]}
     state["app_known"] = [{k: p[k] for k in ("name", "lat", "lon", "website")} for p in places if p["f"] == "app"]
     return tally, places
 
