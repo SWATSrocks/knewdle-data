@@ -1,0 +1,9 @@
+name = "knewdle-ratings"
+main = "src/index.js"
+compatibility_date = "2025-09-01"
+workers_dev = true
+
+[[d1_databases]]
+binding = "DB"
+database_name = "knewdle-ratings"
+database_id = "__DATABASE_ID__"

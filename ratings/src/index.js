@@ -1,0 +1,92 @@
+/**
+ * Knewdle NOW ratings: a tiny free Cloudflare Worker.
+ *
+ *   POST /rate      {"shop": "...", "stars": 1-5, "device": "..."}   -> {"ok": true}
+ *   GET  /averages  -> {"generated": "...", "shops": [{"k": shop, "avg": 4.6, "n": 12}, ...]}  (3+ ratings only)
+ *   GET  /          -> short description
+ *
+ * Stars only (no text), one rating per phone per shop (changing it replaces the old one).
+ * The app only offers rating after a Passport stamp, i.e. after an in-person visit.
+ */
+const MIN_RATINGS = 3;           // an average is published only with at least this many ratings
+const PER_DEVICE_PER_DAY = 25;   // a phone can rate (or change) at most this many shops a day
+const PER_ADDRESS_PER_DAY = 200; // one network address (e.g. a café's Wi-Fi) at most this many a day
+
+const SHOP = /^[a-z0-9.\-]{1,80}@-?\d{1,3}\.\d{2},-?\d{1,3}\.\d{2}$/;
+const DEVICE = /^[A-Za-z0-9\-]{16,64}$/;
+
+function json(body, status = 200, extra = {}) {
+  return new Response(JSON.stringify(body), {
+    status,
+    headers: { "content-type": "application/json; charset=utf-8", "access-control-allow-origin": "*", ...extra },
+  });
+}
+
+async function sha256(text) {
+  const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(text));
+  return [...new Uint8Array(buf)].map((b) => b.toString(16).padStart(2, "0")).join("").slice(0, 24);
+}
+
+async function rate(request, env) {
+  let body;
+  try {
+    body = await request.json();
+  } catch {
+    return json({ ok: false, error: "bad request" }, 400);
+  }
+  const shop = String(body.shop || "").toLowerCase();
+  const device = String(body.device || "");
+  const stars = Number(body.stars);
+  if (!SHOP.test(shop) || !DEVICE.test(device) || !Number.isInteger(stars) || stars < 1 || stars > 5) {
+    return json({ ok: false, error: "bad rating" }, 400);
+  }
+  const day = new Date().toISOString().slice(0, 10);
+
+  // Limits: per network address (hashed, never stored raw) and per phone.
+  const who = await sha256((request.headers.get("cf-connecting-ip") || "unknown") + "|" + day);
+  const row = await env.DB.prepare("SELECT count FROM limits WHERE who = ? AND day = ?").bind(who, day).first();
+  if (row && row.count >= PER_ADDRESS_PER_DAY) return json({ ok: false, error: "too many today" }, 429);
+  const mine = await env.DB.prepare("SELECT COUNT(*) AS c FROM ratings WHERE device = ? AND updated = ?")
+    .bind(device, day).first();
+  if (mine && mine.c >= PER_DEVICE_PER_DAY) return json({ ok: false, error: "too many today" }, 429);
+
+  await env.DB.batch([
+    env.DB.prepare(
+      "INSERT INTO ratings (shop, device, stars, updated) VALUES (?, ?, ?, ?) " +
+        "ON CONFLICT (shop, device) DO UPDATE SET stars = excluded.stars, updated = excluded.updated"
+    ).bind(shop, device, stars, day),
+    env.DB.prepare(
+      "INSERT INTO limits (who, day, count) VALUES (?, ?, 1) " +
+        "ON CONFLICT (who, day) DO UPDATE SET count = count + 1"
+    ).bind(who, day),
+    // Old limit rows are useless after a day.
+    env.DB.prepare("DELETE FROM limits WHERE day < ?").bind(day),
+  ]);
+  return json({ ok: true });
+}
+
+async function averages(env) {
+  const { results } = await env.DB.prepare(
+    "SELECT shop AS k, ROUND(AVG(stars), 1) AS avg, COUNT(*) AS n FROM ratings GROUP BY shop HAVING COUNT(*) >= ?"
+  ).bind(MIN_RATINGS).all();
+  return json({ generated: new Date().toISOString(), min: MIN_RATINGS, shops: results },
+    200, { "cache-control": "public, max-age=900" });
+}
+
+export default {
+  async fetch(request, env) {
+    const url = new URL(request.url);
+    if (request.method === "OPTIONS") {
+      return new Response(null, { headers: { "access-control-allow-origin": "*", "access-control-allow-methods": "GET, POST",
+        "access-control-allow-headers": "content-type" } });
+    }
+    try {
+      if (url.pathname === "/rate" && request.method === "POST") return await rate(request, env);
+      if (url.pathname === "/averages" && request.method === "GET") return await averages(env);
+      if (url.pathname === "/") return json({ name: "Knewdle NOW ratings", info: "https://swatsrocks.github.io/knewdle-data/" });
+      return json({ ok: false, error: "not found" }, 404);
+    } catch (e) {
+      return json({ ok: false, error: "server error" }, 500);
+    }
+  },
+};

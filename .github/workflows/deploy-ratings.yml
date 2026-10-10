@@ -1,0 +1,61 @@
+name: Deploy ratings
+
+# Deploys the star-ratings Worker (ratings/) to Cloudflare whenever it changes, using the
+# CLOUDFLARE_API_TOKEN and CLOUDFLARE_ACCOUNT_ID repository secrets. Creates the free D1 database the first time.
+on:
+  push:
+    branches: [main]
+    paths: ["ratings/**", ".github/workflows/deploy-ratings.yml"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deploy-ratings
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      WRANGLER_SEND_METRICS: "false"
+    defaults:
+      run:
+        working-directory: ratings
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: Check secrets
+        run: |
+          [ -n "$CLOUDFLARE_API_TOKEN" ] || { echo "Missing CLOUDFLARE_API_TOKEN secret"; exit 1; }
+          [ -n "$CLOUDFLARE_ACCOUNT_ID" ] || { echo "Missing CLOUDFLARE_ACCOUNT_ID secret"; exit 1; }
+      - name: Find or create the database
+        run: |
+          find_id() { npx -y wrangler@4 d1 list --json | python3 -c "import sys,json; d=json.load(sys.stdin); print(next((x.get('uuid') or x.get('id') for x in d if x.get('name')=='knewdle-ratings'),''))"; }
+          ID=$(find_id)
+          if [ -z "$ID" ]; then
+            npx -y wrangler@4 d1 create knewdle-ratings
+            ID=$(find_id)
+          fi
+          [ -n "$ID" ] || { echo "Couldn't find or create the D1 database"; exit 1; }
+          sed "s/__DATABASE_ID__/$ID/" wrangler.template.toml > wrangler.toml
+          echo "Database ready"
+      - name: Create tables
+        run: npx -y wrangler@4 d1 execute knewdle-ratings --remote --file schema.sql
+      - name: Deploy
+        run: npx -y wrangler@4 deploy
+      - name: Smoke test
+        run: |
+          sleep 10
+          BASE=https://knewdle-ratings.swatsrocks.workers.dev
+          curl -fsS "$BASE/" ; echo
+          curl -fsS "$BASE/averages" ; echo
+          code=$(curl -s -o /dev/null -w "%{http_code}" -X POST "$BASE/rate" -H "content-type: application/json" -d '{"shop":"bad","stars":9}')
+          echo "bad rating answered HTTP $code (expected 400)"
+          [ "$code" = "400" ]
