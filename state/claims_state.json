@@ -1,3 +1,6 @@
 {
- "claims": {}
+ "claims": {},
+ "closed_sites": {
+  "bentenramen.com": "2026-10-10"
+ }
 }
