@@ -188,7 +188,8 @@ def run_names(state: dict) -> tuple[Counter, list[dict]]:
     print(f"  Overture {release}: {dict(tally)} ({time.time() - t0:.0f}s)")
     state["overture"] = {"release": release, "rules": RULES_VERSION, "tally": dict(tally),
                          "places": [p for p in places if p["f"] != "app"]}
-    state["app_known"] = [{k: p[k] for k in ("name", "lat", "lon", "website")} for p in places if p["f"] == "app"]
+    state["app_known"] = [{k: p.get(k) for k in ("name", "lat", "lon", "website", "address")}
+                          for p in places if p["f"] == "app"]
     return tally, places
 
 

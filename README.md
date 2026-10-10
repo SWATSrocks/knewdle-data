@@ -47,6 +47,15 @@ Runs at the start of each weekly job and publishes its finds in the same file, u
 
 Run only this part: **Actions → Menu check → Run workflow → steps: `more`**.
 
+## Claimed shops (`menucheck/claims.py`, daily)
+
+Owners claim their listing at `docs/shops/` (https://swatsrocks.github.io/knewdle-data/shops/): they find their shop and
+put a code (`kn-` + 6 characters, one per website) on their own homepage. The daily **Shop updates** workflow checks
+claimed shops every day and all other ramen websites once a week (a seventh each day), and reads a
+"Knewdle NOW updates" section or `/knewdle` page (`Special:`, `Closed:`, `Hours:`, `Note:` lines). Results:
+`docs/claimed.json` (read by the app) and `docs/shops_index.json` (the claim page's search list). Shops without a
+website: add them by hand to `state/claims_state.json` when they email.
+
 ## One-time setup (about 10 minutes)
 
 1. Create a free GitHub account if you don't have one, then a **new public repository** named `knewdle-data`.

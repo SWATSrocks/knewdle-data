@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Claim your ramen shop · Knewdle NOW</title>
+<meta name="description" content="Own a ramen shop? Claim your listing on Knewdle NOW for free: get a Verified badge and post your own specials, hours and closures.">
+<style>
+  :root { --broth:#fff4dc; --cream:#fffbf1; --ink:#2b2118; --yolk:#ffc93c; --chashu:#b5552b; --muted:#8a7457; --line:#e8d7b0; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--broth); color:var(--ink); font:16px/1.55 system-ui, -apple-system, "Segoe UI", sans-serif; }
+  main { max-width:760px; margin:0 auto; padding:28px 16px 56px; }
+  .tag { display:inline-block; background:var(--yolk); border:2px solid var(--ink); border-radius:999px; padding:2px 12px; font-weight:800; font-size:.8rem; }
+  h1 { font-size:clamp(1.7rem, 5vw, 2.3rem); line-height:1.15; margin:10px 0 8px; }
+  h2 { font-size:1.25rem; margin:0 0 6px; }
+  .lede { font-size:1.08rem; margin:0 0 22px; }
+  .card { background:var(--cream); border:2px solid var(--ink); border-radius:16px; padding:18px; margin:0 0 16px; box-shadow:4px 4px 0 var(--ink); }
+  .step { display:inline-flex; align-items:center; justify-content:center; width:28px; height:28px; border-radius:50%; background:var(--yolk); border:2px solid var(--ink); font-weight:800; margin-right:8px; }
+  input[type=search] { width:100%; font:inherit; padding:12px 14px; border:2px solid var(--ink); border-radius:12px; background:#fff; }
+  ul.results { list-style:none; padding:0; margin:10px 0 0; }
+  ul.results li button { width:100%; text-align:left; font:inherit; background:#fff; border:1.5px solid var(--line); border-radius:10px; padding:10px 12px; margin:0 0 6px; cursor:pointer; }
+  ul.results li button:hover, ul.results li button:focus { border-color:var(--ink); outline:none; }
+  .addr { color:var(--muted); font-size:.9rem; display:block; }
+  .site { color:var(--chashu); font-size:.85rem; }
+  .code { display:flex; gap:8px; align-items:stretch; margin:8px 0; flex-wrap:wrap; }
+  .code code { flex:1 1 260px; background:#fff; border:2px solid var(--ink); border-radius:10px; padding:10px 12px; font-size:.95rem; word-break:break-all; }
+  button.copy { font:inherit; font-weight:700; background:var(--yolk); border:2px solid var(--ink); border-radius:10px; padding:8px 14px; cursor:pointer; }
+  pre { background:#fff; border:2px solid var(--ink); border-radius:12px; padding:12px; overflow-x:auto; font-size:.92rem; }
+  .muted { color:var(--muted); }
+  .hidden { display:none; }
+  a { color:var(--chashu); }
+  dl { margin:8px 0 0; } dt { font-weight:700; } dd { margin:0 0 6px; }
+</style>
+</head>
+<body>
+<main>
+  <span class="tag">For ramen shops</span>
+  <h1>Own a ramen shop? Claim your spot on Knewdle NOW.</h1>
+  <p class="lede">Knewdle NOW is a free app that helps people find ramen near them, and your shop may already be in it.
+    Claim your listing to get a <strong>✓ Verified</strong> badge and post your own specials, hours and closures.
+    It's free, and there's no account or password to set up.</p>
+
+  <section class="card">
+    <h2><span class="step">1</span>Find your shop</h2>
+    <p>Search by your shop's name and city.</p>
+    <input id="q" type="search" placeholder="e.g. Kairu Sushi Charlotte" autocomplete="off" aria-label="Shop name and city">
+    <p id="status" class="muted" aria-live="polite">Loading shops…</p>
+    <ul id="results" class="results"></ul>
+    <p class="muted">Not listed, or no website? Email <a href="mailto:info@swats.rocks?subject=Claim%20my%20ramen%20shop">info@swats.rocks</a> and we'll help.</p>
+  </section>
+
+  <section id="step2" class="card hidden">
+    <h2><span class="step">2</span>Add your code to your website</h2>
+    <p>For <strong id="pickedName"></strong> <span class="site" id="pickedSite"></span></p>
+    <p>Copy this line and add it anywhere on your website's homepage. The footer works great.</p>
+    <div class="code"><code id="line"></code><button class="copy" data-copy="line">Copy</button></div>
+    <p class="muted">On Squarespace, Wix, WordPress or GoDaddy, add a text block to your footer and paste the line in.</p>
+    <p>Prefer to keep it hidden? Add this to your site's header code instead:</p>
+    <div class="code"><code id="meta"></code><button class="copy" data-copy="meta">Copy</button></div>
+  </section>
+
+  <section class="card">
+    <h2><span class="step">3</span>That's it</h2>
+    <p>We check every ramen shop's website at least once a week, so your listing gets its
+      <strong>✓ Verified by the shop</strong> badge within 7 days (usually sooner). In a hurry? Email
+      <a href="mailto:info@swats.rocks?subject=Please%20check%20my%20Knewdle%20code">info@swats.rocks</a> after adding your code.
+      Once you're verified, we check your website every day. You can remove the line any time; the badge goes away on the next check.</p>
+    <p><strong>Why it's safe:</strong> your code only works on the website already linked to your listing, so nobody else can claim your shop.</p>
+  </section>
+
+  <section class="card">
+    <h2>Post specials, hours and closures</h2>
+    <p>Once you're verified, add a section to your homepage titled <strong>Knewdle NOW updates</strong>, or create a page at
+      <strong>yourwebsite.com/knewdle</strong>. Write one update per line, like this:</p>
+<pre>Special: Spicy miso tonkotsu, $15
+Closed: Nov 27-28
+Hours: Tue-Sun 11:30am-9pm
+Note: Now open for late-night ramen Fridays!</pre>
+    <dl>
+      <dt>Special</dt><dd>Shows on your listing until you remove it.</dd>
+      <dt>Closed</dt><dd>Shows a "Closed" notice on those dates, then disappears by itself.</dd>
+      <dt>Hours</dt><dd>Replaces the hours shown in the app.</dd>
+      <dt>Note</dt><dd>A short message, up to 120 characters.</dd>
+    </dl>
+    <p>We check daily. Change or delete a line and the app updates within a day.</p>
+  </section>
+
+  <p class="muted">Questions? <a href="mailto:info@swats.rocks">info@swats.rocks</a> ·
+    <a href="../">How Knewdle NOW reads restaurant websites</a></p>
+</main>
+<script>
+(function () {
+  const q = document.getElementById('q'), list = document.getElementById('results'), status = document.getElementById('status');
+  let shops = [];
+
+  async function codeFor(host) {
+    const h = host.toLowerCase().replace(/^www\./, '');
+    const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode('knewdle:' + h));
+    return 'kn-' + Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('').slice(0, 6);
+  }
+
+  function norm(s) { return (s || '').toLowerCase().normalize('NFKD').replace(/[̀-ͯ]/g, ''); }
+
+  function render() {
+    const words = norm(q.value).split(/\s+/).filter(Boolean);
+    list.innerHTML = '';
+    if (!words.length) { status.textContent = shops.length ? `${shops.length.toLocaleString()} ramen shops listed. Start typing to search.` : status.textContent; return; }
+    const hits = [];
+    for (const s of shops) {
+      const hay = norm(s.n + ' ' + (s.a || '') + ' ' + s.h);
+      if (words.every(w => hay.includes(w))) { hits.push(s); if (hits.length >= 25) break; }
+    }
+    status.textContent = hits.length ? (hits.length >= 25 ? 'Showing the first 25 matches. Add your city to narrow it down.' : `${hits.length} match${hits.length === 1 ? '' : 'es'}`) : 'No matches. Try fewer words, or email us.';
+    for (const s of hits) {
+      const li = document.createElement('li'), b = document.createElement('button');
+      b.type = 'button';
+      const name = document.createElement('strong'); name.textContent = s.n;
+      const addr = document.createElement('span'); addr.className = 'addr'; addr.textContent = s.a || '';
+      const site = document.createElement('span'); site.className = 'site'; site.textContent = s.h;
+      b.append(name, addr, site);
+      b.addEventListener('click', () => pick(s));
+      li.append(b); list.append(li);
+    }
+  }
+
+  async function pick(s) {
+    const code = await codeFor(s.h);
+    document.getElementById('pickedName').textContent = s.n;
+    document.getElementById('pickedSite').textContent = '(' + s.h + ')';
+    document.getElementById('line').textContent = 'Knewdle NOW verified: ' + code;
+    document.getElementById('meta').textContent = '<meta name="knewdle-verify" content="' + code + '">';
+    const step2 = document.getElementById('step2');
+    step2.classList.remove('hidden');
+    step2.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  document.querySelectorAll('button.copy').forEach(btn => btn.addEventListener('click', async () => {
+    const text = document.getElementById(btn.dataset.copy).textContent;
+    try { await navigator.clipboard.writeText(text); btn.textContent = 'Copied!'; }
+    catch (e) { btn.textContent = 'Select & copy'; }
+    setTimeout(() => { btn.textContent = 'Copy'; }, 1800);
+  }));
+
+  q.addEventListener('input', render);
+  fetch('../shops_index.json').then(r => r.json()).then(d => { shops = d.shops || []; render(); })
+    .catch(() => { status.textContent = "Couldn't load the shop list. Please try again, or email info@swats.rocks."; });
+})();
+</script>
+</body>
+</html>

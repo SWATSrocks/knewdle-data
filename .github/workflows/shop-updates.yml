@@ -1,0 +1,44 @@
+name: Shop updates
+
+# Daily: checks claimed shops' websites for their updates (specials, hours, closures), and a seventh of all other
+# ramen websites for new claims (so each is checked weekly).
+on:
+  schedule:
+    - cron: "17 10 * * *"     # every day 10:17 UTC (6:17am Eastern)
+  workflow_dispatch:
+    inputs:
+      all:
+        description: "Check every ramen website now (not just today's seventh)"
+        default: "no"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: shop-updates
+  cancel-in-progress: false
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -r requirements.txt
+      - name: Check claims and updates
+        timeout-minutes: 45
+        continue-on-error: true
+        run: python -u -m menucheck.claims ${{ github.event.inputs.all == 'yes' && '--all' || '' }}
+      - name: Publish
+        if: always()
+        run: |
+          git config user.name "knewdle-menu-check"
+          git config user.email "actions@users.noreply.github.com"
+          git add state/claims_state.json docs/claimed.json docs/shops_index.json
+          git diff --cached --quiet || git commit -m "Shop updates $(date -u +%Y-%m-%d)"
+          git pull --rebase -X theirs origin main || true
+          git push

@@ -17,7 +17,7 @@ import re
 from .places import RAMEN_IN_DOMAIN, host_of
 
 # Bump when the rules below change, so the next run rescans Overture even without a new release.
-RULES_VERSION = 2
+RULES_VERSION = 3  # 3: also keep addresses of places the app already shows (for the claim page)
 
 # The app's own rule (Models.kt RamenMatch): places matching it are already on the map.
 APP_NAME = re.compile(
