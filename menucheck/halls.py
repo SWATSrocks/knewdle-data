@@ -32,6 +32,11 @@ NOT_A_VENDOR = re.compile(r"^(?:eat|drink|eat\s*&\s*drink|eat and drink|vendors?
 # Grocery listings on market pages ("Ramen Cup 3var.", "Shoyu Ramen 5P"), not vendors.
 PRODUCT = re.compile(r"\d+\s*(?:var|p|pk|pc|pcs|ct|oz|g|ml|lb)\b\.?|\bcup\b|\bpack\b|\binstant\b|\bbag\b|"
                      r"\bbox\b|\bnoodle soup mix\b|\$\s*\d", re.IGNORECASE)
+# Lines that are opening hours, phone numbers or service notes, not vendor names.
+NOT_NAME_LINE = re.compile(r"\d{1,2}(?::\d\d)?\s*(?:am|pm)\b|^\(?\d{3}\)?[-. ]\d{3}|\b(?:mon|tue|wed|thu|fri|sat|sun)"
+                           r"(?:day)?s?\b|catering|delivery|ordering|order online|takeout|pick ?up|reservations?|"
+                           r"gift cards?|parking|available|food stalls|stalls|vendors|neighborhood|location",
+                           re.IGNORECASE)
 HEADINGS = ["h1", "h2", "h3", "h4", "h5", "h6"]
 
 
@@ -49,8 +54,13 @@ def _clean(s: str) -> str:
 
 def _is_name(text: str, hall: str) -> bool:
     return (2 <= len(text) <= 60 and not NOT_A_VENDOR.match(text) and text.lower() != hall.lower()
-            and not PRODUCT.search(text)
+            and not PRODUCT.search(text) and not NOT_NAME_LINE.search(text)
             and not text.lower().startswith(("welcome", "open ", "hours", "©", "copyright", "follow us")))
+
+
+def _short_name(name: str) -> str:
+    """'MATSUNOKI RAMEN- "Ramen & Fried Chicken"' -> 'MATSUNOKI RAMEN' (drop a tagline after a dash/colon)."""
+    return re.split(r"\s*[-–—:|]\s*[\"“]|\s+[–—|]\s+", name)[0].strip() or name
 
 
 def vendors_on_page(html: bytes, hall: str) -> list[tuple[str, str]]:
@@ -89,12 +99,13 @@ def vendors_on_page(html: bytes, hall: str) -> list[tuple[str, str]]:
             desc = name
         if not ramen_text(name + " " + desc):
             continue
-        if SOON_OR_GONE.search(desc):
-            continue
-        found.setdefault(name, desc[:200])
+        if SOON_OR_GONE.search(desc) or PRODUCT.search(desc[:160]):
+            continue  # not open yet, or a grocery listing ("Ramen Cup 3var. $1.99")
+        found.setdefault(_short_name(name), desc[:200])
     # Page builders (Wix, Squarespace…) often style vendor names as plain text, not headings: also read the page
     # line by line, taking a short name-like line followed by a description that says ramen.
-    lines = [_clean(l) for l in soup.get_text("\n", strip=True).split("\n")]
+    # Only when the page has no vendor titles at all (otherwise this would pick up section labels).
+    lines = [_clean(l) for l in soup.get_text("\n", strip=True).split("\n")] if not found else []
     lines = [l for l in lines if l]
     for i, line in enumerate(lines):
         if not ramen_text(line) or SOON_OR_GONE.search(line):
@@ -102,10 +113,14 @@ def vendors_on_page(html: bytes, hall: str) -> list[tuple[str, str]]:
         if _is_name(line, hall) and len(line) <= 40 and i + 1 < len(lines) and len(lines[i + 1]) > 25:
             found.setdefault(line, lines[i + 1][:200])      # the name itself says ramen
         elif len(line) > 25:
-            for j in (i - 1, i - 2):                        # a description: its vendor's name sits just above
-                if j >= 0 and _is_name(lines[j], hall) and len(lines[j]) <= 40 and not lines[j].endswith((".", "!", "?")):
-                    found.setdefault(lines[j], line[:200])
+            for j in (i - 1, i - 2, i - 3):                 # a description: its vendor's name sits just above
+                if j < 0:
                     break
+                if NOT_NAME_LINE.search(lines[j]):
+                    continue                                # skip hours/phone lines between name and description
+                if _is_name(lines[j], hall) and len(lines[j]) <= 40 and not lines[j].endswith((".", "!", "?", ",")):
+                    found.setdefault(lines[j], line[:200])
+                break
     # Same vendor written two ways ("RAMEN SETAGAYA", "Ramen Setagaya"): keep one.
     unique: dict[str, tuple[str, str]] = {}
     for name, desc in found.items():

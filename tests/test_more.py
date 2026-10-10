@@ -207,3 +207,14 @@ def test_hall_plain_text_vendors_and_products():
       <h3>RAMEN SETAGAYA</h3><p>Shio ramen</p><h3>Ramen Setagaya</h3><p>Tokyo shio ramen counter.</p></body></html>"""
     got = sorted(n for n, _ in vendors_on_page(market, "Mitsuwa Marketplace"))
     assert got == ["Ramen Setagaya", "Santouka"], got
+
+
+def test_hall_noise_ignored():
+    from menucheck.halls import vendors_on_page
+    wix = b"""<html><body><p>Bao &amp; Broth</p><p>11AM - 9PM</p><p>A selection of steamed buns and ramen bowls.</p>
+      <p>Catering</p><p>We cater ramen parties and events of any size.</p></body></html>"""
+    assert [n for n, _ in vendors_on_page(wix, "Optimist Hall")] == ["Bao & Broth"]
+    cards = b"""<html><body><div><h3>MATSUNOKI RAMEN- "Ramen &amp; Fried Chicken"</h3><p>Ramen and karaage.</p></div>
+      <div><h3>\xe3\x83\x8b\xe3\x83\xa5\xe3\x83\xbc\xe3\x82\xbf\xe3\x83\x83\xe3\x83\x81</h3><p>NEW TOUCH Ramen Cup 3var. $1.99</p></div>
+      <div><h3>Food Stalls</h3><p>Ramen, udon and more.</p></div></body></html>"""
+    assert [n for n, _ in vendors_on_page(cards, "Pine Street Market")] == ["Matsunoki Ramen"]
