@@ -21,10 +21,10 @@
   "published": 2438,
   "more": {
     "generated": "2026-10-10",
-    "published": 1252,
+    "published": 1249,
     "by_way_found": {
       "chain": 58,
-      "hall": 15,
+      "hall": 12,
       "noodle": 86,
       "brand": 1,
       "name": 17,
@@ -35,21 +35,21 @@
       "Optimist Hall": 1,
       "Transfer Co. Food Hall": 1,
       "Union Market": 2,
-      "Legacy Hall": 2,
-      "Japan Village": 2,
+      "Legacy Hall": 1,
+      "Japan Village": 1,
       "Uwajimaya Seattle": 1,
       "Uwajimaya Beaverton": 1,
       "Mitsuwa Marketplace Torrance": 3,
       "Mitsuwa Marketplace Chicago": 2,
       "Mitsuwa Marketplace Plano": 4,
       "Mitsuwa Marketplace Edgewater": 4,
-      "Pine Street Market": 2,
+      "Pine Street Market": 1,
       "North Market": 1,
-      "Time Out Market New York": 2,
+      "Time Out Market New York": 1,
       "Halidom Eatery": 1,
       "Chattahoochee Food Works": 1,
       "Japan Center Malls": 5
     }
   },
-  "more_published": 1252
+  "more_published": 1249
 }

@@ -1,48 +1,45 @@
 Halls: reading food hall and market vendor directories…
-    Camp North End: couldn't read https://camp.nc/visit/eat-drink/ (not allowed or unavailable)
-  Camp North End: no ramen vendors (1 pages read)
+  Optimist Hall: no ramen vendors (1 pages read)
   Durham Food Hall: no ramen vendors (1 pages read)
-  Optimist Hall: 11Am - 9Pm (1 pages read)
-  Legacy Hall: Chef Chin’s Hibachi Ramen, Mobile Ordering & Delivery Available (1 pages read)
+  Legacy Hall: Chef Chin’s Hibachi Ramen (1 pages read)
   Uwajimaya Seattle: Samurai Noodle (1 pages read)
   Uwajimaya Beaverton: Ramen Ryoma (1 pages read)
   Mitsuwa Marketplace Torrance: Santouka, ニュータッチ, 明星 (1 pages read)
   Mitsuwa Marketplace Chicago: Santouka, ニュータッチ (1 pages read)
-  Mitsuwa Marketplace Plano: Kabukiya Ramen, Totto Yama, ニュータッチ, 明星 (1 pages read)
-  Mitsuwa Marketplace Edgewater: Santouka, Tsujita, ニュータッチ, 明星 (1 pages read)
-  Pine Street Market: MATSUNOKI RAMEN- "Ramen & Fried Chicken", Catering (1 pages read)
-  North Market: Satori Ramen Bar (1 pages read)
   Transfer Co. Food Hall: YATAI (11 pages read)
-  Time Out Market New York: Okiboru, Dumbo (1 pages read)
-  Chattahoochee Food Works: Ramen and Poke Station By Flying Fish (1 pages read)
+  Mitsuwa Marketplace Plano: Kabukiya Ramen, Totto Yama, ニュータッチ, 明星 (1 pages read)
+  Pine Street Market: Matsunoki Ramen (1 pages read)
+  Mitsuwa Marketplace Edgewater: Santouka, Tsujita, ニュータッチ, 明星 (1 pages read)
+  North Market: Satori Ramen Bar (1 pages read)
+  Japan Village: Ramen Setagaya (17 pages read)
+  Time Out Market New York: Okiboru (1 pages read)
+  Boxyard RTP: no ramen vendors (1 pages read)
   Halidom Eatery: Wasabi Sushi & Ramen (1 pages read)
+  Chattahoochee Food Works: Ramen and Poke Station By Flying Fish (1 pages read)
   Krog Street Market: no ramen vendors (1 pages read)
   Grand Central Market: no ramen vendors (1 pages read)
-    Japan Center Malls: couldn't read https://www.sfjapantown.org/japan-center-malls/ (not allowed or unavailable)
-  Japan Center Malls: no ramen vendors (1 pages read)
-  Japan Village: Food Stalls, Ramen Setagaya (17 pages read)
   Chelsea Market: no ramen vendors (1 pages read)
-  Boxyard RTP: no ramen vendors (1 pages read)
-  Essex Market: no ramen vendors (1 pages read)
+  Camp North End: no ramen vendors (22 pages read)
   Assembly Food Hall: no ramen vendors (1 pages read)
   Reading Terminal Market: no ramen vendors (1 pages read)
+  Essex Market: no ramen vendors (1 pages read)
   DeKalb Market Hall: no ramen vendors (1 pages read)
-  Ferry Building Marketplace: no ramen vendors (1 pages read)
+  Liberty Public Market: no ramen vendors (1 pages read)
   Denver Central Market: no ramen vendors (1 pages read)
   Politan Row Colony Square: no ramen vendors (1 pages read)
-    Lyric Market: couldn't read https://lyricmarket.com/eat-drink/ (not allowed or unavailable)
-  Lyric Market: no ramen vendors (1 pages read)
-  Liberty Public Market: no ramen vendors (1 pages read)
+  Ferry Building Marketplace: no ramen vendors (1 pages read)
   Tokyo Central Gardena: no ramen vendors (1 pages read)
+  Lyric Market: no ramen vendors (1 pages read)
   Union Market: Ramen by UZU, Son of a Fish (37 pages read)
+  Japan Center Malls: K Dragon Cuisine, Kushi Tsuru, Nande-Ya, Osakaya, Kui Shin Bo (47 pages read)
   Ponce City Market: no ramen vendors (60 pages read)
-  (halls: 101s)
+  (halls: 96s)
 {
   "generated": "2026-10-10",
-  "published": 1252,
+  "published": 1249,
   "by_way_found": {
     "chain": 58,
-    "hall": 15,
+    "hall": 12,
     "noodle": 86,
     "brand": 1,
     "name": 17,
@@ -53,17 +50,17 @@ Halls: reading food hall and market vendor directories…
     "Optimist Hall": 1,
     "Transfer Co. Food Hall": 1,
     "Union Market": 2,
-    "Legacy Hall": 2,
-    "Japan Village": 2,
+    "Legacy Hall": 1,
+    "Japan Village": 1,
     "Uwajimaya Seattle": 1,
     "Uwajimaya Beaverton": 1,
     "Mitsuwa Marketplace Torrance": 3,
     "Mitsuwa Marketplace Chicago": 2,
     "Mitsuwa Marketplace Plano": 4,
     "Mitsuwa Marketplace Edgewater": 4,
-    "Pine Street Market": 2,
+    "Pine Street Market": 1,
     "North Market": 1,
-    "Time Out Market New York": 2,
+    "Time Out Market New York": 1,
     "Halidom Eatery": 1,
     "Chattahoochee Food Works": 1,
     "Japan Center Malls": 5
