@@ -37,6 +37,9 @@ Runs at the start of each weekly job and publishes its finds in the same file, u
   Credit is required: see `docs/NOTICE-foursquare.txt` and the `credits` field in `menu_ramen.json`.
 - **Chains** (`chains.py`, list in `chains.json`): each ramen chain's own Locations pages, read politely
   (robots.txt and Crawl-delay honoured). Edit `chains.json` to add or remove a chain.
+- **Food halls** (`halls.py`, list in `halls.json`): ramen counters inside food halls, markets and Japanese market
+  food courts (Optimist Hall, Mitsuwa, Uwajimaya, Japan Village…), read from each hall's own vendor directory. Listed
+  at the hall's address as "Inside <hall>". Edit `halls.json` to add a hall.
 - **New websites** (`ctlog.py`): ramen-named domains from public Certificate Transparency logs (crt.sh). Each new one's
   homepage/contact page is read once for a US address. Ones first seen after the first run are marked new (`"nw"`),
   and "coming soon" ones are marked (`"so"`).

@@ -1,6 +1,6 @@
 """Finds ramen places the app's other sources miss, and publishes them in menu_ramen.json ("more").
 
-    python -m menucheck.discover [--skip names,foursquare,chains,web] [--chain NAME] [--max-domains 1500] [--dry-run]
+    python -m menucheck.discover [--skip names,foursquare,chains,halls,web] [--chain NAME] [--max-domains 1500] [--dry-run]
 
   names  - Overture places that show ramen by other words, brands or their website address (names.py)
   chains - ramen chains' own store locators (chains.py, chains.json)
@@ -147,6 +147,28 @@ def run_chains(state: dict, crawler: Crawler, geocode: Geocoder, only: str | Non
     return tally
 
 
+def run_halls(state: dict, crawler: Crawler, geocode: Geocoder) -> Counter:
+    from .halls import CONFIG as HALLS, read_all
+    print("Halls: reading food hall and market vendor directories…")
+    halls: dict = state.setdefault("halls", {})
+    results = read_all(crawler, geocode)
+    configured = {h["name"] for h in json.loads(HALLS.read_text())["halls"]}
+    for name in list(halls):
+        if name not in configured:
+            del halls[name]
+    tally = Counter()
+    for name, places in results.items():
+        prev = halls.get(name, {}).get("places", [])
+        # A site having a bad day keeps last time's list for up to 30 days (vendors change more often than chains).
+        if not places and prev and days_since(halls[name].get("checked")) < 30:
+            tally[name] = len(prev)
+            continue
+        halls[name] = {"checked": today(), "places": places}
+        if places:
+            tally[name] = len(places)
+    return tally
+
+
 def run_names(state: dict) -> tuple[Counter, list[dict]]:
     from .names import fetch_ramen_places
     from .candidates import latest_release
@@ -210,6 +232,9 @@ def build_published(state: dict, optout: set[str]) -> tuple[list[dict], Counter]
     for name, rec in sorted(state.get("chains", {}).items()):
         for p in rec.get("places", []):
             add(p, "chain")
+    for name, rec in sorted(state.get("halls", {}).items()):
+        for p in rec.get("places", []):
+            add(p, "hall", {"in": p.get("in", name)})
     for p in state.get("overture", {}).get("places", []):
         add(p, p["f"])
     for p in state.get("foursquare", {}).get("places", []):
@@ -255,7 +280,7 @@ def write_outputs(state: dict, published: list[dict], why: Counter, run_stats: d
 
 def main() -> int:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--skip", default="", help="comma list of: names,foursquare,chains,web")
+    ap.add_argument("--skip", default="", help="comma list of: names,foursquare,chains,halls,web")
     ap.add_argument("--chain", default=None, help="testing: only read chains whose name contains this")
     ap.add_argument("--max-domains", type=int, default=1500)
     ap.add_argument("--dry-run", action="store_true")
@@ -276,6 +301,7 @@ def main() -> int:
     steps = [("names", lambda: run_names(state)[0]),
              ("foursquare", lambda: run_foursquare(state)),
              ("chains", lambda: run_chains(state, crawler, geocode, args.chain)),
+             ("halls", lambda: run_halls(state, crawler, geocode)),
              ("web", lambda: run_web(state, crawler, geocode, args.max_domains, optout, save))]
     for name, step in steps:
         if name in skip:

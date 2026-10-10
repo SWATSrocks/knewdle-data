@@ -158,3 +158,41 @@ def test_chains_config_is_valid():
         assert c["site"].startswith("https://") and c["start"]
         if c.get("pages"):
             re.compile(c["pages"])
+
+
+# --- food halls ---------------------------------------------------------------------------------------
+
+def test_hall_directory_cards():
+    from menucheck.halls import vendors_on_page
+    html = b"""<html><body><nav><a>Eat</a><a>Vendors</a></nav><h1>Tenants</h1>
+      <div class="grid">
+        <div class="card"><h3>Bao &amp; Broth</h3><p>A selection of steamed buns and ramen bowls.</p></div>
+        <div class="card"><h3>Papi Queso</h3><p>Gourmet grilled cheese.</p></div>
+        <div class="card"><h3>The Dumpling Lady</h3><p>Sichuan dumplings and noodles.</p></div>
+        <div class="card"><h3>Menya Hall Counter</h3><p>Opening soon!</p></div>
+        <div class="card"><h3>Tsukemen Lab</h3><p>Dipping noodles.</p></div>
+      </div><footer>Ramen nights every Friday</footer></body></html>"""
+    got = [n for n, _ in vendors_on_page(html, "Optimist Hall")]
+    assert got == ["Bao & Broth", "Tsukemen Lab"], got
+
+
+def test_hall_vendor_page():
+    from menucheck.halls import vendor_page
+    page = b"<html><body><header>Ponce City Market</header><h1>Okiboru</h1><p>Traditional ramen and tsukemen from Atlanta.</p></body></html>"
+    assert vendor_page(page, "Ponce City Market")[0] == "Okiboru"
+    soon = b"<html><body><h1>Okiboru</h1><p>Coming soon: ramen and tsukemen.</p></body></html>"
+    assert vendor_page(soon, "Ponce City Market") is None
+    other = b"<html><body><h1>Botiwalla</h1><p>Indian street food.</p></body></html>"
+    assert vendor_page(other, "Ponce City Market") is None
+
+
+def test_halls_config_is_valid():
+    import re
+    from menucheck.halls import CONFIG
+    from menucheck.places import addresses_in_text
+    cfg = json.loads(CONFIG.read_text())
+    for h in cfg["halls"]:
+        assert h["start"] and all(u.startswith("https://") for u in h["start"]), h
+        assert addresses_in_text(h["address"]), h["address"]
+        if h.get("pages"):
+            re.compile(h["pages"])
