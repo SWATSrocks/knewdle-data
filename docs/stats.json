@@ -21,10 +21,10 @@
   "published": 2438,
   "more": {
     "generated": "2026-10-10",
-    "published": 1249,
+    "published": 1246,
     "by_way_found": {
       "chain": 58,
-      "hall": 12,
+      "hall": 9,
       "noodle": 86,
       "brand": 1,
       "name": 17,
@@ -32,17 +32,16 @@
       "fsq": 1030
     },
     "halls": {
-      "Optimist Hall": 1,
       "Transfer Co. Food Hall": 1,
       "Union Market": 2,
       "Legacy Hall": 1,
       "Japan Village": 1,
       "Uwajimaya Seattle": 1,
       "Uwajimaya Beaverton": 1,
-      "Mitsuwa Marketplace Torrance": 3,
-      "Mitsuwa Marketplace Chicago": 2,
-      "Mitsuwa Marketplace Plano": 4,
-      "Mitsuwa Marketplace Edgewater": 4,
+      "Mitsuwa Marketplace Torrance": 1,
+      "Mitsuwa Marketplace Chicago": 1,
+      "Mitsuwa Marketplace Plano": 2,
+      "Mitsuwa Marketplace Edgewater": 2,
       "Pine Street Market": 1,
       "North Market": 1,
       "Time Out Market New York": 1,
@@ -51,5 +50,5 @@
       "Japan Center Malls": 5
     }
   },
-  "more_published": 1249
+  "more_published": 1246
 }
