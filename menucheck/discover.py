@@ -159,9 +159,12 @@ def run_halls(state: dict, crawler: Crawler, geocode: Geocoder) -> Counter:
     tally = Counter()
     for name, places in results.items():
         prev = halls.get(name, {}).get("places", [])
-        # A site having a bad day keeps last time's list for up to 30 days (vendors change more often than chains).
-        if not places and prev and days_since(halls[name].get("checked")) < 30:
-            tally[name] = len(prev)
+        if places is None:
+            # Couldn't read the directory this time: keep last time's list for up to 30 days.
+            if prev and days_since(halls[name].get("checked")) < 30:
+                tally[name] = len(prev)
+            else:
+                halls.pop(name, None)
             continue
         halls[name] = {"checked": today(), "places": places}
         if places:

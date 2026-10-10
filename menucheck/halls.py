@@ -53,6 +53,10 @@ def _clean(s: str) -> str:
 
 
 def _is_name(text: str, hall: str) -> bool:
+    # US directories write vendor names in English letters; a Japanese-only line on a market page is usually a
+    # product brand (ニュータッチ, 明星) unless the name itself is a ramen word (らーめん…).
+    if not re.search(r"[A-Za-z]", text) and not ramen_text(text):
+        return False
     return (2 <= len(text) <= 60 and not NOT_A_VENDOR.match(text) and text.lower() != hall.lower()
             and not PRODUCT.search(text) and not NOT_NAME_LINE.search(text)
             and not text.lower().startswith(("welcome", "open ", "hours", "©", "copyright", "follow us")))
@@ -113,11 +117,11 @@ def vendors_on_page(html: bytes, hall: str) -> list[tuple[str, str]]:
         if _is_name(line, hall) and len(line) <= 40 and i + 1 < len(lines) and len(lines[i + 1]) > 25:
             found.setdefault(line, lines[i + 1][:200])      # the name itself says ramen
         elif len(line) > 25:
-            for j in (i - 1, i - 2, i - 3):                 # a description: its vendor's name sits just above
+            for j in (i - 1, i - 2, i - 3, i - 4):                 # a description: its vendor's name sits just above
                 if j < 0:
                     break
-                if NOT_NAME_LINE.search(lines[j]):
-                    continue                                # skip hours/phone lines between name and description
+                if NOT_NAME_LINE.search(lines[j]) or NOT_A_VENDOR.match(lines[j]):
+                    continue                                # skip hours, phone and button lines in between
                 if _is_name(lines[j], hall) and len(lines[j]) <= 40 and not lines[j].endswith((".", "!", "?", ",")):
                     found.setdefault(lines[j], line[:200])
                 break
@@ -145,7 +149,7 @@ def vendor_page(html: bytes, hall: str) -> tuple[str, str] | None:
     return name, opening[:200]
 
 
-def read_hall(crawler: Crawler, hall: dict, geocode: Geocoder, log=print) -> list[dict]:
+def read_hall(crawler: Crawler, hall: dict, geocode: Geocoder, log=print) -> list[dict] | None:
     site = host_of(hall["start"][0])
     pattern = re.compile(hall["pages"], re.IGNORECASE) if hall.get("pages") else None
     delay = min(crawler.crawl_delay(hall["start"][0]), MAX_DELAY)
@@ -153,12 +157,14 @@ def read_hall(crawler: Crawler, hall: dict, geocode: Geocoder, log=print) -> lis
     vendors: dict[str, str] = {}
     to_read: list[str] = []
     pages_read = 0
+    read_any = False
     for url in hall["start"]:
         r = crawler.fetch(url)
         pages_read += 1
         if r is None:
             log(f"    {hall['name']}: couldn't read {url} (not allowed or unavailable)")
             continue
+        read_any = True
         for name, desc in vendors_on_page(r.content, hall["name"]):
             vendors.setdefault(name, desc)
         if pattern:
@@ -185,6 +191,8 @@ def read_hall(crawler: Crawler, hall: dict, geocode: Geocoder, log=print) -> lis
         if got:
             vendors.setdefault(*got)
 
+    if not read_any:
+        return None  # the directory couldn't be read at all: keep last time's list for a while
     if not vendors:
         log(f"  {hall['name']}: no ramen vendors ({pages_read} pages read)")
         return []
@@ -211,7 +219,7 @@ def read_hall(crawler: Crawler, hall: dict, geocode: Geocoder, log=print) -> lis
     return out
 
 
-def read_all(crawler: Crawler, geocode: Geocoder, log=print) -> dict[str, list[dict]]:
+def read_all(crawler: Crawler, geocode: Geocoder, log=print) -> dict[str, list[dict] | None]:
     from concurrent.futures import ThreadPoolExecutor
     halls = json.loads(CONFIG.read_text())["halls"]
     results: dict[str, list[dict]] = {}
@@ -224,6 +232,5 @@ def read_all(crawler: Crawler, geocode: Geocoder, log=print) -> dict[str, list[d
             return h["name"], None
     with ThreadPoolExecutor(max_workers=6) as pool:
         for name, places in pool.map(one, halls):
-            if places is not None:
-                results[name] = places
+            results[name] = places  # None = couldn't read it this time
     return results
