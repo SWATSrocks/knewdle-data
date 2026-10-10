@@ -1,6 +1,7 @@
 Foursquare: reading release 2026-09-15…
-  3542 US ramen places (127s)
-  (foursquare: 127s)
+  3542 US ramen places (86s)
+  1252 US ramen places Foursquare marks closed
+  (foursquare: 86s)
 {
   "generated": "2026-10-10",
   "published": 1236,
@@ -14,6 +15,7 @@ Foursquare: reading release 2026-09-15…
     "fsq": 1020
   },
   "foursquare": {
-    "ramen places": 3542
+    "ramen places": 3542,
+    "closed": 1252
   }
 }
