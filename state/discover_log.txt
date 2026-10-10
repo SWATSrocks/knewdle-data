@@ -1,42 +1,9 @@
-Halls: reading food hall and market vendor directories…
-  Durham Food Hall: no ramen vendors (1 pages read)
-  Optimist Hall: no ramen vendors (1 pages read)
-  Legacy Hall: Chef Chin’s Hibachi Ramen (1 pages read)
-  Uwajimaya Seattle: Samurai Noodle (1 pages read)
-  Uwajimaya Beaverton: Ramen Ryoma (1 pages read)
-  Mitsuwa Marketplace Torrance: Santouka (1 pages read)
-  Transfer Co. Food Hall: YATAI (11 pages read)
-  Mitsuwa Marketplace Chicago: Santouka (1 pages read)
-  Mitsuwa Marketplace Edgewater: Santouka, Tsujita (1 pages read)
-  Mitsuwa Marketplace Plano: Kabukiya Ramen, Totto Yama (1 pages read)
-  Pine Street Market: Matsunoki Ramen (1 pages read)
-  Japan Village: Ramen Setagaya (17 pages read)
-  Boxyard RTP: no ramen vendors (1 pages read)
-  Time Out Market New York: Okiboru (1 pages read)
-  Halidom Eatery: Wasabi Sushi & Ramen (1 pages read)
-  Chattahoochee Food Works: Ramen and Poke Station By Flying Fish (1 pages read)
-  Krog Street Market: no ramen vendors (1 pages read)
-  North Market: Satori Ramen Bar (1 pages read)
-  Grand Central Market: no ramen vendors (1 pages read)
-  Chelsea Market: no ramen vendors (1 pages read)
-  Camp North End: no ramen vendors (22 pages read)
-  Reading Terminal Market: no ramen vendors (1 pages read)
-  Assembly Food Hall: no ramen vendors (1 pages read)
-  Liberty Public Market: no ramen vendors (1 pages read)
-  Essex Market: no ramen vendors (1 pages read)
-  DeKalb Market Hall: no ramen vendors (1 pages read)
-  Politan Row Colony Square: no ramen vendors (1 pages read)
-  Ferry Building Marketplace: no ramen vendors (1 pages read)
-  Denver Central Market: no ramen vendors (1 pages read)
-  Tokyo Central Gardena: no ramen vendors (1 pages read)
-  Lyric Market: no ramen vendors (1 pages read)
-  Union Market: Ramen by UZU, Son of a Fish (37 pages read)
-  Japan Center Malls: K Dragon Cuisine, Kushi Tsuru, Nande-Ya, Osakaya, Kui Shin Bo (47 pages read)
-  Ponce City Market: no ramen vendors (60 pages read)
-  (halls: 115s)
+Foursquare: reading release 2026-09-15…
+  3542 US ramen places (127s)
+  (foursquare: 127s)
 {
   "generated": "2026-10-10",
-  "published": 1246,
+  "published": 1236,
   "by_way_found": {
     "chain": 58,
     "hall": 9,
@@ -44,24 +11,9 @@ Halls: reading food hall and market vendor directories…
     "brand": 1,
     "name": 17,
     "site": 45,
-    "fsq": 1030
+    "fsq": 1020
   },
-  "halls": {
-    "Transfer Co. Food Hall": 1,
-    "Union Market": 2,
-    "Legacy Hall": 1,
-    "Japan Village": 1,
-    "Uwajimaya Seattle": 1,
-    "Uwajimaya Beaverton": 1,
-    "Mitsuwa Marketplace Torrance": 1,
-    "Mitsuwa Marketplace Chicago": 1,
-    "Mitsuwa Marketplace Plano": 2,
-    "Mitsuwa Marketplace Edgewater": 2,
-    "Pine Street Market": 1,
-    "North Market": 1,
-    "Time Out Market New York": 1,
-    "Halidom Eatery": 1,
-    "Chattahoochee Food Works": 1,
-    "Japan Center Malls": 5
+  "foursquare": {
+    "ramen places": 3542
   }
 }

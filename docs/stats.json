@@ -21,7 +21,7 @@
   "published": 2438,
   "more": {
     "generated": "2026-10-10",
-    "published": 1246,
+    "published": 1236,
     "by_way_found": {
       "chain": 58,
       "hall": 9,
@@ -29,26 +29,11 @@
       "brand": 1,
       "name": 17,
       "site": 45,
-      "fsq": 1030
+      "fsq": 1020
     },
-    "halls": {
-      "Transfer Co. Food Hall": 1,
-      "Union Market": 2,
-      "Legacy Hall": 1,
-      "Japan Village": 1,
-      "Uwajimaya Seattle": 1,
-      "Uwajimaya Beaverton": 1,
-      "Mitsuwa Marketplace Torrance": 1,
-      "Mitsuwa Marketplace Chicago": 1,
-      "Mitsuwa Marketplace Plano": 2,
-      "Mitsuwa Marketplace Edgewater": 2,
-      "Pine Street Market": 1,
-      "North Market": 1,
-      "Time Out Market New York": 1,
-      "Halidom Eatery": 1,
-      "Chattahoochee Food Works": 1,
-      "Japan Center Malls": 5
+    "foursquare": {
+      "ramen places": 3542
     }
   },
-  "more_published": 1246
+  "more_published": 1236
 }
