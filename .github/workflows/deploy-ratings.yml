@@ -66,3 +66,9 @@ jobs:
             --command "SELECT shop, stars FROM ratings WHERE device = 'smoke-test-device-0001'"
           npx -y wrangler@4 d1 execute knewdle-ratings --remote \
             --command "DELETE FROM ratings WHERE device = 'smoke-test-device-0001'"
+          # A closed-report round trip, then clean it up.
+          curl -fsS -X POST "$BASE/report" -H "content-type: application/json" \
+            -d '{"shop":"test.knewdle@0.00,0.00","kind":"closed","name":"Test","device":"smoke-test-device-0001"}' ; echo
+          curl -fsS "$BASE/closed" ; echo
+          npx -y wrangler@4 d1 execute knewdle-ratings --remote \
+            --command "DELETE FROM reports WHERE device = 'smoke-test-device-0001'"

@@ -54,3 +54,30 @@ def test_shared_platforms_cannot_be_claimed():
     from menucheck.crawl import is_blocked_host
     for h in ("online.skytab.com", "kairu.square.site", "order.toasttab.com"):
         assert is_blocked_host("https://" + h) or any(x in h for x in SHARED_HOSTS), h
+
+
+def test_closed_for_good_on_homepage():
+    from menucheck.claims import says_closed_for_good
+    assert says_closed_for_good("<p>After 8 wonderful years, we have closed our doors. Thank you, Mooresville!</p>")
+    assert says_closed_for_good("<h1>Ramen Soul is permanently closed</h1>")
+    assert not says_closed_for_good("<p>We're closed on Mondays. Open Tue-Sun.</p>")
+    assert not says_closed_for_good("<p>Temporarily closed for renovations, we'll reopen in May!</p>")
+    assert not says_closed_for_good("<p>We have closed for the holiday and reopen Friday.</p>")
+
+
+def test_manual_closed_list_and_chain_guard(tmp_path=None):
+    import json, tempfile
+    from pathlib import Path
+    from menucheck import closed
+    d = Path(tempfile.mkdtemp())
+    (d / "closed.txt").write_text("# note\nRamen Soul | 35.582052, -80.879841  # closed\noldramen.com\nbad line here\n")
+    closed.MANUAL = d / "closed.txt"
+    got = closed.manual()
+    assert got == [{"n": "Ramen Soul", "la": 35.582052, "lo": -80.879841, "why": "manual"},
+                   {"h": "oldramen.com", "why": "manual"}], got
+    closed.CLAIMS = d / "claims.json"
+    (d / "claims.json").write_text(json.dumps({"closed_sites": {"onlyshop.com": "2026-10-10", "jinyaramenbar.com": "2026-10-10"}}))
+    listed = [{"name": "Only Shop", "lat": 1, "lon": 1, "website": "https://onlyshop.com"},
+              {"name": "JINYA A", "lat": 2, "lon": 2, "website": "https://www.jinyaramenbar.com/"},
+              {"name": "JINYA B", "lat": 3, "lon": 3, "website": "https://www.jinyaramenbar.com/"}]
+    assert closed.website_closed(listed) == [{"h": "onlyshop.com", "why": "website"}]

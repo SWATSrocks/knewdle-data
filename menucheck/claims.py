@@ -47,6 +47,23 @@ SHARED_HOSTS = ("skytab.com", "popmenu.com", "menufy.com", "order.online", "orde
 MISSES_TO_UNCLAIM = 2      # code gone on this many daily checks in a row -> badge removed
 URL = re.compile(r"https?://\S+|www\.\S+", re.IGNORECASE)
 LINE = re.compile(r"^\s*(special|closed|hours|note)\s*[:\-–]\s*(.+?)\s*$", re.IGNORECASE)
+# A shop's own homepage saying it has closed for good (not "closed Mondays" or "temporarily closed").
+CLOSED_FOR_GOOD = re.compile(
+    r"permanently closed|closed permanently|closed for good|(?:have|has) (?:now |officially |permanently )?closed "
+    r"(?:our|its) doors|closing (?:our|its) doors (?:for good|permanently)|we(?:'ve| have) (?:officially )?closed\b(?! on)"
+    r"(?! for (?:the|a|today|tonight|lunch|dinner|holiday|vacation|private|renovation))", re.IGNORECASE)
+TEMPORARY = re.compile(r"temporar|reopen|re-open|renovat|vacation|holiday|for the day|tonight|today", re.IGNORECASE)
+
+
+def says_closed_for_good(html: bytes | str) -> bool:
+    text = BeautifulSoup(html, "html.parser").get_text(" ", strip=True)[:6000]
+    for m in CLOSED_FOR_GOOD.finditer(text):
+        around = text[max(0, m.start() - 120): m.end() + 120]
+        if not TEMPORARY.search(around):
+            return True
+    return False
+
+
 UPDATES_HEADING = re.compile(r"knewdle\s*now\s*updates", re.IGNORECASE)
 MONTHS = {m: i for i, m in enumerate(
     ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"], start=1)}
@@ -201,15 +218,16 @@ def check_host(crawler: Crawler, host: str, claimed: bool) -> dict:
     home = crawler.fetch_home(host)
     if home is None:
         return {"reached": False}
+    closed = says_closed_for_good(home.content)
     if not has_code(home.content, code):
-        return {"reached": True, "verified": False}
+        return {"reached": True, "verified": False, "closed": closed}
     lines = update_lines(home.content, whole_page=False)
     page = crawler.fetch(f"{home.url.split('://')[0]}://{host_of(home.url) or host}/knewdle")
     if page is not None and host_of(page.url) == host_of(home.url):
         page_lines = update_lines(page.content, whole_page=True)
         if page_lines:
             lines = page_lines  # a dedicated /knewdle page wins over the homepage section
-    return {"reached": True, "verified": True, "updates": parse_updates(lines)}
+    return {"reached": True, "verified": True, "updates": parse_updates(lines), "closed": closed}
 
 
 def main() -> int:
@@ -241,6 +259,14 @@ def main() -> int:
                 res = f.result()
             except Exception as e:  # noqa: BLE001
                 res = {"reached": False, "err": type(e).__name__}
+            closed_sites: dict = state.setdefault("closed_sites", {})
+            if res.get("reached"):
+                if res.get("closed"):
+                    if h not in closed_sites:
+                        print(f"  ⚠ website says closed for good: {h}")
+                    closed_sites[h] = today().isoformat()
+                else:
+                    closed_sites.pop(h, None)
             rec = claims.get(h)
             if res.get("verified"):
                 if rec is None:

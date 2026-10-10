@@ -15,3 +15,13 @@ CREATE TABLE IF NOT EXISTS limits (
   count INTEGER NOT NULL,
   PRIMARY KEY (who, day)
 );
+
+-- "This shop is closed" reports: one per (shop, phone). A shop is hidden for everyone once 2+ phones report it.
+CREATE TABLE IF NOT EXISTS reports (
+  shop    TEXT NOT NULL,
+  device  TEXT NOT NULL,
+  kind    TEXT NOT NULL DEFAULT 'closed',
+  name    TEXT,                -- the shop's name as shown in the app (for the reviewer)
+  updated TEXT NOT NULL,
+  PRIMARY KEY (shop, device, kind)
+);

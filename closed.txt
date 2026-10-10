@@ -1,0 +1,5 @@
+# Shops known to be closed for good, hidden from Knewdle NOW. One per line, either:
+#   Name | latitude, longitude        (the shop's spot, from any map)
+#   website.com                       (hides the listing with that website; not for chains)
+# Lines starting with # are notes. The daily "Shop updates" job publishes this with the other closure signals.
+Ramen Soul | 35.582052, -80.879841    # Mooresville, NC: closed (Charlotte Magazine, "Ramen Soul Closes in Mooresville")

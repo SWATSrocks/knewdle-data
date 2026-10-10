@@ -19,13 +19,14 @@ from .places import RAMEN_WORD
 
 REPO = "foursquare/fsq-os-places"
 API = f"https://huggingface.co/api/datasets/{REPO}/tree/main/release"
-RULES_VERSION = 4
+RULES_VERSION = 5
 MAX_AGE_YEARS = 3   # places nobody has confirmed in this long are often gone
 # Filed as ramen but named for another cuisine: usually a mis-filed listing.
 OTHER_CUISINE = re.compile(r"^pho|(?<![a-z])(?:pho|phở|taco|taqueria|pizza|pizzeria|burger|bbq|barbecue|wings?|mexican|"
                            r"cantina|tex-mex|bagel|donut|doughnut|pancake|steakhouse|seafood boil|crawfish|hoagies?|sandwich(?:es)?|subs?|cheesesteaks?|deli|bagels?|pretzels?|"
                            r"ice cream|gelato|boba|bubble tea|smoothies?|juice)(?![a-z])",
                            re.IGNORECASE)
+LAST_CLOSED: list[dict] = []   # filled by fetch(): ramen places Foursquare marks closed
 CREDIT = "Contains data from Foursquare Open Source Places, © Foursquare Labs, Inc. (Apache License 2.0)"
 
 
@@ -92,6 +93,25 @@ def fetch(release: str) -> list[dict]:
           AND (regexp_matches({labels}, 'ramen')
                OR (regexp_matches({labels}, 'dining') AND regexp_matches(lower(coalesce(name, '')), '{words}')))
     """
+    # Ramen places Foursquare marks closed: used to hide them even where another source still lists them.
+    closed_rows = []
+    if "date_closed" in cols or "unresolved_flags" in cols:
+        is_closed = " OR ".join(x for x in (
+            "date_closed IS NOT NULL" if "date_closed" in cols else "",
+            "list_contains(unresolved_flags, 'closed') OR list_contains(unresolved_flags, 'doesnt_exist')"
+            if "unresolved_flags" in cols else "") if x)
+        closed_sql = f"""
+            SELECT name, latitude AS lat, longitude AS lon, {col('website')} AS website
+            FROM read_parquet('{path}')
+            WHERE country = 'US' AND latitude IS NOT NULL AND ({is_closed})
+              AND (regexp_matches({labels}, 'ramen')
+                   OR (regexp_matches({labels}, 'dining') AND regexp_matches(lower(coalesce(name, '')), '{words}')))
+        """
+        closed_rows = con.execute(closed_sql).fetchall()
+    global LAST_CLOSED
+    LAST_CLOSED = [{"name": n, "lat": round(float(la), 6), "lon": round(float(lo), 6), "website": w}
+                   for n, la, lo, w in closed_rows if n]
+
     out = []
     for r in con.execute(sql).fetchall():
         pid, name, lat, lon, street, city, region, website, labels_txt = r

@@ -208,7 +208,10 @@ def run_foursquare(state: dict) -> Counter:
     places = fsq.fetch(release)
     tally = Counter({"ramen places": len(places)})
     print(f"  {len(places)} US ramen places ({time.time() - t0:.0f}s)")
-    state["foursquare"] = {"release": release, "rules": fsq.RULES_VERSION, "tally": dict(tally), "places": places}
+    tally["closed"] = len(fsq.LAST_CLOSED)
+    state["foursquare"] = {"release": release, "rules": fsq.RULES_VERSION, "tally": dict(tally), "places": places,
+                           "closed": fsq.LAST_CLOSED}
+    print(f"  {len(fsq.LAST_CLOSED)} US ramen places Foursquare marks closed")
     notice = fsq.notice_text()
     if notice:
         (ROOT / "docs" / "NOTICE-foursquare.txt").write_text(notice)
