@@ -1,18 +1,66 @@
-Foursquare: reading release 2026-09-15…
-  3555 US ramen places (71s)
-  (foursquare: 71s)
+Halls: reading food hall and market vendor directories…
+  Durham Food Hall: no ramen vendors (1 pages read)
+  Optimist Hall: no ramen vendors (1 pages read)
+  Legacy Hall: Chef Chin’s Hibachi Ramen (1 pages read)
+  Uwajimaya Seattle: Samurai Noodle (1 pages read)
+  Uwajimaya Beaverton: Ramen Ryoma (1 pages read)
+  Mitsuwa Marketplace Torrance: NEW TOUCH Ramen Cup 3var., MYOJO Ramen Plant Base 2P 2var., Santouka (1 pages read)
+  Mitsuwa Marketplace Chicago: NEW TOUCH Ramen Cup 3var., Santouka (1 pages read)
+  Transfer Co. Food Hall: couldn't place the hall's address (500 E Davie St, Raleigh, NC 27601)
+  Mitsuwa Marketplace Plano: NEW TOUCH Ramen Cup 3var., MYOJO Ramen Plant Base 2P 2var., Kabukiya Ramen (1 pages read)
+  Mitsuwa Marketplace Edgewater: NEW TOUCH Ramen Cup 3var., MYOJO Ramen Plant Base 2P 2var., Santouka, Tsujita (1 pages read)
+  Pine Street Market: MATSUNOKI RAMEN- "Ramen & Fried Chicken" (1 pages read)
+  Japan Village: RAMEN SETAGAYA, Ramen Setagaya (17 pages read)
+  North Market: Satori Ramen Bar (1 pages read)
+  Boxyard RTP: no ramen vendors (1 pages read)
+  Time Out Market New York: Okiboru (1 pages read)
+  Halidom Eatery: Wasabi Sushi & Ramen (1 pages read)
+  Chattahoochee Food Works: Ramen and Poke Station By Flying Fish (1 pages read)
+  Krog Street Market: no ramen vendors (1 pages read)
+  Chelsea Market: no ramen vendors (1 pages read)
+  Grand Central Market: no ramen vendors (1 pages read)
+  Camp North End: no ramen vendors (22 pages read)
+  Assembly Food Hall: no ramen vendors (1 pages read)
+  Reading Terminal Market: no ramen vendors (1 pages read)
+  Essex Market: no ramen vendors (1 pages read)
+  DeKalb Market Hall: no ramen vendors (1 pages read)
+  Liberty Public Market: no ramen vendors (1 pages read)
+  Denver Central Market: no ramen vendors (1 pages read)
+  Politan Row Colony Square: no ramen vendors (1 pages read)
+  Ferry Building Marketplace: no ramen vendors (1 pages read)
+  Tokyo Central Gardena: no ramen vendors (1 pages read)
+  Lyric Market: no ramen vendors (1 pages read)
+  Union Market: Ramen by UZU, Son of a Fish (37 pages read)
+  Japan Center Malls: K Dragon Cuisine, Kushi Tsuru, Nande-Ya, Osakaya, Kui Shin Bo (47 pages read)
+  Ponce City Market: no ramen vendors (60 pages read)
+  (halls: 133s)
 {
-  "generated": "2026-10-09",
-  "published": 1237,
+  "generated": "2026-10-10",
+  "published": 1247,
   "by_way_found": {
     "chain": 58,
+    "hall": 10,
     "noodle": 86,
     "brand": 1,
     "name": 17,
     "site": 45,
     "fsq": 1030
   },
-  "foursquare": {
-    "ramen places": 3555
+  "halls": {
+    "Union Market": 2,
+    "Legacy Hall": 1,
+    "Japan Village": 2,
+    "Uwajimaya Seattle": 1,
+    "Uwajimaya Beaverton": 1,
+    "Mitsuwa Marketplace Torrance": 3,
+    "Mitsuwa Marketplace Chicago": 2,
+    "Mitsuwa Marketplace Plano": 3,
+    "Mitsuwa Marketplace Edgewater": 4,
+    "Pine Street Market": 1,
+    "North Market": 1,
+    "Time Out Market New York": 1,
+    "Halidom Eatery": 1,
+    "Chattahoochee Food Works": 1,
+    "Japan Center Malls": 5
   }
 }

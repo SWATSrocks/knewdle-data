@@ -20,19 +20,34 @@
   },
   "published": 2438,
   "more": {
-    "generated": "2026-10-09",
-    "published": 1237,
+    "generated": "2026-10-10",
+    "published": 1247,
     "by_way_found": {
       "chain": 58,
+      "hall": 10,
       "noodle": 86,
       "brand": 1,
       "name": 17,
       "site": 45,
       "fsq": 1030
     },
-    "foursquare": {
-      "ramen places": 3555
+    "halls": {
+      "Union Market": 2,
+      "Legacy Hall": 1,
+      "Japan Village": 2,
+      "Uwajimaya Seattle": 1,
+      "Uwajimaya Beaverton": 1,
+      "Mitsuwa Marketplace Torrance": 3,
+      "Mitsuwa Marketplace Chicago": 2,
+      "Mitsuwa Marketplace Plano": 3,
+      "Mitsuwa Marketplace Edgewater": 4,
+      "Pine Street Market": 1,
+      "North Market": 1,
+      "Time Out Market New York": 1,
+      "Halidom Eatery": 1,
+      "Chattahoochee Food Works": 1,
+      "Japan Center Malls": 5
     }
   },
-  "more_published": 1237
+  "more_published": 1247
 }
