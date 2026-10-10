@@ -196,3 +196,14 @@ def test_halls_config_is_valid():
         assert addresses_in_text(h["address"]), h["address"]
         if h.get("pages"):
             re.compile(h["pages"])
+
+
+def test_hall_plain_text_vendors_and_products():
+    from menucheck.halls import vendors_on_page
+    wix = b"""<html><body><div><p><span>Bao &amp; Broth</span></p><p><span>A selection of steamed buns and ramen bowls.</span></p>
+      <p><span>Papi Queso</span></p><p><span>Gourmet grilled cheese sandwiches and more.</span></p></div></body></html>"""
+    assert [n for n, _ in vendors_on_page(wix, "Optimist Hall")] == ["Bao & Broth"]
+    market = b"""<html><body><h3>NEW TOUCH Ramen Cup 3var.</h3><p>$1.99 sale</p><h3>Santouka</h3><p>Hokkaido ramen</p>
+      <h3>RAMEN SETAGAYA</h3><p>Shio ramen</p><h3>Ramen Setagaya</h3><p>Tokyo shio ramen counter.</p></body></html>"""
+    got = sorted(n for n, _ in vendors_on_page(market, "Mitsuwa Marketplace"))
+    assert got == ["Ramen Setagaya", "Santouka"], got

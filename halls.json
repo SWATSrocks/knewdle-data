@@ -3,7 +3,7 @@
   "halls": [
     {"name": "Optimist Hall", "address": "1115 N Brevard St, Charlotte, NC 28206", "start": ["https://www.optimisthall.com/tenants"]},
     {"name": "Camp North End", "address": "1824 Statesville Ave, Charlotte, NC 28206", "start": ["https://camp.nc/visit/eat-drink/"], "pages": "camp\\.nc/tenant/[a-z0-9-]+/?$"},
-    {"name": "Transfer Co. Food Hall", "address": "500 E Davie St, Raleigh, NC 27601", "start": ["https://www.transfercofoodhall.com/vendors"], "pages": "transfercofoodhall\\.com/vendors/[a-z0-9-]+/?$"},
+    {"name": "Transfer Co. Food Hall", "address": "500 E Davie St, Raleigh, NC 27601", "point": [35.7766, -78.6331], "start": ["https://www.transfercofoodhall.com/vendors"], "pages": "transfercofoodhall\\.com/vendors/[a-z0-9-]+/?$"},
     {"name": "Durham Food Hall", "address": "530 Foster St, Durham, NC 27701", "start": ["https://durhamfoodhall.com/eat/"]},
     {"name": "Boxyard RTP", "address": "900 Park Offices Dr, Durham, NC 27713", "start": ["https://boxyard.rtp.org/vendors/"]},
     {"name": "Union Market", "address": "1309 5th St NE, Washington, DC 20002", "start": ["https://unionmarketdc.com/the-market/eat-drink/"], "pages": "unionmarketdc\\.com/tenant/[a-z0-9-]+/?$"},

@@ -17,7 +17,7 @@ from urllib.parse import urljoin
 from bs4 import BeautifulSoup
 
 from .crawl import Crawler
-from .names import CHAIN_WORDS, EXTRA_WORDS
+from .names import APP_NAME, CHAIN_WORDS, EXTRA_WORDS
 from .places import RAMEN_WORD, Geocoder, addresses_in_text, host_of
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -29,11 +29,14 @@ NOT_A_VENDOR = re.compile(r"^(?:eat|drink|eat\s*&\s*drink|eat and drink|vendors?
                           r"shops?|dine|dining|restaurants?|food|food hall|menu|menus|hours|events?|visit|about|"
                           r"contact|order|order now|order online|view menu|learn more|more info|website|"
                           r"read more|see more|shop|stores?|map|parking|careers|faq)$", re.IGNORECASE)
+# Grocery listings on market pages ("Ramen Cup 3var.", "Shoyu Ramen 5P"), not vendors.
+PRODUCT = re.compile(r"\d+\s*(?:var|p|pk|pc|pcs|ct|oz|g|ml|lb)\b\.?|\bcup\b|\bpack\b|\binstant\b|\bbag\b|"
+                     r"\bbox\b|\bnoodle soup mix\b|\$\s*\d", re.IGNORECASE)
 HEADINGS = ["h1", "h2", "h3", "h4", "h5", "h6"]
 
 
 def ramen_text(s: str) -> bool:
-    return bool(RAMEN_WORD.search(s) or EXTRA_WORDS.search(s) or CHAIN_WORDS.search(s))
+    return bool(RAMEN_WORD.search(s) or APP_NAME.search(s) or EXTRA_WORDS.search(s) or CHAIN_WORDS.search(s))
 
 
 def _slug(s: str) -> str:
@@ -46,6 +49,7 @@ def _clean(s: str) -> str:
 
 def _is_name(text: str, hall: str) -> bool:
     return (2 <= len(text) <= 60 and not NOT_A_VENDOR.match(text) and text.lower() != hall.lower()
+            and not PRODUCT.search(text)
             and not text.lower().startswith(("welcome", "open ", "hours", "©", "copyright", "follow us")))
 
 
@@ -73,6 +77,11 @@ def vendors_on_page(html: bytes, hall: str) -> list[tuple[str, str]]:
                 break
             block = parent
         desc = _clean(block.get_text(" ", strip=True))
+        if block is el:
+            # Flat layout (title, then its description as the next element): take that description.
+            nxt = el.find_next_sibling()
+            if nxt is not None and nxt.name not in HEADINGS and len(nxt.get_text(" ", strip=True)) <= 300:
+                desc = name + " " + _clean(nxt.get_text(" ", strip=True))
         if len(desc) > 700:
             desc = name
         # A card holding several titles is a list, not one vendor: judge by the name alone then.
@@ -83,7 +92,25 @@ def vendors_on_page(html: bytes, hall: str) -> list[tuple[str, str]]:
         if SOON_OR_GONE.search(desc):
             continue
         found.setdefault(name, desc[:200])
-    return list(found.items())
+    # Page builders (Wix, Squarespace…) often style vendor names as plain text, not headings: also read the page
+    # line by line, taking a short name-like line followed by a description that says ramen.
+    lines = [_clean(l) for l in soup.get_text("\n", strip=True).split("\n")]
+    lines = [l for l in lines if l]
+    for i, line in enumerate(lines):
+        if not ramen_text(line) or SOON_OR_GONE.search(line):
+            continue
+        if _is_name(line, hall) and len(line) <= 40 and i + 1 < len(lines) and len(lines[i + 1]) > 25:
+            found.setdefault(line, lines[i + 1][:200])      # the name itself says ramen
+        elif len(line) > 25:
+            for j in (i - 1, i - 2):                        # a description: its vendor's name sits just above
+                if j >= 0 and _is_name(lines[j], hall) and len(lines[j]) <= 40 and not lines[j].endswith((".", "!", "?")):
+                    found.setdefault(lines[j], line[:200])
+                    break
+    # Same vendor written two ways ("RAMEN SETAGAYA", "Ramen Setagaya"): keep one.
+    unique: dict[str, tuple[str, str]] = {}
+    for name, desc in found.items():
+        unique.setdefault(name.lower(), (name if not name.isupper() else name.title(), desc))
+    return list(unique.values())
 
 
 def vendor_page(html: bytes, hall: str) -> tuple[str, str] | None:
