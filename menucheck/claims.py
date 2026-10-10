@@ -27,7 +27,7 @@ from pathlib import Path
 
 from bs4 import BeautifulSoup
 
-from .crawl import Crawler
+from .crawl import Crawler, is_blocked_host
 from .places import host_of
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -40,6 +40,10 @@ CONFIG = ROOT / "config.json"
 OPTOUT = ROOT / "optout.txt"
 
 LIMITS = {"special": 120, "note": 120, "hours": 160}
+# Shared ordering/website platforms: one address for many restaurants, so a code there can't prove ownership.
+SHARED_HOSTS = ("skytab.com", "popmenu.com", "menufy.com", "order.online", "orderonline", "res-menu.com",
+                "getbento.com", "bentobox", "square.site", "squareup.com", "wixsite.com", "godaddysites.com",
+                "business.site", "linktr.ee", "facebook.com", "instagram.com", "yelp.com", "google.com")
 MISSES_TO_UNCLAIM = 2      # code gone on this many daily checks in a row -> badge removed
 URL = re.compile(r"https?://\S+|www\.\S+", re.IGNORECASE)
 LINE = re.compile(r"^\s*(special|closed|hours|note)\s*[:\-–]\s*(.+?)\s*$", re.IGNORECASE)
@@ -174,7 +178,7 @@ def listings() -> dict[str, list[dict]]:
 
     def add(name, website, address, lat, lon):
         h = host_of(website or "")
-        if not h or not name or lat is None:
+        if not h or not name or lat is None or is_blocked_host("https://" + h) or any(x in h for x in SHARED_HOSTS):
             return
         lst = by_host.setdefault(h, [])
         if not any(x["name"] == name and abs(x["lat"] - lat) < 0.002 for x in lst):

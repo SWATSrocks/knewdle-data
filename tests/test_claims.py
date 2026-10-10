@@ -47,3 +47,10 @@ def test_closed_dates():
     assert closed_range("for a private event", D) is None
     # Already over: not published.
     assert "closed" not in parse_updates([("closed", "Oct 1-2")], D)
+
+
+def test_shared_platforms_cannot_be_claimed():
+    from menucheck.claims import SHARED_HOSTS
+    from menucheck.crawl import is_blocked_host
+    for h in ("online.skytab.com", "kairu.square.site", "order.toasttab.com"):
+        assert is_blocked_host("https://" + h) or any(x in h for x in SHARED_HOSTS), h
