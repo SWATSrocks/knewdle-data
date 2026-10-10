@@ -56,6 +56,13 @@ claimed shops every day and all other ramen websites once a week (a seventh each
 `docs/claimed.json` (read by the app) and `docs/shops_index.json` (the claim page's search list). Shops without a
 website: add them by hand to `state/claims_state.json` when they email.
 
+## Closed shops (`menucheck/closed.py`, daily)
+
+`docs/closed.json` lists shops to hide: `closed.txt` (add a line yourself: `Name | lat, lon` or `website.com`),
+"Closed?" reports from 2+ phones (ratings Worker, `/closed`), Foursquare's closed flags (when another source still
+lists the place and Foursquare has no open listing for it), and single-location websites that say
+"permanently closed". To un-hide a shop wrongly reported, delete its rows in the Worker's `reports` table or ask me.
+
 ## One-time setup (about 10 minutes)
 
 1. Create a free GitHub account if you don't have one, then a **new public repository** named `knewdle-data`.
