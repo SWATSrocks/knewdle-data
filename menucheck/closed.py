@@ -79,10 +79,13 @@ def foursquare_closed(extra: dict, listed: list[dict]) -> list[dict]:
     if not closed:
         return []
     shown = PlaceIndex(listed)
+    # Foursquare sometimes keeps an old closed duplicate of a shop that's still open: if it ALSO lists the
+    # same place as open, trust that and don't hide anything.
+    still_open = PlaceIndex(extra.get("foursquare", {}).get("places", []))
     out = []
     for c in closed:
         p = {"name": c["name"], "lat": c["lat"], "lon": c["lon"], "website": c.get("website")}
-        if shown.has(p):
+        if shown.has(p) and not still_open.has(p):
             out.append({"n": c["name"], "la": c["lat"], "lo": c["lon"], "why": "foursquare"})
     return out
 
