@@ -146,7 +146,7 @@ def vendor_page(html: bytes, hall: str) -> tuple[str, str] | None:
     opening = text[max(0, start): start + 1500] if start >= 0 else text[:1500]
     if not ramen_text(name + " " + opening) or SOON_OR_GONE.search(opening[:400]):
         return None
-    return name, opening[:200]
+    return (name.title() if name.isupper() else name), opening[:200]
 
 
 def read_hall(crawler: Crawler, hall: dict, geocode: Geocoder, log=print) -> list[dict] | None:
