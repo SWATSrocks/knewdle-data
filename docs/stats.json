@@ -1,15 +1,9 @@
 {
-  "generated": "2026-10-09",
+  "generated": "2026-10-12",
   "overture_release": "2026-09-23.1",
   "candidates": 47692,
-  "checked_this_run": 28547,
-  "results_this_run": {
-    "none": 27142,
-    "shop": 127,
-    "serves": 879,
-    "error": 392,
-    "robots": 7
-  },
+  "checked_this_run": 0,
+  "results_this_run": {},
   "all_known": {
     "none": 27142,
     "platform": 1474,
@@ -19,9 +13,10 @@
     "robots": 2144
   },
   "published": 2438,
+  "more_published": 1237,
   "more": {
-    "generated": "2026-10-10",
-    "published": 1236,
+    "generated": "2026-10-12",
+    "published": 1237,
     "by_way_found": {
       "chain": 58,
       "hall": 9,
@@ -29,12 +24,67 @@
       "brand": 1,
       "name": 17,
       "site": 45,
-      "fsq": 1020
+      "fsq": 1020,
+      "web": 1
+    },
+    "names": {
+      "app": 4975,
+      "noodle": 115,
+      "name": 96,
+      "brand": 3,
+      "site": 86
     },
     "foursquare": {
       "ramen places": 3542,
       "closed": 1252
+    },
+    "chains": {
+      "JINYA Ramen Bar": 57,
+      "Ramen Kizuki": 16,
+      "Ippudo": 3,
+      "Ichiran": 3,
+      "Hokkaido Ramen Santouka": 4,
+      "Marufuku Ramen": 1,
+      "Mensho": 6,
+      "Ramen Tatsu-ya": 7,
+      "Ramen Danbo": 3,
+      "HiroNori Craft Ramen": 1,
+      "Ramen-San": 3,
+      "Tsujita LA": 0,
+      "Daikokuya": 0,
+      "RAKKAN Ramen": 9,
+      "Momosan Ramen": 5,
+      "Hinodeya Ramen": 8,
+      "KYURAMEN": 34,
+      "Silverlake Ramen": 32,
+      "Kinton Ramen": 0,
+      "Yoshiharu Ramen": 0,
+      "Ichicoro Ramen": 0
+    },
+    "halls": {
+      "Transfer Co. Food Hall": 1,
+      "Union Market": 2,
+      "Legacy Hall": 1,
+      "Japan Village": 1,
+      "Uwajimaya Seattle": 1,
+      "Uwajimaya Beaverton": 1,
+      "Mitsuwa Marketplace Torrance": 1,
+      "Mitsuwa Marketplace Chicago": 1,
+      "Mitsuwa Marketplace Plano": 2,
+      "Mitsuwa Marketplace Edgewater": 2,
+      "Pine Street Market": 1,
+      "North Market": 1,
+      "Time Out Market New York": 1,
+      "Halidom Eatery": 1,
+      "Chattahoochee Food Works": 1,
+      "Japan Center Malls": 5
+    },
+    "web": {
+      "empty": 1,
+      "unreachable": 6,
+      "no US address": 10,
+      "ok": 1,
+      "not ramen": 3
     }
-  },
-  "more_published": 1236
+  }
 }
