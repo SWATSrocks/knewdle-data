@@ -1,0 +1,40 @@
+name: Test one website
+
+# Run by hand: reads one shop's website the way the weekly menu check does and saves an explanation
+# to state/site_test.txt ("why isn't this shop showing up?").
+on:
+  workflow_dispatch:
+    inputs:
+      url:
+        description: "Shop website"
+        required: true
+      name:
+        description: "Shop name (optional)"
+        default: ""
+
+permissions:
+  contents: write
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -r requirements.txt
+      - name: Read the site
+        env:
+          SITE_URL: ${{ github.event.inputs.url }}
+          SITE_NAME: ${{ github.event.inputs.name }}
+        run: python -u -m menucheck.sitetest "$SITE_URL" "$SITE_NAME" 2>&1 | tee state/site_test.txt
+      - name: Save the result
+        run: |
+          git config user.name "knewdle-menu-check"
+          git config user.email "actions@users.noreply.github.com"
+          git add state/site_test.txt
+          git commit -m "Site test: ${{ github.event.inputs.url }}" || exit 0
+          git pull --rebase && git push
