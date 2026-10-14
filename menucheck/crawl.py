@@ -86,6 +86,7 @@ class Crawler:
         self.delay = delay
         self._local = threading.local()
         self._robots: dict[str, urllib.robotparser.RobotFileParser | None] = {}
+        self._robots_denied: set[str] = set()   # hosts whose robots.txt itself answered 401/403
 
     @property
     def session(self) -> requests.Session:
@@ -114,6 +115,7 @@ class Crawler:
                 r = self.session.get(base + "/robots.txt", timeout=(6, TIMEOUT), allow_redirects=True)
                 if r.status_code in (401, 403):
                     rp.disallow_all = True
+                    self._robots_denied.add(base)
                 elif r.status_code >= 400:
                     rp.allow_all = True          # no robots.txt = no restrictions (standard behaviour)
                 else:
@@ -123,6 +125,10 @@ class Crawler:
             self._robots[base] = rp
         rp = self._robots[base]
         return bool(rp and rp.can_fetch(self.ua, url) and rp.can_fetch(BOT_NAME, url))
+
+    def _robots_file_denied(self, url: str) -> bool:
+        p = urlparse(url)
+        return f"{p.scheme}://{p.netloc}" in self._robots_denied
 
     def crawl_delay(self, url: str) -> float:
         """Seconds the site asks bots to wait between requests (robots.txt Crawl-delay), at least our own delay."""
@@ -244,7 +250,9 @@ class Crawler:
             if not self.allowed(link):
                 # A website builder's file server that doesn't publish robots rules: the file belongs to
                 # the restaurant, so the restaurant's own site rules (already checked above) apply.
-                if not (asset and not self.robots_reachable(link)):
+                # Same when its robots.txt is just access-denied (a private storage bucket answers 403 to
+                # everything it isn't serving): that's no rules at all (RFC 9309 treats 4xx as "unavailable").
+                if not (asset and (not self.robots_reachable(link) or self._robots_file_denied(link))):
                     continue
             time.sleep(self.delay)
             try:

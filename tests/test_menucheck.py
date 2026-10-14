@@ -365,3 +365,30 @@ def test_menu_pdf_under_accounts_path_is_followed():
     pdf = "https://media-cdn.getbento.com/accounts/f778/media/wnE7_Cool%20Fish%20Menu%20.pdf"
     ranked = _rank_menu_links(["https://www.coolfishlkn.com/menus/", pdf, "https://a.com/account/login", "https://a.com/gift-cards"])
     assert ranked[0] == pdf and "https://a.com/account/login" not in ranked and "https://a.com/gift-cards" not in ranked
+
+
+def test_asset_host_with_access_denied_robots_still_read():
+    import menucheck.crawl as crawl
+    srv, base = _serve("d")
+    try:
+        c = Crawler("https://example.org/bot", delay=0)
+        real_allowed = c.allowed
+        # A storage bucket that answers 403 to /robots.txt (no rules published) holding the shop's menu PDF.
+        c.allowed = lambda u: False if u.endswith(".pdf") else real_allowed(u)
+        c._robots_file_denied = lambda u: u.endswith(".pdf")
+        old = crawl.ASSET_HOSTS
+        crawl.ASSET_HOSTS = old + ("127.0.0.1",)
+        try:
+            r = c.read_site(base + "/")
+        finally:
+            crawl.ASSET_HOSTS = old
+        assert any(p.url.endswith(".pdf") for p in r.pages), [p.url for p in r.pages]
+        # ...but not on the restaurant's own site, where an explicit "no" stands.
+        c2 = Crawler("https://example.org/bot", delay=0)
+        real2 = c2.allowed
+        c2.allowed = lambda u: False if u.endswith(".pdf") else real2(u)
+        c2._robots_file_denied = lambda u: u.endswith(".pdf")
+        r2 = c2.read_site(base + "/")
+        assert not any(p.url.endswith(".pdf") for p in r2.pages)
+    finally:
+        srv.shutdown()
