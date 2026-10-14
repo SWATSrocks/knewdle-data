@@ -33,6 +33,14 @@ def main() -> int:
             print(f"  GET {u} -> {type(e).__name__}: {e}")
             raise
         print(f"  GET {u} -> {'not 200 / blocked' if r is None else f'{r.status_code} {r.headers.get(chr(99)+'ontent-type', '')} {len(r.content)} bytes'}")
+        if r is not None and b"<html" in r.content[:2000].lower():
+            import re as _re
+            raw = r.content.decode("utf-8", "replace")
+            for m in _re.finditer(r"[^\s\"'<>]{0,200}\.pdf[^\s\"'<>]{0,40}", raw, _re.IGNORECASE):
+                i = m.start()
+                print("    pdf mention:", raw[max(0, i - 200): m.end() + 60].replace("\n", " "))
+            _, links = c._page_text(r)
+            print("    menu links found:", links[:15])
         return r
 
     c._get = traced_get  # type: ignore[method-assign]
