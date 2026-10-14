@@ -298,7 +298,10 @@ def _rank_menu_links(links: list[str]) -> list[str]:
             s += 3
         if "dinner" in p or "food" in p:
             s += 2
-        if any(x in p for x in ("cart", "checkout", "login", "account", "gift", "career", "job", "privacy")):
+        # Judge "not a menu" words on the page's own name only: file hosts keep menus under paths like
+        # /accounts/<id>/media/menu.pdf (BentoBox), which must not count as an account page.
+        last = urlparse(p).path.rstrip("/").rsplit("/", 1)[-1] + "?" + urlparse(p).query
+        if any(x in last for x in ("cart", "checkout", "login", "account", "gift", "career", "job", "privacy")):
             s -= 10
         return s
     uniq = list(dict.fromkeys(links))

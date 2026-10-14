@@ -357,3 +357,11 @@ def test_asset_host_without_robots_rules_still_read():
         assert any(p.url.endswith(".pdf") for p in r.pages), [p.url for p in r.pages]
     finally:
         srv.shutdown()
+
+
+def test_menu_pdf_under_accounts_path_is_followed():
+    # BentoBox keeps menus at /accounts/<id>/media/<file>.pdf: "accounts" there isn't a login page.
+    from menucheck.crawl import _rank_menu_links
+    pdf = "https://media-cdn.getbento.com/accounts/f778/media/wnE7_Cool%20Fish%20Menu%20.pdf"
+    ranked = _rank_menu_links(["https://www.coolfishlkn.com/menus/", pdf, "https://a.com/account/login", "https://a.com/gift-cards"])
+    assert ranked[0] == pdf and "https://a.com/account/login" not in ranked and "https://a.com/gift-cards" not in ranked
