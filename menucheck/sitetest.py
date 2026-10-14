@@ -37,11 +37,22 @@ def main() -> int:
 
     c._get = traced_get  # type: ignore[method-assign]
     orig_allowed = c.allowed
+    shown: set[str] = set()
 
     def traced_allowed(u):
         ok = orig_allowed(u)
         if not ok:
-            print(f"  robots: NOT allowed {u} (robots.txt reachable: {c.robots_reachable(u)})")
+            from urllib.parse import urlparse
+            q = urlparse(u)
+            base = f"{q.scheme}://{q.netloc}"
+            print(f"  robots: NOT allowed {u} (robots.txt reachable: {c._robots.get(base) is not None})")
+            if base not in shown:
+                shown.add(base)
+                try:
+                    r = c.session.get(base + "/robots.txt", timeout=15)
+                    print(f"    {base}/robots.txt -> {r.status_code}:\n      " + r.text[:800].replace("\n", "\n      "))
+                except Exception as e:  # noqa: BLE001
+                    print(f"    {base}/robots.txt -> {type(e).__name__}")
         return ok
 
     c.allowed = traced_allowed  # type: ignore[method-assign]
