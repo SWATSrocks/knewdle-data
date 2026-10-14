@@ -1,8 +1,24 @@
-Reading https://www.coolfishlkn.com/menus/
-  GET https://www.coolfishlkn.com/menus/ -> 200 text/html; charset=utf-8 32713 bytes
+Reading http://coolfishlkn.com/
+  robots: NOT allowed http://coolfishlkn.com/ (robots.txt reachable: False)
+    http://coolfishlkn.com/robots.txt -> ConnectTimeout
+  robots: NOT allowed http://coolfishlkn.com/ (robots.txt reachable: False)
+  robots: NOT allowed https://coolfishlkn.com/ (robots.txt reachable: False)
+    https://coolfishlkn.com/robots.txt -> ConnectTimeout
+  robots: NOT allowed https://coolfishlkn.com/ (robots.txt reachable: False)
+  GET https://www.coolfishlkn.com/ -> 200 text/html; charset=utf-8 30320 bytes
+    menu links found: ['https://www.coolfishlkn.com/menus/', 'https://www.coolfishlkn.com/menus/', 'https://www.coolfishlkn.com/menus']
+  GET https://www.coolfishlkn.com/menus/ -> 200 text/html; charset=utf-8 31509 bytes
     pdf mention: l--active tabs-panel--show" 								role="tabpanel" 								aria-labelledby="tab-dine-in-menu" 								aria-selected="true"> 							      		<div class="menu-description container-sm"> 			 			<a href="https://media-cdn.getbento.com/accounts/f778a05d4e5bb713b6eacec7efbaf7e4/media/wnE7cqa4SaWWWTta9m0b_Cool%20Fish%20Menu%20.pdf" aria-label="Download PDF" class="btn btn-brand" target="_b
     menu links found: ['https://www.coolfishlkn.com/menus/#main-content', 'https://www.coolfishlkn.com/menus/', 'https://www.coolfishlkn.com/menus/', 'https://www.coolfishlkn.com/menus/#dine-in-menu', 'https://media-cdn.getbento.com/accounts/f778a05d4e5bb713b6eacec7efbaf7e4/media/wnE7cqa4SaWWWTta9m0b_Cool%20Fish%20Menu%20.pdf']
-ok=True error=None robots=False pages=1
+  robots: NOT allowed https://media-cdn.getbento.com/accounts/f778a05d4e5bb713b6eacec7efbaf7e4/media/wnE7cqa4SaWWWTta9m0b_Cool%20Fish%20Menu%20.pdf (robots.txt reachable: True)
+    https://media-cdn.getbento.com/robots.txt -> 403:
+      <?xml version="1.0" encoding="UTF-8"?>
+      <Error><Code>AccessDenied</Code><Message>Access Denied</Message><RequestId>VMVFW4ZXP24YCVSW</RequestId><HostId>XQSKUiCGlyEezbhUA5U6gcyIvvQRoFKUaFwrQ+sGSL+4zklCv5zgu8fpMqxy2SI3sReNX/QoanY=</HostId></Error>
+  robots: NOT allowed https://media-cdn.getbento.com/accounts/f778a05d4e5bb713b6eacec7efbaf7e4/media/wnE7cqa4SaWWWTta9m0b_Cool%20Fish%20Menu%20.pdf (robots.txt reachable: True)
+ok=True error=None robots=False pages=2
+
+--- https://www.coolfishlkn.com/: 1051 chars -> Verdict(kind='none', dishes=0, menu_items=0, examples=[], broths=0, reason='')
+    Cool Fish | Asian Fusion in Cornelius, NC | Skip to main content | 21726 Catawba Ave, | Cornelius, NC 28078 | (704) 765-1765 | Hours & Location | Menus | Catering | Order Online | 21726 Catawba Ave, | Cornelius, NC 28078 | (704) 765-1765 | Toggle Navigation | Hours & Location | Menus | Catering | Jobs | Contact | Order Online | Email Signup | Facebook | Instagram | Youtube | 21726 Catawba Ave, | Cornelius, NC 28078 | (704) 765-1765 | powered by Ben
 
 --- https://www.coolfishlkn.com/menus/: 1095 chars -> Verdict(kind='none', dishes=0, menu_items=0, examples=[], broths=0, reason='')
     Menus | Cool Fish in Cornelius, NC | Skip to main content | 21726 Catawba Ave, | Cornelius, NC 28078 | (704) 765-1765 | Hours & Location | Menus | Catering | Order Online | 21726 Catawba Ave, | Cornelius, NC 28078 | (704) 765-1765 | Toggle Navigation | Hours & Location | Menus | Catering | Jobs | Contact | Order Online | Email Signup | Facebook | Instagram | Youtube | 21726 Catawba Ave, | Cornelius, NC 28078 | (704) 765-1765 | powered by BentoBox | M
