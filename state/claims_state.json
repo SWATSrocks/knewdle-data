@@ -5,5 +5,943 @@
   "moonskoreankitchen.com": "2026-10-12",
   "ninjaramen.com": "2026-10-14",
   "eastwest-connection.com": "2026-10-16"
+ },
+ "site_health": {
+  "ezogiku.jimdo.com ": {
+   "bad": "dns",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "daiichiramenhawaii.net": {
+   "bad": "dns",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "roninrgv.com": {
+   "bad": "dns",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "sapporoizakayaramen.com": {
+   "bad": "dns",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "reddsramenya.com": {
+   "bad": "dns",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "shibarideli.com": {
+   "bad": "dns",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "momiramen.com": {
+   "bad": "down",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "linsexpressedinburg.com": {
+   "bad": "down",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "rockinramenhh.com": {
+   "bad": "dns",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "kantaramenandthai.com": {
+   "bad": "down",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "eboshiramenbar.com": {
+   "bad": "down",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "kamukura-usa.com": {
+   "bad": "down",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "tamashiiramen.com": {
+   "bad": "dns",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "yoshiharuramen.com": {
+   "bad": "down",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "shyoramen.com": {
+   "bad": "dns",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "toriyensushi.com": {
+   "bad": "dns",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "mapquest.com": {
+   "bad": "down",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "tastylitchfieldpark.com": {
+   "bad": "down",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "ramenos.online": {
+   "bad": "dns",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "sitlowpho.com": {
+   "bad": "dns",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "pancakekingorange.com": {
+   "bad": "dns",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "restaurantway.com": {
+   "bad": "down",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "weishiannoodles.com": {
+   "bad": "dns",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "westcovina.mangosteenvkca.com": {
+   "bad": "dns",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "akiramenchinohills.com": {
+   "bad": "dns",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "9096286130.com": {
+   "bad": "dns",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "ramenokawari.com": {
+   "bad": "dns",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "ieatsricenoodle.com": {
+   "bad": "dns",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "taikoramensushi.com": {
+   "bad": "dns",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "airiramen.com": {
+   "bad": "down",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "unikome.com": {
+   "bad": "parked",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "ninedragonseafood.com": {
+   "bad": "dns",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "eats.redbirdcloud.com": {
+   "bad": "dns",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "memorial.orderhiccupsteahouse.com": {
+   "bad": "down",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "samuraidragonslidell.com": {
+   "bad": "dns",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "takopokeramen.com": {
+   "bad": "down",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "kumaramentx.com": {
+   "bad": "dns",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "tanakaemory.com": {
+   "bad": "dns",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "menkoiramenhouse-hub.com": {
+   "bad": "dns",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "fujiramencolumbia.com": {
+   "bad": "dns",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "dreamfevas.com": {
+   "bad": "dns",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "houseofpancke.com": {
+   "bad": "dns",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "o-chanoodlecafe.com": {
+   "bad": "down",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "sappororamengrilltx.com": {
+   "bad": "down",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "majikkuramen.com": {
+   "bad": "down",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "33ramenpickup.com": {
+   "bad": "down",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "djsushisf.com": {
+   "bad": "dns",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "muditaramen.com": {
+   "bad": "dns",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "rameninstant.com": {
+   "bad": "dns",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "kingnoodle.net": {
+   "bad": "dns",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "kaijueatsramenizakaya.com": {
+   "bad": "down",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "killernoodlesg.com": {
+   "bad": "parked",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "tadamasaramen.com": {
+   "bad": "dns",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "kenshosocial.com": {
+   "bad": "parked",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "dozoramen.com": {
+   "bad": "dns",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "kotetsuramen.com": {
+   "bad": "down",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "dineries.com": {
+   "bad": "dns",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "rokusf.com": {
+   "bad": "down",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "misogoodramen.com": {
+   "bad": "down",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "angryramen.com": {
+   "bad": "down",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "hahasushigrill.com": {
+   "bad": "dns",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "shokuramenya.com": {
+   "bad": "dns",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "eatramenboy.com": {
+   "bad": "dns",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "raku-ramen.com": {
+   "bad": "down",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "kyotosushibargrillramen.com": {
+   "bad": "down",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "wendysnoodlecafe.com": {
+   "bad": "dns",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "thaistylenoodlehouse4.com": {
+   "bad": "down",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "ichibanramenandpoki.com": {
+   "bad": "down",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "fukumimiramen.com": {
+   "bad": "dns",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "noodlemasternv.com": {
+   "bad": "down",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "shogunbowlcorvallis.com": {
+   "bad": "dns",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "tokyoyaramenor.com": {
+   "bad": "dns",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "chilliochilli.com": {
+   "bad": "dns",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "noodlezen-id.com": {
+   "bad": "dns",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "thanh-salon.hub.biz": {
+   "bad": "down",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "boilingfishtogo.com": {
+   "bad": "dns",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "wyraqocha.com": {
+   "bad": "dns",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "gaolhao.com": {
+   "bad": "down",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "kent.eatpho7.com": {
+   "bad": "dns",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "samurainoodle.com": {
+   "bad": "down",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "orderkomatsuramen.com": {
+   "bad": "dns",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "dashiwa-ramen.com": {
+   "bad": "down",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "grandpanoodlegallery.com": {
+   "bad": "dns",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "honolulupokeramentogo.com": {
+   "bad": "down",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "tenkyu.cafe": {
+   "bad": "dns",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "inactive.weiramenin.com": {
+   "bad": "dns",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "tanpoporestaurant.com": {
+   "bad": "down",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "oshkoshphonoodles.com": {
+   "bad": "dns",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "lincolnshiregourmet.com": {
+   "bad": "dns",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "zobanoodlebar.com": {
+   "bad": "dns",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "ishitaramen.com": {
+   "bad": "down",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "tsutaramenpokepewaukee.com": {
+   "bad": "down",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "toriramen.com": {
+   "bad": "down",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "muramuraramenil.com": {
+   "bad": "down",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "chai-noodle.com": {
+   "bad": "dns",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "pnr360.com": {
+   "bad": "down",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "myurbannoodle.com": {
+   "bad": "down",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "bluefishmiorder.com": {
+   "bad": "down",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "newtonsnoodles.com": {
+   "bad": "dns",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "saigonbistrodc.com": {
+   "bad": "dns",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "smorefood.com": {
+   "bad": "down",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "buffalonoodlebar.com": {
+   "bad": "dns",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "harigane.jp": {
+   "bad": "dns",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "katanawestminster.com": {
+   "bad": "dns",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "littletokyovirginiabeach.com": {
+   "bad": "dns",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "yongkangstreet.org": {
+   "bad": "dns",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "ramenbarpittsburgh.com": {
+   "bad": "down",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "purinsuramennj.com": {
+   "bad": "dns",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "ramenstop.us": {
+   "bad": "dns",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "flamingpepperkitchen.net": {
+   "bad": "dns",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "publicvillagenyc.com": {
+   "bad": "dns",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "rairaiken-hub.com": {
+   "bad": "dns",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "noodlestation.com": {
+   "bad": "parked",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "justforfen.com": {
+   "bad": "dns",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "newyorkramennoodles.com": {
+   "bad": "dns",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "inoodlesramen.com": {
+   "bad": "dns",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "minigrow.com": {
+   "bad": "down",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "hanabiramensusa.com": {
+   "bad": "down",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "ramentime2020.com": {
+   "bad": "down",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "ordernaruramen.com": {
+   "bad": "dns",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "lasakausa.com": {
+   "bad": "dns",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "baysidedumplinghouseny.com": {
+   "bad": "dns",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "amsterthainyc.com": {
+   "bad": "down",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "sukiyaramenpoke.com": {
+   "bad": "down",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "oasisramenhouse.com": {
+   "bad": "down",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "rakkiiramensmithtown.com": {
+   "bad": "dns",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "kamiramenpearland.com": {
+   "bad": "down",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "yakimanieprovidence.com": {
+   "bad": "dns",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "ichirakuri.com": {
+   "bad": "dns",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "livenoodles.com": {
+   "bad": "dns",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "mdmnoodles.com": {
+   "bad": "down",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "menyajiro-boston.com": {
+   "bad": "parked",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "jingrestaurant.com": {
+   "bad": "down",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "hangarbaycafe.com": {
+   "bad": "down",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "greektowncasino.com": {
+   "bad": "down",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "hajimestc.com": {
+   "bad": "down",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "monsterasushi.com": {
+   "bad": "dns",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "goodchoicesushi.com": {
+   "bad": "down",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "brothramen.com": {
+   "bad": "dns",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "yakyudori.hinotez.com": {
+   "bad": "parked",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "ikurasushirestaurant.com": {
+   "bad": "dns",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "fukuyamany.com": {
+   "bad": "dns",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "odaramenpdx.com": {
+   "bad": "dns",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "nikubbqramen.com": {
+   "bad": "down",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "theramenhousemontana.com": {
+   "bad": "dns",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "momosushiramen.com": {
+   "bad": "dns",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "pokestationqueens.com": {
+   "bad": "dns",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "hanatoramenca.com": {
+   "bad": "dns",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "oxfordchinesefood.com": {
+   "bad": "dns",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "brothersramenfresno.com": {
+   "bad": "dns",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "hachidoriramen.com": {
+   "bad": "down",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "blankbrooklyn.com": {
+   "bad": "down",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "boneandbellyramen.com": {
+   "bad": "parked",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "chimera.restaurant": {
+   "bad": "down",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "sushi85ramen.com": {
+   "bad": "down",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  },
+  "pokenagomi.com": {
+   "bad": "down",
+   "first": "2026-10-17",
+   "last": "2026-10-17",
+   "n": 1
+  }
  }
 }
