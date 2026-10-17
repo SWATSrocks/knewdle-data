@@ -4,7 +4,7 @@
  *   POST /rate      {"shop": "...", "stars": 1-5, "device": "..."}   -> {"ok": true}
  *   GET  /averages  -> {"generated": "...", "shops": [{"k": shop, "avg": 4.6, "n": 12}, ...]}  (3+ ratings only)
  *   POST /report    {"shop": "...", "device": "...", "kind": "closed" | "closed-here", "name": "Shop name"} -> {"ok": true}
- *                   ("closed-here": the phone was at the shop, within 150 m, when it reported)
+ *                   ("closed-here": the phone passed the in-person check, the same one as Passport stamps)
  *   GET  /closed    -> {"shops": [{"k": shop, "name": "...", "n": 2, "here": 1}, ...]}
  *                   (last 365 days: 1 phone that was at the shop, or 2+ phones from anywhere)
  *   GET  /          -> short description
