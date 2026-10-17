@@ -12,6 +12,8 @@
         Hours: Tue-Sun 11:30am-9pm
         Note: Late-night ramen Fridays!
   * Publishes docs/claimed.json (read by the app) and docs/shops_index.json (the claim page's search list).
+  * The same visit also notes each website's health (state "site_health"): its domain no longer exists, it's
+    become a for-sale/parked page, or it's been down for weeks. closed.py turns that into "may be closed".
 """
 from __future__ import annotations
 
@@ -20,6 +22,7 @@ import datetime as dt
 import hashlib
 import json
 import re
+import socket
 import sys
 import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
@@ -53,6 +56,67 @@ CLOSED_FOR_GOOD = re.compile(
     r"(?:our|its) doors|closing (?:our|its) doors (?:for good|permanently)|we(?:'ve| have) (?:officially )?closed\b(?! on)"
     r"(?! for (?:the|a|today|tonight|lunch|dinner|holiday|vacation|private|renovation))", re.IGNORECASE)
 TEMPORARY = re.compile(r"temporar|reopen|re-open|renovat|vacation|holiday|for the day|tonight|today", re.IGNORECASE)
+
+
+# A website that's no longer the restaurant's: for sale, parked, expired or suspended.
+SITE_GONE = re.compile(r"domain (?:is |may be )?for sale|buy this domain|this domain (?:name )?(?:is|may be) for sale|"
+                       r"parked (?:free|domain|by)|domain (?:has )?expired|this domain has expired|renew (?:this|your) domain|"
+                       r"account (?:has been )?suspended|website (?:has been )?suspended|hugedomains|dan\.com|"
+                       r"sedo(?:parking)?\b|afternic", re.IGNORECASE)
+
+
+_DNS_WORKS: bool | None = None
+
+
+def dns_works() -> bool:
+    """Sanity check before believing "domain gone": well-known names must resolve here."""
+    global _DNS_WORKS
+    if _DNS_WORKS is None:
+        _DNS_WORKS = all(_resolves(h) for h in ("github.com", "wikipedia.org"))
+    return _DNS_WORKS
+
+
+def _resolves(h: str) -> bool:
+    try:
+        socket.getaddrinfo(h, 443)
+        return True
+    except OSError:
+        return False
+
+
+def domain_gone(host: str) -> bool | None:
+    """True if neither host nor www.host exists in DNS any more; None if DNS couldn't tell (try again later)."""
+    if not dns_works():
+        return None
+    gone = 0
+    for h in (host, "www." + host.removeprefix("www.")):
+        try:
+            socket.getaddrinfo(h, 443)
+            return False
+        except socket.gaierror as e:
+            if e.errno in (socket.EAI_NONAME, getattr(socket, "EAI_NODATA", -5)):
+                gone += 1
+            else:
+                return None
+        except OSError:
+            return None
+    return gone == 2
+
+
+def site_health(crawler: Crawler, host: str, home) -> str | None:
+    """'ok', 'dns' (domain gone), 'parked' (for sale etc.), 'down' (no answer), or None when we can't tell."""
+    if home is not None:
+        text = BeautifulSoup(home.content, "html.parser").get_text(" ", strip=True)[:4000]
+        return "parked" if SITE_GONE.search(text) else "ok"
+    gone = domain_gone(host)
+    if gone:
+        return "dns"
+    if gone is None:
+        return None
+    u = f"https://{host}/"
+    if crawler.robots_reachable(u) and not crawler.allowed(u):
+        return None                      # robots.txt says no: that's not a sign of anything
+    return "down"
 
 
 def says_closed_for_good(html: bytes | str) -> bool:
@@ -216,18 +280,35 @@ def listings() -> dict[str, list[dict]]:
 def check_host(crawler: Crawler, host: str, claimed: bool) -> dict:
     code = code_for(host)
     home = crawler.fetch_home(host)
+    health = site_health(crawler, host, home)
     if home is None:
-        return {"reached": False}
+        return {"reached": False, "health": health}
     closed = says_closed_for_good(home.content)
     if not has_code(home.content, code):
-        return {"reached": True, "verified": False, "closed": closed}
+        return {"reached": True, "verified": False, "closed": closed, "health": health}
     lines = update_lines(home.content, whole_page=False)
     page = crawler.fetch(f"{home.url.split('://')[0]}://{host_of(home.url) or host}/knewdle")
     if page is not None and host_of(page.url) == host_of(home.url):
         page_lines = update_lines(page.content, whole_page=True)
         if page_lines:
             lines = page_lines  # a dedicated /knewdle page wins over the homepage section
-    return {"reached": True, "verified": True, "updates": parse_updates(lines), "closed": closed}
+    return {"reached": True, "verified": True, "updates": parse_updates(lines), "closed": closed, "health": health}
+
+
+def note_health(health: dict, host: str, status: str | None, day: str | None = None) -> None:
+    """Keeps a running record of a website's trouble: {"bad": kind, "first": date, "last": date, "n": checks}."""
+    day = day or today().isoformat()
+    if status is None:
+        return                           # couldn't tell this time: keep what we had
+    if status == "ok":
+        health.pop(host, None)
+        return
+    rec = health.get(host)
+    if rec is None or rec.get("bad") != status:
+        health[host] = {"bad": status, "first": day, "last": day, "n": 1}
+    elif rec["last"] != day:
+        rec["last"] = day
+        rec["n"] += 1
 
 
 def main() -> int:
@@ -259,6 +340,7 @@ def main() -> int:
                 res = f.result()
             except Exception as e:  # noqa: BLE001
                 res = {"reached": False, "err": type(e).__name__}
+            note_health(state.setdefault("site_health", {}), h, res.get("health"))
             closed_sites: dict = state.setdefault("closed_sites", {})
             if res.get("reached"):
                 if res.get("closed"):

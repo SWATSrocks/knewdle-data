@@ -3,19 +3,23 @@
  *
  *   POST /rate      {"shop": "...", "stars": 1-5, "device": "..."}   -> {"ok": true}
  *   GET  /averages  -> {"generated": "...", "shops": [{"k": shop, "avg": 4.6, "n": 12}, ...]}  (3+ ratings only)
- *   POST /report    {"shop": "...", "device": "...", "kind": "closed" | "closed-here", "name": "Shop name"} -> {"ok": true}
+ *   POST /report    {"shop": "...", "device": "...", "kind": "closed" | "closed-here" | "open-here", "name": "Shop name"} -> {"ok": true}
  *                   ("closed-here": the phone passed the in-person check, the same one as Passport stamps)
- *   GET  /closed    -> {"shops": [{"k": shop, "name": "...", "n": 2, "here": 1}, ...]}
- *                   (last 365 days: 1 phone that was at the shop, or 2+ phones from anywhere)
+ *                   "open-here": the phone was at the shop and found it open (arrival check or Passport stamp)
+ *   GET  /closed    -> {"shops": [{"k": shop, "name": "...", "n": 2, "here": 1, "last": "date"}, ...]}
+ *                   (last 365 days: 1 phone that was at the shop, or 2+ phones from anywhere; never a shop
+ *                   someone found open in person since the last "closed" report)
+ *   GET  /closed?all=1 -> same, but every shop with any "closed" report, plus "open": [{"k", "last"}]
  *   GET  /          -> short description
  *
  * Stars only (no text), one rating per phone per shop (changing it replaces the old one).
  * The app only offers rating after a Passport stamp, i.e. after an in-person visit.
  */
-const MIN_RATINGS = 3;
+const MIN_RATINGS = 3;           // an average is published only with at least this many ratings
 const MIN_CLOSED_REPORTS = 2;    // different phones that must say "closed" before a shop is hidden for everyone
 const MIN_HERE_REPORTS = 1;      // ...or this many phones that said so while standing at the shop
-const REPORT_DAYS = 365;         // reports older than this no longer count           // an average is published only with at least this many ratings
+const KINDS = ["closed", "closed-here", "open-here"]; // open-here: found it open in person (arrival check or stamp)
+const REPORT_DAYS = 365;         // reports older than this no longer count
 const PER_DEVICE_PER_DAY = 25;   // a phone can rate (or change) at most this many shops a day
 const PER_ADDRESS_PER_DAY = 200; // one network address (e.g. a café's Wi-Fi) at most this many a day
 
@@ -83,7 +87,7 @@ async function report(request, env) {
   const device = String(body.device || "");
   const kind = String(body.kind || "closed");
   const name = String(body.name || "").slice(0, 80).replace(/[<>\u0000-\u001f]/g, " ");
-  if (!SHOP.test(shop) || !DEVICE.test(device) || (kind !== "closed" && kind !== "closed-here")) {
+  if (!SHOP.test(shop) || !DEVICE.test(device) || !KINDS.includes(kind)) {
     return json({ ok: false, error: "bad report" }, 400);
   }
   const day = new Date().toISOString().slice(0, 10);
@@ -119,16 +123,30 @@ async function unreport(request, env) {
   return json({ ok: true });
 }
 
-async function closed(env) {
+async function closed(env, all) {
+  // Per shop: phones that said "closed" (anywhere / at the shop) and the latest in-person "it's open".
+  // A shop someone found open in person on or after the last "closed" report is not listed.
   const since = new Date(Date.now() - REPORT_DAYS * 86400000).toISOString().slice(0, 10);
   const { results } = await env.DB.prepare(
-    "SELECT shop AS k, MAX(name) AS name, COUNT(DISTINCT device) AS n, " +
-      "COUNT(DISTINCT CASE WHEN kind = 'closed-here' THEN device END) AS here " +
-      "FROM reports WHERE kind IN ('closed', 'closed-here') AND updated >= ? " +
-      "GROUP BY shop HAVING n >= ? OR here >= ?"
-  ).bind(since, MIN_CLOSED_REPORTS, MIN_HERE_REPORTS).all();
-  return json({ generated: new Date().toISOString(), min: MIN_CLOSED_REPORTS, min_here: MIN_HERE_REPORTS, shops: results },
-    200, { "cache-control": "public, max-age=900" });
+    "SELECT shop AS k, MAX(name) AS name, " +
+      "COUNT(DISTINCT CASE WHEN kind IN ('closed', 'closed-here') THEN device END) AS n, " +
+      "COUNT(DISTINCT CASE WHEN kind = 'closed-here' THEN device END) AS here, " +
+      "MAX(CASE WHEN kind IN ('closed', 'closed-here') THEN updated END) AS last_closed, " +
+      "MAX(CASE WHEN kind = 'open-here' THEN updated END) AS last_open " +
+      "FROM reports WHERE updated >= ? GROUP BY shop"
+  ).bind(since).all();
+  const shops = [];
+  const open = [];
+  for (const r of results) {
+    if (r.last_open) open.push({ k: r.k, last: r.last_open });
+    if (!r.n || (r.last_open && r.last_open >= r.last_closed)) continue;
+    if (all || r.n >= MIN_CLOSED_REPORTS || r.here >= MIN_HERE_REPORTS) {
+      shops.push({ k: r.k, name: r.name, n: r.n, here: r.here, last: r.last_closed });
+    }
+  }
+  const body = { generated: new Date().toISOString(), min: MIN_CLOSED_REPORTS, min_here: MIN_HERE_REPORTS, shops };
+  if (all) body.open = open;
+  return json(body, 200, { "cache-control": "public, max-age=900" });
 }
 
 async function averages(env) {
@@ -151,7 +169,7 @@ export default {
       if (url.pathname === "/averages" && request.method === "GET") return await averages(env);
       if (url.pathname === "/report" && request.method === "POST") return await report(request, env);
       if (url.pathname === "/unreport" && request.method === "POST") return await unreport(request, env);
-      if (url.pathname === "/closed" && request.method === "GET") return await closed(env);
+      if (url.pathname === "/closed" && request.method === "GET") return await closed(env, url.searchParams.get("all") === "1");
       if (url.pathname === "/") return json({ name: "Knewdle NOW ratings", info: "https://swatsrocks.github.io/knewdle-data/" });
       return json({ ok: false, error: "not found" }, 404);
     } catch (e) {

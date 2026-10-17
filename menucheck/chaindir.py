@@ -192,7 +192,7 @@ def check(crawler, listed: list[dict], log=print, today: str | None = None) -> l
             continue
         log(f"  {d['name']}: {len(mine)} listings, {len(gone)} no longer in the chain's own directory")
         rec["last"] = {"date": today, "listings": len(mine), "missing": len(gone), "hidden": len(gone)}
-        out += [{"n": p["name"], "la": p["lat"], "lo": p["lon"], "why": "chain",
+        out += [{"n": p["name"], "la": p["lat"], "lo": p["lon"], "w": p.get("website"), "why": "chain",
                  "a": p.get("address")} for p in gone]
     CACHE.write_text(json.dumps(cache, indent=1, sort_keys=True))
     return out

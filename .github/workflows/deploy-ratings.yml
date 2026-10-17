@@ -73,5 +73,10 @@ jobs:
             -d '{"shop":"test.knewdle@0.00,0.00","kind":"closed-here","name":"Test","device":"smoke-test-device-0001"}' ; echo
           # One report made at the shop is enough to list it.
           curl -fsS "$BASE/closed" | tee /dev/stderr | grep -q '"k":"test.knewdle@0.00,0.00"'
+          # Found open in person afterwards: no longer listed, but shows up as a confirmation.
+          curl -fsS -X POST "$BASE/report" -H "content-type: application/json" \
+            -d '{"shop":"test.knewdle@0.00,0.00","kind":"open-here","name":"Test","device":"smoke-test-device-0002"}' ; echo
+          if curl -fsS "$BASE/closed" | grep -q '"k":"test.knewdle@0.00,0.00"'; then echo "still listed after open-here"; exit 1; fi
+          curl -fsS "$BASE/closed?all=1" | tee /dev/stderr | grep -q '"open":\[{"k":"test.knewdle@0.00,0.00"'
           npx -y wrangler@4 d1 execute knewdle-ratings --remote \
-            --command "DELETE FROM reports WHERE device = 'smoke-test-device-0001'"
+            --command "DELETE FROM reports WHERE device IN ('smoke-test-device-0001', 'smoke-test-device-0002')"
