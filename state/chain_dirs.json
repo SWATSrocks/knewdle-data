@@ -1,0 +1,541 @@
+{
+ "Noodles & Company": {
+  "last": {
+   "date": "2026-10-17",
+   "hidden": 75,
+   "listings": 478,
+   "missing": 75
+  },
+  "states": {
+   "az": {
+    "checked": "2026-10-17",
+    "stores": [
+     "gilbert/2975-south-market-street",
+     "goodyear/15290-w-mcdowell-road",
+     "peoria/7541-west-bell-road",
+     "phoenix/2805-west-agua-fria-freeway",
+     "phoenix/4901-e-ray-road",
+     "scottsdale/4902-east-shea-blvd",
+     "tempe/2000-e-rio-salado-parkway"
+    ]
+   },
+   "ca": {
+    "checked": "2026-10-17",
+    "stores": [
+     "carlsbad/2521-palomar-airport-road",
+     "citrus-heights/6123-sunrise-blvd",
+     "cypress/5895-katella-avenue",
+     "rocklin/5198-commons-dr",
+     "sacramento/2435-fair-oaks-blvd",
+     "san-diego/3650-rosecrans-street"
+    ]
+   },
+   "co": {
+    "checked": "2026-10-17",
+    "stores": [
+     "arvada/6408-yank-way",
+     "arvada/8071-wadsworth-blvd",
+     "aurora/10550-e-garden-drive",
+     "aurora/3450-north-tower-rd",
+     "aurora/4261-s-buckley-road",
+     "aurora/6200-south-main-st",
+     "boulder/1600-28th-st",
+     "boulder/2602-baseline-road",
+     "broomfield/4530-w-121st-ave",
+     "broomfield/635a-flatiron-marketplace-dr",
+     "castle-rock/34-e-allen-street",
+     "centennial/12023-e-arapahoe-rd",
+     "centennial/2370-east-arapahoe",
+     "colorado-springs/1358-interquest-parkway",
+     "colorado-springs/1812-southgate-rd",
+     "colorado-springs/5166-n-nevada-ave",
+     "colorado-springs/5844-barnes-road",
+     "colorado-springs/7234-north-academy-blvd",
+     "denver/1502-s-colorado-blvd",
+     "denver/303-16th-street",
+     "denver/6300-east-hampden",
+     "denver/7401-e-29th-ave",
+     "englewood/697-w-hampden-ave",
+     "fort-collins/3519-south-college-ave",
+     "fort-collins/4733-s-timberline-rd",
+     "fort-collins/648-s-college-avenue",
+     "fountain/6825-mesa-ridge-pkwy",
+     "grand-junction/2474-highway-6-50",
+     "greeley/4650-centerplace-dr",
+     "highlands-ranch/9563-south-university-blvd",
+     "lafayette/534-w-south-boulder-rd",
+     "lakewood/375-union-blvd",
+     "lakewood/7740-west-alameda",
+     "littleton/8555-w-belleview-ave",
+     "littleton/9400-heritage-hills-cir",
+     "littleton/9956-remington",
+     "longmont/1087-s-hover-street",
+     "longmont/2255-n-main-st",
+     "loveland/1550-fall-river-dr",
+     "loveland/225-east-29th-street",
+     "parker/11153-s-parker-rd",
+     "pueblo/825-west-us-hwy-50",
+     "thornton/3824-120th-ave",
+     "westminster/10355-federal-blvd",
+     "westminster/14375-orchard-parkway"
+    ]
+   },
+   "ct": {
+    "checked": "2026-10-17",
+    "stores": [
+     "manchester/1442-pleasant-valley-road",
+     "middletown/808-washington-street",
+     "southington/832-queen-st",
+     "west-hartford/333-north-main-street"
+    ]
+   },
+   "fl": {
+    "checked": "2026-10-17",
+    "stores": [
+     "orlando/12101-university-blvd",
+     "orlando/7822-w-sand-lake-rd"
+    ]
+   },
+   "ia": {
+    "checked": "2026-10-17",
+    "stores": [
+     "ames/400-s-duff-avenue",
+     "cedar-rapids/310-collins-road-ne",
+     "coralville/2451-2nd-street",
+     "davenport/5345-elmore-ave",
+     "des-moines/2105-ingersoll-ave",
+     "des-moines/5840-douglas-ave",
+     "dubuque/800-wacker-drive",
+     "iowa-city/201-s-clinton",
+     "waterloo/2833-crossroads-blvd",
+     "waukee/505-e-hickman-rd"
+    ]
+   },
+   "id": {
+    "checked": "2026-10-17",
+    "stores": [
+     "boise/535-n-milwaukee",
+     "chubbuck/4013-yellowstone-avenue",
+     "idaho-falls/1870-s-25th-east",
+     "meridian/2274-n-eagle-rd",
+     "nampa/1275-n-happy-valley-road",
+     "twin-falls/1833-blue-lakes-blvd-north"
+    ]
+   },
+   "il": {
+    "checked": "2026-10-17",
+    "stores": [
+     "arlington-heights/66-s-arlington-heights-road",
+     "aurora/2365-n-farnsworth",
+     "bloomingdale/398-w-army-trail-road",
+     "bloomington/305-n-veterans-pkwy",
+     "bourbonnais/2024-route-50",
+     "buffalo-grove/1209-west-dundee-road",
+     "champaign/528-east-green",
+     "chicago/1-south-franklin-st",
+     "chicago/1022-s-canal-street",
+     "chicago/2000-n-clybourn-ave",
+     "chicago/3419-n-southport-ave",
+     "crystal-lake/4912-northwest-highway",
+     "deer-park/20530-north-rand-road",
+     "deerfield/110c-south-waukegan-rd",
+     "east-peoria/358-west-washington-st",
+     "elgin/895-south-randall-road",
+     "evanston/930-church-street",
+     "frankfort/21075-s-lagrange-rd",
+     "geneva/1310-commons-drive",
+     "glenview/1851-tower-drive",
+     "grayslake/804-e-belvidere-road",
+     "gurnee/6681-grand-ave",
+     "la-grange/1-east-burlington-avenue",
+     "lake-in-the-hills/315-n-randall-road",
+     "lockport/16341-west-159th-street",
+     "machesney-park/1247-w-lane-rd",
+     "naperville/207-south-washington",
+     "naperville/2727-west-75th-st",
+     "niles/5681-west-touhy-avenue",
+     "normal/609-south-main-street",
+     "norridge/4157-north-harlem",
+     "oakbrook-terrace/18-w-64-west-22nd-street",
+     "oswego/2336-route-34",
+     "plainfield/13511-s-route-59",
+     "rockford/6430-e-state-st",
+     "schaumburg/1400-n-meacham-rd",
+     "schaumburg/2610-west-schaumburg-road",
+     "shiloh/3290-green-mount-crossing",
+     "shorewood/920-brook-forest-ave",
+     "springfield/2575-w-wabash-st",
+     "tinley-park/15915-s-harlem-avenue",
+     "vernon-hills/700-n-milwaukee-avenue",
+     "wheaton/15-danada-square-east",
+     "woodridge/1001-75th-st-at-lemont",
+     "yorkville/1789-marketview-drive"
+    ]
+   },
+   "in": {
+    "checked": "2026-10-17",
+    "stores": [
+     "bloomington/2560-e-3rd-st",
+     "bloomington/517-e-kirkwood-avenue",
+     "carmel/1-east-carmel-drive",
+     "columbus/3040-columbus-center",
+     "crown-point/10720-broadway-avenue",
+     "elkhart/405-east-county-road-6",
+     "fishers/8654-e96th-st",
+     "fort-wayne/4602-illinois-rd",
+     "indianapolis/5710-west-86th-street",
+     "indianapolis/7853-s-us-31-at-shelby-st",
+     "indianapolis/8702-keystone-crossing",
+     "indianapolis/903-indiana-ave",
+     "muncie/1416-w-mcgalliard-rd",
+     "munster/9140-calumet-ave",
+     "noblesville/17015-mercantile-blvd",
+     "plainfield/190-s-perry-rd",
+     "south-bend/1233-n-eddy-street",
+     "valparaiso/71-silhavy-rd",
+     "west-lafayette/102-n-chauncey-ave"
+    ]
+   },
+   "ks": {
+    "checked": "2026-10-17",
+    "stores": [
+     "lawrence/8-west-8th-street",
+     "manhattan/705-n-3rd-street",
+     "olathe/15208-west-119th-street",
+     "overland-park/11339-95th-st",
+     "overland-park/13448-metcalf-avenue",
+     "prairie-village/7600-state-line-rd",
+     "topeka/2110-sw-wanamaker-rd",
+     "wichita/3300-north-rock-road",
+     "wichita/3807-n-maize-road"
+    ]
+   },
+   "ky": {
+    "checked": "2026-10-17",
+    "stores": [
+     "lexington/2468-nicholasville-road",
+     "louisville/1225-s-hurstbourne-pkwy",
+     "louisville/319-w-cardinal-blvd",
+     "newport/193-pavilion-parkway"
+    ]
+   },
+   "md": {
+    "checked": "2026-10-17",
+    "stores": [
+     "baltimore/5350-campbell-blvd",
+     "bel-air/621-bel-air-road",
+     "bowie/3916-town-center-blvd",
+     "college-park/7320-baltimore-avenue",
+     "columbia/6191-old-dobbin-lane",
+     "frederick/200-a-shorebird-st",
+     "gaithersburg/177-kentlands-boulevard",
+     "germantown/20952-frederick-rd",
+     "glen-burnie/6710-governor-ritchie-hwy",
+     "hagerstown/17328-valley-mall-rd",
+     "lanham/2801-campus-way-north",
+     "laurel/14700-baltimore-ave",
+     "lexington-park/46360-lexington-village-way",
+     "owings-mills/10450-owings-mills-blvd",
+     "rockville/1609-b-rockville-pike",
+     "severna-park/552b-governor-ritchie-hwy",
+     "waldorf/3055-waldorf-market-place"
+    ]
+   },
+   "mi": {
+    "checked": "2026-10-17",
+    "stores": [
+     "ann-arbor/2245-w-stadium-blvd",
+     "ann-arbor/3601-washtenaw-ave",
+     "east-lansing/101-e-grand-river-ave",
+     "grand-rapids/2289-east-beltline",
+     "grand-rapids/5070-28th-street-se",
+     "grandville/3871-rivertown-parkway-sw",
+     "holland/12371-james-street",
+     "kalamazoo/5363-w-main-st",
+     "livonia/29459-plymouth-rd",
+     "macomb/15575-hall-road",
+     "midland/7007-eastman-avenue",
+     "mount-pleasant/4493-e-bluegrass-rd",
+     "northville/17931-haggerty-road",
+     "novi/26425-novi-road",
+     "okemos/1965-w-grand-river-ave",
+     "portage/6150-s-westnedge-avenue",
+     "royal-oak/420-s-main-street",
+     "troy/3119-crooks-road",
+     "troy/6836-rochester-rd"
+    ]
+   },
+   "mn": {
+    "checked": "2026-10-17",
+    "stores": [
+     "apple-valley/14879-florence-trail",
+     "blaine/10340-baltimore-st",
+     "blaine/12351-ulysses-st-ne",
+     "bloomington/60-east-broadway",
+     "burnsville/901-county-rd-42-w",
+     "chanhassen/945-west-78th-street",
+     "coon-rapids/3479-river-rapids-dr-nw",
+     "cottage-grove/7180-east-point-douglas-rd",
+     "duluth/1600-miller-trunk-hwy",
+     "eagan/2000-rahncliff-ct",
+     "eden-prairie/13300-technology-dr",
+     "edina/6531-york-ave-south",
+     "elk-river/18130-zane-st-nw",
+     "golden-valley/7808-olson-memorial-hwy",
+     "mankato/1600-warren-st-and-stadium-rd",
+     "mankato/1930-adams-st",
+     "maple-grove/7840-main-st",
+     "maplewood/2865-white-bear-ave",
+     "minneapolis/300-e-hennepin-ave",
+     "minneapolis/5220-central-avenue-ne",
+     "minneapolis/820-washington-ave-se",
+     "minnetonka/4937-county-rd-101",
+     "moorhead/922-holiday-drive",
+     "plymouth/3425-vicksburg-ln-n",
+     "richfield/1732-e-66th-st",
+     "rochester/3944-marketplace-dr-nw",
+     "rochester/4607-maine-ave-se",
+     "rogers/13590-northdale-blvd",
+     "rosemount/15067-canada-avenue-w",
+     "roseville/1655-county-road-b2",
+     "saint-cloud/211-5th-avenue-s",
+     "saint-cloud/4011-w-division-st",
+     "saint-louis-park/8120-highway-7",
+     "saint-paul/470-hamline-avenue-n",
+     "savage/14000-hwy-13-south",
+     "stillwater/13301-north-60th-st",
+     "vadnais-heights/1020-highway-96-east",
+     "west-st-paul/1590-robert-street-south",
+     "woodbury/7455-currell-blvd"
+    ]
+   },
+   "mo": {
+    "checked": "2026-10-17",
+    "stores": [
+     "chesterfield/1784-clarkson-rd",
+     "columbia/21-conley-road",
+     "creve-coeur/10925-olive-blvd",
+     "kansas-city/9140-ne-barry-road",
+     "lees-summit/659-nw-blue-parkway",
+     "st-louis/64-hampton-village-plaza"
+    ]
+   },
+   "mt": {
+    "checked": "2026-10-17",
+    "stores": [
+     "bozeman/1459-north-19th-ave",
+     "missoula/3680-brooks-st"
+    ]
+   },
+   "nc": {
+    "checked": "2026-10-17",
+    "stores": [
+     "apex/1055-beaver-creek-commons-drive",
+     "cary/200-crossroads-blvd",
+     "charlotte/8016-providence-rd",
+     "charlotte/8926-jm-keynes-dr",
+     "durham/2608-erwin-rd",
+     "fayetteville/1926-skibo-road",
+     "jacksonville/1345-western-blvd",
+     "raleigh/2031-cameron-st",
+     "raleigh/8411-brier-creek-parkway",
+     "wilmington/351-s-collge-rd"
+    ]
+   },
+   "nd": {
+    "checked": "2026-10-17",
+    "stores": [
+     "bismarck/303-s-third-st",
+     "fargo/2603-kirsten-lane",
+     "fargo/4501-15th-avenue-south",
+     "grand-forks/3000-32nd-ave",
+     "minot/304-4th-avenue-nw",
+     "williston/3715-2nd-ave-w"
+    ]
+   },
+   "ne": {
+    "checked": "2026-10-17",
+    "stores": [
+     "lincoln/2801-pine-lake-road",
+     "lincoln/5001-o-street",
+     "omaha/12414-l-street",
+     "omaha/13110-west-dodge",
+     "omaha/203-south-72nd-street"
+    ]
+   },
+   "nv": {
+    "checked": "2026-10-17",
+    "stores": [
+     "las-vegas/2400-south-rancho-drive"
+    ]
+   },
+   "oh": {
+    "checked": "2026-10-17",
+    "stores": [
+     "beavercreek/11-greene-blvd",
+     "columbus/1390-w-5th-ave",
+     "columbus/1528-gemini-place",
+     "columbus/2124-n-high-st",
+     "columbus/5069-n-hamilton-rd",
+     "dublin/6104-parkcenter-cir",
+     "mason/9368-south-mason-montgomery-rd",
+     "miamisburg/3400-rigby-road",
+     "powell/9733-sawmill-pkwy",
+     "reynoldsburg/2166-baltimore-reynoldsburg-rd",
+     "springdale/11725-princeton-pike",
+     "uniontown/3944-massillon-rd",
+     "west-chester/7791-cox-lane"
+    ]
+   },
+   "or": {
+    "checked": "2026-10-17",
+    "stores": [
+     "beaverton/4655-sw-griffith-dr",
+     "clackamas/12190-se-82nd-ave",
+     "hillsboro/7216-ne-cornell-road",
+     "springfield/2820-gateway-street"
+    ]
+   },
+   "pa": {
+    "checked": "2026-10-17",
+    "stores": [
+     "camp-hill/164-south-32nd-street",
+     "cranberry-township/2030-mackenzie-way",
+     "harrisburg/5108-jonestown-rd",
+     "lancaster/2099-fruitville-pike",
+     "pittsburgh/301-south-hills-village",
+     "pittsburgh/3805-forbes-ave",
+     "york/2108-south-queen-st"
+    ]
+   },
+   "sc": {
+    "checked": "2026-10-17",
+    "stores": [
+     "myrtle-beach/8221-n-kings-hwy"
+    ]
+   },
+   "sd": {
+    "checked": "2026-10-17",
+    "stores": [
+     "rapid-city/1734-eglin-street",
+     "sioux-falls/5005-s-louise-ave"
+    ]
+   },
+   "tn": {
+    "checked": "2026-10-17",
+    "stores": [
+     "clarksville/2702-wilma-rudolph-blvd",
+     "franklin/995-meridian-blvd",
+     "knoxville/11083-parkside-drive"
+    ]
+   },
+   "ut": {
+    "checked": "2026-10-17",
+    "stores": [
+     "draper/191-east-12300-south",
+     "farmington/1032-west-park-lane",
+     "layton/748-west-antelope-drive",
+     "lehi/3601-digital-drive",
+     "logan/1430-north-main-street",
+     "midvale/6901-south-1300-east",
+     "murray/5207-south-state-street",
+     "ogden/4245-s-riverdale-road",
+     "orem/293-east-university-parkway",
+     "salt-lake-city/1152-east-2100-south",
+     "saratoga-springs/24-pioneer-crossing",
+     "south-jordan/11429-district-dr",
+     "west-jordan/7632-s-campus-view-dr",
+     "west-valley-city/2682-south-high-commons-way"
+    ]
+   },
+   "va": {
+    "checked": "2026-10-17",
+    "stores": [
+     "alexandria/3105-duke-street",
+     "alexandria/5900-kingstowne-blvd",
+     "charlottesville/2035-bond-st",
+     "christiansburg/2767-market-street-ne",
+     "fairfax/10296-main-street",
+     "fairfax/12961-fair-lakes-center",
+     "falls-church/7511-leesburg-pike",
+     "fredericksburg/1212-carl-d-silver-pkwy",
+     "manassas/9646-liberia-ave",
+     "mechanicsville/7291-battle-hill-dr",
+     "midlothian/1401-alverser-dr",
+     "norfolk/1520-colley-ave",
+     "reston/11648-plaza-america-drive",
+     "richmond/1601-willow-lawn-dr",
+     "springfield/7020-old-keene-mill-rd",
+     "virginia-beach/687-lynnhaven-parkway",
+     "williamsburg/4640-casey-blvd",
+     "woodbridge/13900-shoppers-best-way"
+    ]
+   },
+   "wa": {
+    "checked": "2026-10-17",
+    "stores": [
+     "vancouver/4311-northeast-thurston-way"
+    ]
+   },
+   "wi": {
+    "checked": "2026-10-17",
+    "stores": [
+     "appleton/3719-east-calumet",
+     "appleton/4333-wisconsin-ave-and-hwy-41",
+     "baraboo/75-gasser-rd",
+     "beaver-dam/100-frances-ln",
+     "beloit/2900-milwaukee-road",
+     "brookfield/17000-w-bluemound-rd",
+     "delafield/3260-golf-road",
+     "eau-claire/4653-keystone-crossing",
+     "fitchburg/2981-triverton-pike-dr-at-mckee-rd",
+     "fond-du-lac/729-west-johnson-street",
+     "glendale/5333-n-port-washington-road",
+     "grafton/1351-north-port-washington-rd",
+     "green-bay/2450-e-mason-st",
+     "green-bay/2485-lineville-rd",
+     "green-bay/2665-s-oneida-st",
+     "greenfield/4859-s-76th-st",
+     "hales-corners/5794-s-108-st",
+     "hartford/1303-bell-ave",
+     "hudson/1055-pearson-dr",
+     "janesville/2259-humes-rd",
+     "kenosha/6320-green-bay-rd",
+     "lake-geneva/351-peller-road",
+     "madison/232-state-street-at-johnson",
+     "madison/4280-east-towne-boulevard",
+     "madison/7050-mineral-point-rd",
+     "manitowoc/4530-calumet",
+     "marinette/2342-roosevelt-road",
+     "middleton/1601-deming-way",
+     "milwaukee/1310-miller-park-way",
+     "milwaukee/2725-w-oklahoma-ave-at-28th",
+     "milwaukee/3121-north-oakland-ave-at-kenwood",
+     "milwaukee/544-e-ogden",
+     "milwaukee/8781-n-port-washington",
+     "monona/6520-monona-dr-at-pier-37",
+     "mount-pleasant/5720-washington-ave",
+     "neenah/645-south-green-bay-rd",
+     "new-berlin/15630-w-national-ave",
+     "oak-creek/8609-s-howell-ave",
+     "oconomowoc/1676-old-school-house-rd",
+     "onalaska/9417-state-road-16",
+     "oshkosh/1560-s-koeller-street",
+     "pewaukee/1390-capitol-drive",
+     "sheboygan/555-s-taylor-dr",
+     "stevens-point/101-division-street",
+     "sun-prairie/2812-prairie-lakes-drive",
+     "superior/1624-belknap-st",
+     "verona/611-hometown-circle",
+     "waukesha/1210-sunset-dr",
+     "waunakee/2800-sarah-lane",
+     "wausau/1800-stewart-st",
+     "wauwatosa/7700-west-state-st-at-harwood",
+     "wauwatosa/864-n-mayfair-rd",
+     "west-bend/425-west-paradise-dr",
+     "wisconsin-rapids/2001-8th-street"
+    ]
+   }
+  }
+ }
+}
