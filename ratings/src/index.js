@@ -3,8 +3,10 @@
  *
  *   POST /rate      {"shop": "...", "stars": 1-5, "device": "..."}   -> {"ok": true}
  *   GET  /averages  -> {"generated": "...", "shops": [{"k": shop, "avg": 4.6, "n": 12}, ...]}  (3+ ratings only)
- *   POST /report    {"shop": "...", "device": "...", "kind": "closed", "name": "Shop name"} -> {"ok": true}
- *   GET  /closed    -> {"shops": [{"k": shop, "name": "...", "n": 2}, ...]}  (2+ phones, last 365 days)
+ *   POST /report    {"shop": "...", "device": "...", "kind": "closed" | "closed-here", "name": "Shop name"} -> {"ok": true}
+ *                   ("closed-here": the phone was at the shop, within 150 m, when it reported)
+ *   GET  /closed    -> {"shops": [{"k": shop, "name": "...", "n": 2, "here": 1}, ...]}
+ *                   (last 365 days: 1 phone that was at the shop, or 2+ phones from anywhere)
  *   GET  /          -> short description
  *
  * Stars only (no text), one rating per phone per shop (changing it replaces the old one).
@@ -12,6 +14,7 @@
  */
 const MIN_RATINGS = 3;
 const MIN_CLOSED_REPORTS = 2;    // different phones that must say "closed" before a shop is hidden for everyone
+const MIN_HERE_REPORTS = 1;      // ...or this many phones that said so while standing at the shop
 const REPORT_DAYS = 365;         // reports older than this no longer count           // an average is published only with at least this many ratings
 const PER_DEVICE_PER_DAY = 25;   // a phone can rate (or change) at most this many shops a day
 const PER_ADDRESS_PER_DAY = 200; // one network address (e.g. a café's Wi-Fi) at most this many a day
@@ -80,7 +83,7 @@ async function report(request, env) {
   const device = String(body.device || "");
   const kind = String(body.kind || "closed");
   const name = String(body.name || "").slice(0, 80).replace(/[<>\u0000-\u001f]/g, " ");
-  if (!SHOP.test(shop) || !DEVICE.test(device) || kind !== "closed") {
+  if (!SHOP.test(shop) || !DEVICE.test(device) || (kind !== "closed" && kind !== "closed-here")) {
     return json({ ok: false, error: "bad report" }, 400);
   }
   const day = new Date().toISOString().slice(0, 10);
@@ -119,10 +122,12 @@ async function unreport(request, env) {
 async function closed(env) {
   const since = new Date(Date.now() - REPORT_DAYS * 86400000).toISOString().slice(0, 10);
   const { results } = await env.DB.prepare(
-    "SELECT shop AS k, MAX(name) AS name, COUNT(*) AS n FROM reports WHERE kind = 'closed' AND updated >= ? " +
-      "GROUP BY shop HAVING COUNT(*) >= ?"
-  ).bind(since, MIN_CLOSED_REPORTS).all();
-  return json({ generated: new Date().toISOString(), min: MIN_CLOSED_REPORTS, shops: results },
+    "SELECT shop AS k, MAX(name) AS name, COUNT(DISTINCT device) AS n, " +
+      "COUNT(DISTINCT CASE WHEN kind = 'closed-here' THEN device END) AS here " +
+      "FROM reports WHERE kind IN ('closed', 'closed-here') AND updated >= ? " +
+      "GROUP BY shop HAVING n >= ? OR here >= ?"
+  ).bind(since, MIN_CLOSED_REPORTS, MIN_HERE_REPORTS).all();
+  return json({ generated: new Date().toISOString(), min: MIN_CLOSED_REPORTS, min_here: MIN_HERE_REPORTS, shops: results },
     200, { "cache-control": "public, max-age=900" });
 }
 

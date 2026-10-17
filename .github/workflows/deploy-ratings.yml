@@ -69,6 +69,9 @@ jobs:
           # A closed-report round trip, then clean it up.
           curl -fsS -X POST "$BASE/report" -H "content-type: application/json" \
             -d '{"shop":"test.knewdle@0.00,0.00","kind":"closed","name":"Test","device":"smoke-test-device-0001"}' ; echo
-          curl -fsS "$BASE/closed" ; echo
+          curl -fsS -X POST "$BASE/report" -H "content-type: application/json" \
+            -d '{"shop":"test.knewdle@0.00,0.00","kind":"closed-here","name":"Test","device":"smoke-test-device-0001"}' ; echo
+          # One report made at the shop is enough to list it.
+          curl -fsS "$BASE/closed" | tee /dev/stderr | grep -q '"k":"test.knewdle@0.00,0.00"'
           npx -y wrangler@4 d1 execute knewdle-ratings --remote \
             --command "DELETE FROM reports WHERE device = 'smoke-test-device-0001'"
