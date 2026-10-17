@@ -3,3 +3,4 @@
 #   website.com                       (hides the listing with that website; not for chains)
 # Lines starting with # are notes. The daily "Shop updates" job publishes this with the other closure signals.
 Ramen Soul | 35.582052, -80.879841    # Mooresville, NC: closed (Charlotte Magazine, "Ramen Soul Closes in Mooresville")
+Noodles & Company | 35.594542, -80.864582    # 489 River Hwy, Mooresville, NC: gone from locations.noodles.com/nc (reported by the developer, Oct 2026)

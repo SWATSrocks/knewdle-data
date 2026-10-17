@@ -1,8 +1,9 @@
 """Shops that have closed for good, so the app can hide them (docs/closed.json). Run daily after claims.
 
-Four signals, from strongest to weakest:
+Five signals, from strongest to weakest:
   * manual:     closed.txt, places you've confirmed are closed
-  * reports:    2+ different phones tapped "Closed?" in the app (from the ratings Worker)
+  * reports:    someone at the shop tapped "Closed?" in the app, or 2+ different phones did (ratings Worker)
+  * chain:      a chain's own location directory no longer lists that store (chaindir.py, weekly per state)
   * foursquare: Foursquare's open data marks the place closed, while another source still lists it
   * website:    the shop's own homepage says "permanently closed" / "closed our doors" (single-location sites only)
 
@@ -103,10 +104,21 @@ def website_closed(listed: list[dict]) -> list[dict]:
     return [{"h": h, "why": "website"} for h in sorted(sites) if per_host.get(h, 0) == 1]
 
 
+def chain_closed(listed: list[dict]) -> list[dict]:
+    from .chaindir import check
+    from .crawl import Crawler
+    info = load_json(ROOT / "config.json", {}).get("bot_info_url", "https://github.com/")
+    try:
+        return check(Crawler(info), listed)
+    except Exception as e:  # noqa: BLE001 - a chain site being down mustn't stop the rest
+        print(f"  ! chain directories failed: {type(e).__name__}: {e}", file=sys.stderr)
+        return []
+
+
 def main() -> int:
     extra = load_json(EXTRA, {})
     listed = listed_places(extra)
-    entries = manual() + reports() + foursquare_closed(extra, listed) + website_closed(listed)
+    entries = manual() + reports() + chain_closed(listed) + foursquare_closed(extra, listed) + website_closed(listed)
     counts: dict[str, int] = {}
     for e in entries:
         counts[e["why"]] = counts.get(e["why"], 0) + 1

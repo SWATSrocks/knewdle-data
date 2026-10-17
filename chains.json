@@ -164,5 +164,13 @@
       ],
       "follow": true
     }
+  ],
+  "directories_about": "Chains (ramen or not) whose listings Knewdle NOW can show and whose OWN website has a state -> city -> store directory. Used only to hide closed stores: a listing whose house number isn't in the chain's directory for that state is treated as closed. 'match' picks the chain's listings by name.",
+  "directories": [
+    {
+      "name": "Noodles & Company",
+      "match": "^noodles\\s*(?:&|and|n)\\s*co(?:mpany)?\\b",
+      "directory": "https://locations.noodles.com"
+    }
   ]
 }
