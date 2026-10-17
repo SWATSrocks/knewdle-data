@@ -298,6 +298,8 @@ def check_host(crawler: Crawler, host: str, claimed: bool) -> dict:
 def note_health(health: dict, host: str, status: str | None, day: str | None = None) -> None:
     """Keeps a running record of a website's trouble: {"bad": kind, "first": date, "last": date, "n": checks}."""
     day = day or today().isoformat()
+    if not re.fullmatch(r"[a-z0-9.-]+\.[a-z]{2,}", host or ""):
+        return                           # not a clean host name: don't judge it
     if status is None:
         return                           # couldn't tell this time: keep what we had
     if status == "ok":
@@ -340,7 +342,10 @@ def main() -> int:
                 res = f.result()
             except Exception as e:  # noqa: BLE001
                 res = {"reached": False, "err": type(e).__name__}
-            note_health(state.setdefault("site_health", {}), h, res.get("health"))
+            health_rec = state.setdefault("site_health", {})
+            for junk in [k for k in health_rec if k != k.strip()]:
+                health_rec.pop(junk)
+            note_health(health_rec, h, res.get("health"))
             closed_sites: dict = state.setdefault("closed_sites", {})
             if res.get("reached"):
                 if res.get("closed"):

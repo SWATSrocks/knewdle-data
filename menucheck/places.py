@@ -331,6 +331,7 @@ def same_place(a: dict, b: dict) -> bool:
 
 
 def host_of(url: str) -> str:
+    url = (url or "").strip()
     if not url:
         return ""
     u = url if url.startswith("http") else "https://" + url
