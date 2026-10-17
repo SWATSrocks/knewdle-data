@@ -75,7 +75,14 @@ def test_store_missing_from_directory_is_closed(tmp_path=None):
     assert sorted(e["a"] for e in got) == ["1120 Parkside Main St, Cary, NC", "489 River Hwy, Mooresville, NC"], got
     assert all(e["why"] == "chain" for e in got)
     saved = json.loads(cache.read_text())["Noodles & Company"]["states"]["nc"]
-    assert saved["stores"] == ["200", "8016", "8926"]
+    assert saved["stores"] == ["cary/200-crossroads-blvd", "charlotte/8016-providence-rd", "charlotte/8926-jm-keynes-dr"]
+
+
+def test_wrong_house_number_on_same_street_stays():
+    stores = ["longmont/1087-s-hover-street", "longmont/2255-n-main-st"]
+    assert cd.still_listed("2000 Main St, Longmont, CO", stores)          # same street, same city: keep
+    assert not cd.still_listed("2000 Main St, Boulder, CO", stores)       # another city
+    assert not cd.still_listed("1737 E Evans Ave, Longmont, CO", stores)  # another street
 
 
 def test_chain_left_a_state_entirely():

@@ -61,7 +61,7 @@ def _links(html: bytes, base: str, host: str) -> list[str]:
 
 
 def read_state(crawler, d: dict, st: str, log=print) -> set[str] | None:
-    """House numbers of every store the chain lists in one state, or None if it couldn't all be read."""
+    """Every store the chain lists in one state as "city/street-slug", or None if it couldn't all be read."""
     base = d["directory"].rstrip("/")
     host = urlparse(base).hostname
     depth = len(_segments(base))           # path segments before the state (0 for locations.noodles.com)
@@ -75,10 +75,8 @@ def read_state(crawler, d: dict, st: str, log=print) -> set[str] | None:
 
     def take(url: str):
         seg = _segments(url)
-        if len(seg) == depth + 3 and seg[depth] == st:
-            num = house_of(seg[depth + 2].replace("-", " "))
-            if num:
-                stores.add(num)
+        if len(seg) == depth + 3 and seg[depth] == st and house_of(seg[depth + 2].replace("-", " ")):
+            stores.add(f"{seg[depth + 1]}/{seg[depth + 2]}")   # "charlotte/8016-providence-rd"
 
     take(r.url)                            # a state with one store may send us straight to it
     for u in _links(r.content, r.url, host):
@@ -114,6 +112,38 @@ def _maybe_empty(crawler, base: str, st: str) -> set[str] | None:
     if len(states) >= 5 and st not in states:
         return set()                       # the chain has left this state entirely
     return None
+
+
+STREET_FILLER = {"st", "street", "rd", "road", "ave", "avenue", "blvd", "dr", "drive", "ln", "lane", "way", "ct", "pl",
+                 "pkwy", "parkway", "hwy", "highway", "n", "s", "e", "w", "north", "south", "east", "west", "ne", "nw",
+                 "se", "sw", "ste", "suite", "unit", "us", "the", "and", "at", "of"}
+
+
+def _slug(s: str) -> str:
+    return re.sub(r"[^a-z0-9]+", "-", (s or "").lower()).strip("-")
+
+
+def _street_words(street: str) -> set[str]:
+    """'2255 N Main St' -> {'main'}; '303 16th Street' -> {'16th'} (house numbers and filler words dropped)."""
+    return {w for w in re.split(r"[^a-z0-9]+", street.lower()) if w and not w.isdigit() and w not in STREET_FILLER}
+
+
+def still_listed(address: str, stores: list[str]) -> bool:
+    """Is this listing among the chain's stores? Same house number anywhere in the state, or (map data often
+    has the wrong number) a store on the same street in the same city."""
+    num = house_of(address)
+    if any(house_of(x.split("/", 1)[1].replace("-", " ")) == num for x in stores):
+        return True
+    parts = [p.strip() for p in address.split(",")]
+    if len(parts) < 3:
+        return False
+    street, city = parts[0], _slug(parts[-2])
+    words = _street_words(street)
+    for x in stores:
+        c, slug = x.split("/", 1)
+        if c == city and words & _street_words(slug.replace("-", " ")):
+            return True
+    return False
 
 
 def chain_listings(d: dict, listed: list[dict]) -> list[dict]:
@@ -153,7 +183,7 @@ def check(crawler, listed: list[dict], log=print, today: str | None = None) -> l
             if not (st and num and s):
                 continue                   # can't tell: leave it alone
             age = (dt.date.fromisoformat(today) - dt.date.fromisoformat(s["checked"])).days
-            if age <= 30 and num not in s["stores"]:
+            if age <= 30 and not still_listed(p["address"], s["stores"]):
                 gone.append(p)
         if len(gone) > MAX_SHARE * len(mine):
             log(f"  {d['name']}: {len(gone)} of {len(mine)} listings missing from its directory: too many at once, "
