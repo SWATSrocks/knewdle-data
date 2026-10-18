@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>You've gotta try this ramen spot · Knewdle NOW</title>
+<meta name="description" content="A friend shared a ramen spot with you on Knewdle NOW. Open it in the app to see the menu and get directions.">
+<meta property="og:title" content="You've gotta try this ramen spot! 🍜">
+<meta property="og:description" content="A friend shared a ramen spot with you on Knewdle NOW. Tap to see it and get directions.">
+<meta property="og:type" content="website">
+<meta name="robots" content="noindex">
+<style>
+  :root { --broth:#fff4dc; --cream:#fffbf1; --ink:#2b2118; --yolk:#ffc93c; --chili:#d8432f; --scallion:#3f8f4f; --chashu:#b5552b; --muted:#8a7457; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--broth); color:var(--ink); font:16px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif; }
+  main { max-width:520px; margin:0 auto; padding:28px 16px 48px; }
+  .brand { font-weight:900; font-size:1.5rem; letter-spacing:-.02em; }
+  .brand b { color:var(--chili); }
+  .tag { display:inline-block; background:var(--yolk); border:2px solid var(--ink); border-radius:999px; padding:2px 12px; font-weight:800; font-size:.8rem; margin:14px 0 8px; }
+  .card { background:var(--cream); border:2px solid var(--ink); border-radius:18px; padding:20px; box-shadow:4px 4px 0 var(--ink); margin:0 0 18px; }
+  h1 { font-size:clamp(1.6rem, 6vw, 2.1rem); line-height:1.15; margin:4px 0 6px; overflow-wrap:anywhere; }
+  .addr { color:var(--muted); margin:0 0 4px; }
+  .site { color:var(--chashu); font-size:.9rem; overflow-wrap:anywhere; }
+  .btn { display:flex; align-items:center; justify-content:center; gap:8px; width:100%; min-height:56px; margin:10px 0 0; padding:12px 16px;
+         border:2px solid var(--ink); border-radius:16px; font:inherit; font-weight:800; font-size:1.05rem; text-decoration:none; color:var(--ink); cursor:pointer; }
+  .go { background:var(--yolk); }
+  .play { background:var(--scallion); color:#fff; }
+  .maps { background:#fff; font-weight:700; }
+  .muted { color:var(--muted); font-size:.9rem; }
+  .hidden { display:none; }
+</style>
+</head>
+<body>
+<main>
+  <div class="brand">Knewdle <b>NOW</b> 🍜</div>
+
+  <div id="shop" class="hidden">
+    <span class="tag">You've gotta try this spot!</span>
+    <div class="card">
+      <h1 id="name"></h1>
+      <p class="addr" id="addr"></p>
+      <div class="site" id="site"></div>
+    </div>
+
+    <a class="btn go" id="open" href="#">🍜 Open in Knewdle NOW</a>
+    <a class="btn play" id="play" href="#">Get Knewdle NOW free on Google Play</a>
+    <p class="muted" id="playnote">New to Knewdle NOW? Install it and it opens right to this shop.</p>
+    <a class="btn maps" id="maps" href="#" rel="noopener">📍 Directions in Google Maps</a>
+  </div>
+
+  <div id="none" class="hidden card">
+    <h1>Find ramen near you</h1>
+    <p>Knewdle NOW finds ramen shops near you, checks their menus and lets you collect stamps in your Ramen Passport.</p>
+    <a class="btn play" href="https://play.google.com/store/apps/details?id=com.swatsrocks.knewdle">Get Knewdle NOW free on Google Play</a>
+  </div>
+</main>
+<script>
+(function () {
+  var PKG = "com.swatsrocks.knewdle";
+  var p = new URLSearchParams(location.search);
+  var name = (p.get("n") || "").trim().slice(0, 80);
+  var la = parseFloat(p.get("la")), lo = parseFloat(p.get("lo"));
+  var addr = (p.get("a") || "").trim().slice(0, 120);
+  var site = (p.get("w") || "").trim();
+  if (!/^[a-z0-9.-]+\.[a-z]{2,}$/.test(site)) site = "";
+  var ok = name && isFinite(la) && isFinite(lo) && Math.abs(la) <= 90 && Math.abs(lo) <= 180;
+  if (!ok) { document.getElementById("none").classList.remove("hidden"); return; }
+
+  document.title = "Try " + name + " · Knewdle NOW";
+  document.getElementById("name").textContent = name;
+  document.getElementById("addr").textContent = addr;
+  document.getElementById("site").textContent = site;
+  document.getElementById("shop").classList.remove("hidden");
+
+  // The same shop, re-encoded the way the app reads it (%20 for spaces, not "+").
+  var enc = encodeURIComponent;
+  var q = "n=" + enc(name) + "&la=" + enc(la.toFixed(5)) + "&lo=" + enc(lo.toFixed(5)) +
+          (addr ? "&a=" + enc(addr) : "") + (site ? "&w=" + enc(site) : "");
+  // Google Play keeps "referrer" through the install, so the app can open this shop on its first launch.
+  var play = "https://play.google.com/store/apps/details?id=" + PKG + "&referrer=" + enc("knewdle_shop=" + enc(q));
+  // Android: open the app if it's installed, otherwise Chrome goes straight to Google Play.
+  var intent = "intent://shop?" + q + "#Intent;scheme=knewdle;package=" + PKG +
+               ";S.browser_fallback_url=" + enc(play) + ";end";
+  var maps = "https://www.google.com/maps/dir/?api=1&destination=" + la.toFixed(5) + "," + lo.toFixed(5);
+
+  var android = /Android/i.test(navigator.userAgent);
+  var openBtn = document.getElementById("open");
+  document.getElementById("play").href = play;
+  document.getElementById("maps").href = maps;
+  if (android) {
+    openBtn.href = intent;
+    // Try right away; the buttons stay for apps whose built-in browser blocks it.
+    setTimeout(function () { location.href = intent; }, 250);
+  } else {
+    // iPhone or computer: Knewdle NOW is on Android, so lead with directions.
+    openBtn.classList.add("hidden");
+    document.getElementById("playnote").textContent = "Knewdle NOW is on Android. On an iPhone? Use the directions below.";
+  }
+})();
+</script>
+</body>
+</html>
