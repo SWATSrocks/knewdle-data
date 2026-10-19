@@ -1,15 +1,9 @@
 {
-  "generated": "2026-10-14",
+  "generated": "2026-10-19",
   "overture_release": "2026-09-23.1",
   "candidates": 47692,
-  "checked_this_run": 28138,
-  "results_this_run": {
-    "none": 26919,
-    "shop": 132,
-    "serves": 881,
-    "error": 176,
-    "robots": 30
-  },
+  "checked_this_run": 0,
+  "results_this_run": {},
   "all_known": {
     "none": 26919,
     "platform": 1474,
@@ -19,19 +13,19 @@
     "robots": 2174
   },
   "published": 2455,
-  "more_published": 1237,
+  "more_published": 1256,
   "more": {
-    "generated": "2026-10-12",
-    "published": 1237,
+    "generated": "2026-10-19",
+    "published": 1256,
     "by_way_found": {
       "chain": 58,
       "hall": 9,
-      "noodle": 86,
+      "noodle": 85,
       "brand": 1,
       "name": 17,
       "site": 45,
-      "fsq": 1020,
-      "web": 1
+      "fsq": 1039,
+      "web": 2
     },
     "names": {
       "app": 4975,
@@ -41,8 +35,8 @@
       "site": 86
     },
     "foursquare": {
-      "ramen places": 3542,
-      "closed": 1252
+      "ramen places": 3544,
+      "closed": 1285
     },
     "chains": {
       "JINYA Ramen Bar": 57,
@@ -51,7 +45,7 @@
       "Ichiran": 3,
       "Hokkaido Ramen Santouka": 4,
       "Marufuku Ramen": 1,
-      "Mensho": 6,
+      "Mensho": 7,
       "Ramen Tatsu-ya": 7,
       "Ramen Danbo": 3,
       "HiroNori Craft Ramen": 1,
@@ -86,11 +80,11 @@
       "Japan Center Malls": 5
     },
     "web": {
-      "empty": 1,
-      "unreachable": 6,
-      "no US address": 10,
-      "ok": 1,
-      "not ramen": 3
+      "ok": 2,
+      "not ramen": 1,
+      "unreachable": 1,
+      "empty": 3,
+      "no US address": 4
     }
   }
 }
