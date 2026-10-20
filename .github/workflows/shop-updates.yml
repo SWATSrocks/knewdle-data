@@ -55,6 +55,7 @@ jobs:
           git config user.email "actions@users.noreply.github.com"
           git add state/claims_state.json docs/claimed.json docs/shops_index.json
           git add docs/ratings.json docs/closed.json 2>/dev/null || true
+          git add docs/hours.json 2>/dev/null || true
           git add state/chain_dirs.json 2>/dev/null || true
           git diff --cached --quiet || git commit -m "Shop updates $(date -u +%Y-%m-%d)"
           git pull --rebase -X theirs origin main || true

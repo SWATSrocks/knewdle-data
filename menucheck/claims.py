@@ -12,6 +12,8 @@
         Hours: Tue-Sun 11:30am-9pm
         Note: Late-night ramen Fridays!
   * Publishes docs/claimed.json (read by the app) and docs/shops_index.json (the claim page's search list).
+  * The same visit reads the shop's opening hours from its own site (structured data or an "Hours" section,
+    see hours.py) and publishes docs/hours.json for single-location websites.
   * The same visit also notes each website's health (state "site_health"): its domain no longer exists, it's
     become a for-sale/parked page, or it's been down for weeks. closed.py turns that into "may be closed".
 """
@@ -27,9 +29,11 @@ import sys
 import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
+from urllib.parse import urljoin, urlparse
 
 from bs4 import BeautifulSoup
 
+from . import hours as hours_mod
 from .crawl import Crawler, is_blocked_host
 from .places import host_of
 
@@ -39,6 +43,8 @@ EXTRA = ROOT / "state" / "extra_state.json"
 MENU_STATE = ROOT / "state" / "menu_state.json"
 CLAIMED = ROOT / "docs" / "claimed.json"
 INDEX = ROOT / "docs" / "shops_index.json"
+HOURS = ROOT / "docs" / "hours.json"
+HOURS_KEEP_DAYS = 60       # hours found before stay published this long when a later visit can't read them
 CONFIG = ROOT / "config.json"
 OPTOUT = ROOT / "optout.txt"
 
@@ -277,22 +283,73 @@ def listings() -> dict[str, list[dict]]:
     return by_host
 
 
-def check_host(crawler: Crawler, host: str, claimed: bool) -> dict:
+def find_hours(crawler: Crawler, home) -> tuple[list | None, str | None]:
+    """The shop's weekly hours from its homepage, or from up to 2 of its own hours/contact/location pages."""
+    week, how = hours_mod.parse(home.content)
+    if week:
+        return week, how
+    base = host_of(home.url)
+    soup = BeautifulSoup(home.content, "html.parser")
+    seen, tries = set(), []
+    for a in soup.find_all("a", href=True):
+        href = urljoin(home.url, a["href"]).split("#")[0]
+        if not href.startswith("http") or host_of(href) != base or href.rstrip("/") == home.url.rstrip("/"):
+            continue
+        label = (a.get_text(" ", strip=True) or "") + " " + urlparse(href).path
+        if hours_mod.HOURS_LINK.search(label) and href not in seen and not re.search(r"\.(pdf|jpe?g|png)$", href, re.I):
+            seen.add(href)
+            # "hours" pages first, then location/contact, then about
+            tries.append((0 if re.search(r"hour", label, re.I) else 1 if re.search(r"locat|visit|find|contact", label, re.I) else 2, href))
+    for _, href in sorted(tries)[:2]:
+        page = crawler.fetch(href)
+        if page is not None and host_of(page.url) == base:
+            week, how = hours_mod.parse(page.content)
+            if week:
+                return week, how
+    return None, None
+
+
+DEADLINE = [float("inf")]  # time.time() after which remaining sites are left for the next run
+
+
+def check_host(crawler: Crawler, host: str, claimed: bool, want_hours: bool = False) -> dict:
+    if time.time() > DEADLINE[0]:
+        return {"skipped": True}
     code = code_for(host)
     home = crawler.fetch_home(host)
     health = site_health(crawler, host, home)
     if home is None:
         return {"reached": False, "health": health}
     closed = says_closed_for_good(home.content)
+    hours = None
+    if want_hours and not closed:
+        try:
+            week, how = find_hours(crawler, home)
+            hours = {"w": week, "how": how} if week else None
+        except Exception:  # noqa: BLE001 - hours are a bonus; never lose the rest of the check over them
+            hours = None
     if not has_code(home.content, code):
-        return {"reached": True, "verified": False, "closed": closed, "health": health}
+        return {"reached": True, "verified": False, "closed": closed, "health": health, "hours": hours}
     lines = update_lines(home.content, whole_page=False)
     page = crawler.fetch(f"{home.url.split('://')[0]}://{host_of(home.url) or host}/knewdle")
     if page is not None and host_of(page.url) == host_of(home.url):
         page_lines = update_lines(page.content, whole_page=True)
         if page_lines:
             lines = page_lines  # a dedicated /knewdle page wins over the homepage section
-    return {"reached": True, "verified": True, "updates": parse_updates(lines), "closed": closed, "health": health}
+    return {"reached": True, "verified": True, "updates": parse_updates(lines), "closed": closed, "health": health,
+            "hours": hours}
+
+
+def note_hours(rec_all: dict, host: str, res: dict, day: str | None = None) -> None:
+    """state["hours"][host] = {"w": week, "how": how, "found": date}; kept HOURS_KEEP_DAYS if later visits miss."""
+    day = day or today().isoformat()
+    if res.get("hours"):
+        rec_all[host] = {"w": res["hours"]["w"], "how": res["hours"]["how"], "found": day}
+    elif res.get("reached") and res.get("closed"):
+        rec_all.pop(host, None)
+    old = rec_all.get(host)
+    if old and (dt.date.fromisoformat(day) - dt.date.fromisoformat(old["found"])).days > HOURS_KEEP_DAYS:
+        rec_all.pop(host, None)
 
 
 def note_health(health: dict, host: str, status: str | None, day: str | None = None) -> None:
@@ -317,6 +374,7 @@ def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--all", action="store_true", help="check every website today, not a seventh")
     ap.add_argument("--dry-run", action="store_true")
+    ap.add_argument("--minutes", type=float, default=38, help="stop starting new sites after this long, and save")
     args = ap.parse_args()
 
     config = load_json(CONFIG, {})
@@ -333,19 +391,23 @@ def main() -> int:
     print(f"{len(by_host)} ramen websites; checking {len(due)} today ({sum(1 for h in due if h in claims)} claimed)")
 
     t0 = time.time()
+    DEADLINE[0] = t0 + args.minutes * 60
     found = 0
     with ThreadPoolExecutor(max_workers=16) as pool:
-        futures = {pool.submit(check_host, crawler, h, h in claims): h for h in due}
+        futures = {pool.submit(check_host, crawler, h, h in claims, len(by_host[h]) == 1): h for h in due}
         for f in as_completed(futures):
             h = futures[f]
             try:
                 res = f.result()
             except Exception as e:  # noqa: BLE001
                 res = {"reached": False, "err": type(e).__name__}
+            if res.get("skipped"):
+                continue
             health_rec = state.setdefault("site_health", {})
             for junk in [k for k in health_rec if k != k.strip()]:
                 health_rec.pop(junk)
             note_health(health_rec, h, res.get("health"))
+            note_hours(state.setdefault("hours", {}), h, res)
             closed_sites: dict = state.setdefault("closed_sites", {})
             if res.get("reached"):
                 if res.get("closed"):
@@ -378,6 +440,12 @@ def main() -> int:
             rec["updates"].pop("closed")
     print(f"done in {time.time() - t0:.0f}s: {len(claims)} verified shops ({found} new today)")
 
+    hours_rec = state.setdefault("hours", {})
+    for h in list(hours_rec):
+        note_hours(hours_rec, h, {})          # age out old finds
+    hours_pub = {h: r["w"] for h, r in sorted(hours_rec.items()) if len(by_host.get(h, [])) == 1}
+    print(f"hours: {len(hours_pub)} single-location websites with hours "
+          f"({sum(1 for h in by_host if len(by_host[h]) == 1)} single-location websites in all)")
     published = [{"h": h, "since": r["since"], "u": r.get("updated"), **r.get("updates", {})}
                  for h, r in sorted(claims.items())]
     index = sorted(({"n": p["name"], "a": p.get("address"), "h": h} for h, ps in by_host.items() for p in ps),
@@ -389,6 +457,8 @@ def main() -> int:
     STATE.write_text(json.dumps(state, indent=1, ensure_ascii=False))
     CLAIMED.write_text(json.dumps({"v": 1, "generated": today().isoformat(), "shops": published},
                                   separators=(",", ":"), ensure_ascii=False))
+    HOURS.write_text(json.dumps({"v": 1, "generated": today().isoformat(), "shops": hours_pub},
+                                separators=(",", ":")))
     INDEX.write_text(json.dumps({"generated": today().isoformat(), "shops": index},
                                 separators=(",", ":"), ensure_ascii=False))
     return 0
