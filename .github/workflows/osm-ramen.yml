@@ -1,11 +1,11 @@
 name: OpenStreetMap ramen
 
-# Daily: one patient request to OpenStreetMap's Overpass for every US ramen place, published as docs/osm_ramen.json
-# (the app downloads this instead of asking busy Overpass servers from every phone). Runs before "Shop updates",
-# which then checks these shops' websites for hours and closures too.
+# Twice a week: OpenStreetMap's US ramen, read from Geofabrik's free daily extracts of OpenStreetMap (no busy
+# Overpass servers involved), published as docs/osm_ramen.json for the app. "Shop updates" then checks these shops'
+# websites for hours and closures too.
 on:
   schedule:
-    - cron: "41 8 * * *"      # every day 8:41 UTC (4:41am Eastern)
+    - cron: "41 7 * * 1,4"    # Monday and Thursday 7:41 UTC
   workflow_dispatch:
 
 permissions:
@@ -18,7 +18,7 @@ concurrency:
 jobs:
   fetch:
     runs-on: ubuntu-latest
-    timeout-minutes: 55
+    timeout-minutes: 90
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -26,13 +26,33 @@ jobs:
           python-version: "3.12"
           cache: pip
       - run: pip install -r requirements.txt
-      - name: Fetch
-        run: python -u -m menucheck.osm
+      - run: sudo apt-get update -qq && sudo apt-get install -y -qq osmium-tool
+      - name: Download and filter each US region (one at a time, so the disk never fills)
+        run: |
+          set -e
+          W=$( [ -d /mnt ] && [ -w /mnt ] && echo /mnt/osm || echo "$RUNNER_TEMP/osm" ); sudo mkdir -p "$W"; sudo chown "$USER" "$W"
+          df -h "$W" | tail -1
+          : > "$W/all.geojsonseq"
+          for r in us-west us-midwest us-northeast us-south us/puerto-rico; do
+            echo "== $r"
+            curl -fsSL --retry 3 -A "knewdle-data (https://github.com/SWATSrocks/knewdle-data)" \
+              -o "$W/r.osm.pbf" "https://download.geofabrik.de/north-america/$r-latest.osm.pbf"
+            ls -la "$W/r.osm.pbf"
+            osmium tags-filter --overwrite -o "$W/f.osm.pbf" "$W/r.osm.pbf" nwr/amenity=restaurant,fast_food,food_court
+            rm -f "$W/r.osm.pbf"
+            osmium export --overwrite -f geojsonseq -a type,id --geometry-types=point,polygon -o "$W/f.geojsonseq" "$W/f.osm.pbf"
+            cat "$W/f.geojsonseq" >> "$W/all.geojsonseq"
+            rm -f "$W/f.osm.pbf" "$W/f.geojsonseq"
+          done
+          echo "OSM_FILE=$W/all.geojsonseq" >> "$GITHUB_ENV"
+      - name: Pick out the ramen
+        run: python -u -m menucheck.osm "$OSM_FILE"
       - name: Publish
         run: |
           git config user.name "knewdle-menu-check"
           git config user.email "actions@users.noreply.github.com"
-          git add docs/osm_ramen.json state/osm_regions.json state/osm_log.txt 2>/dev/null || true
+          git add docs/osm_ramen.json 2>/dev/null || true
+          git rm -q --cached state/osm_regions.json state/osm_log.txt 2>/dev/null || true
           git diff --cached --quiet || git commit -m "OpenStreetMap ramen $(date -u +%Y-%m-%d)"
           git pull --rebase -X theirs origin main || true
           git push

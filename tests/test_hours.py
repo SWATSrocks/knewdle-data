@@ -73,3 +73,16 @@ def test_osm_slim():
     assert [(e["type"], e["id"]) for e in out] == [("node", 5), ("way", 2)]
     assert out[0]["tags"] == {"name": "Ramen A", "opening_hours": "Mo-Su 11:00-21:00"}
     assert out[1]["lat"] == 35.2
+
+
+def test_osm_geojson_element():
+    from menucheck import osm
+    pt = {"type": "Feature", "geometry": {"type": "Point", "coordinates": [-80.8, 35.2]},
+          "properties": {"@type": "node", "@id": 42, "amenity": "restaurant", "name": "Sacramento Grill"}}
+    assert osm.element(pt) is None
+    pt["properties"]["name"] = "Menya Hosaki"
+    assert osm.element(pt) == {"type": "node", "id": 42, "lat": 35.2, "lon": -80.8, "tags": {"name": "Menya Hosaki"}}
+    poly = {"type": "Feature", "geometry": {"type": "Polygon", "coordinates": [[[0, 0], [2, 0], [2, 2], [0, 2], [0, 0]]]},
+            "properties": {"@type": "area", "@id": 200, "amenity": "restaurant", "name": "Bowl", "cuisine": "japanese;ramen"}}
+    e = osm.element(poly)
+    assert (e["type"], e["id"], e["lat"], e["lon"]) == ("way", 100, 1.0, 1.0)

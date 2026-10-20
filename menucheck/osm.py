@@ -1,11 +1,11 @@
-"""OpenStreetMap's US ramen, fetched once a day here instead of from every phone.
+"""OpenStreetMap's US ramen, read from Geofabrik's free daily OpenStreetMap extracts.
 
-    python -m menucheck.osm
+    python -m menucheck.osm restaurants.geojsonseq
 
-Public Overpass servers are often too busy to answer a phone within seconds (a study in 24 metros: they failed
-in 15). From here it asks one state at a time, patiently, retrying the ones that failed, and keeps each state's
-last good answer (up to 30 days) when its servers stay busy. The app just downloads the result:
-docs/osm_ramen.json, in Overpass's own JSON shape, with only the tags the app uses.
+The phone used to ask public Overpass servers, which were too busy to answer most of the time (a study in 24
+metros: they failed in 15, and even asking one state at a time from here, they answered for 8 of 52). So the
+workflow downloads Geofabrik's US region extracts, keeps only restaurants (osmium), and this picks out the ramen
+with the same rule the app always used. The app just downloads docs/osm_ramen.json, in Overpass's JSON shape.
 
 Data © OpenStreetMap contributors, available under the Open Database License (ODbL 1.0).
 """
@@ -13,65 +13,59 @@ from __future__ import annotations
 
 import datetime as dt
 import json
+import re
 import sys
-import time
 from pathlib import Path
-
-import requests
 
 ROOT = Path(__file__).resolve().parent.parent
 OUT = ROOT / "docs" / "osm_ramen.json"
-ENDPOINTS = ["https://overpass-api.de/api/interpreter", "https://maps.mail.ru/osm/tools/overpass/api/interpreter",
-             "https://overpass.private.coffee/api/interpreter"]
-# Same rule as the app always used: tagged ramen, or a ramen word in the name.
 NAME = "ramen|ramyun|ラーメン|らーめん|拉麺|拉麵|tonkotsu|ichiran|ippudo|menya|men-ya|jinya|kizuki|santouka|hinodeya|totto"
+NAME_RX = re.compile(rf"(?<![a-z])(?:{NAME})", re.IGNORECASE)
 KEEP_TAGS = ("name", "name:en", "cuisine", "addr:housenumber", "addr:street", "addr:city", "addr:state",
              "opening_hours", "phone", "contact:phone", "website", "contact:website")
-REGIONS = ["AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "DC", "FL", "GA", "HI", "ID", "IL", "IN", "IA", "KS", "KY",
-           "LA", "ME", "MD", "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH", "NJ", "NM", "NY", "NC", "ND", "OH",
-           "OK", "OR", "PA", "RI", "SC", "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY", "PR"]
-STATE = ROOT / "state" / "osm_regions.json"
-LOG = ROOT / "state" / "osm_log.txt"
-KEEP_DAYS = 30        # a state whose servers keep failing keeps its last answer this long
+MIN_SHARE = 0.7       # a result under 70% of the last count is treated as broken, and the last list stays
 
 
-def query(region: str) -> str:
-    """One state at a time: small enough that a busy server still answers."""
-    return f"""[out:json][timeout:170];
-area["ISO3166-2"="US-{region}"]->.a;
-(
-  nwr["amenity"~"^(restaurant|fast_food|food_court)$"]["cuisine"~"ramen",i](area.a);
-  nwr["amenity"~"^(restaurant|fast_food|food_court)$"]["name"~"{NAME}",i](area.a);
-);
-out center tags;"""
+def is_ramen(tags: dict) -> bool:
+    if tags.get("amenity") not in ("restaurant", "fast_food", "food_court"):
+        return False
+    if "ramen" in (tags.get("cuisine") or "").lower():
+        return True
+    return bool(NAME_RX.search(tags.get("name") or "") or NAME_RX.search(tags.get("name:en") or ""))
 
 
-HEADERS = {"User-Agent": "knewdle-data/1.0 (daily ramen list for the Knewdle NOW app; https://github.com/SWATSrocks/knewdle-data)"}
+def _center(geom: dict) -> tuple[float, float] | None:
+    t, c = geom.get("type"), geom.get("coordinates")
+    if t == "Point":
+        return c[1], c[0]
+    rings = c[0] if t == "Polygon" else c[0][0] if t == "MultiPolygon" else None
+    if not rings:
+        return None
+    pts = rings[:-1] if len(rings) > 1 and rings[0] == rings[-1] else rings
+    return sum(p[1] for p in pts) / len(pts), sum(p[0] for p in pts) / len(pts)
 
 
-def fetch_region(region: str, log, end: float) -> dict | None:
-    for ep in ENDPOINTS:
-        if time.time() > end:
-            return None
-        t0 = time.time()
-        try:
-            r = requests.post(ep, data={"data": query(region)}, headers=HEADERS, timeout=(15, 190))
-            if r.status_code == 200 and r.text.lstrip().startswith("{"):
-                d = r.json()
-                if "runtime error" in str(d.get("remark", "")):
-                    log(f"  {region} {ep.split('/')[2]}: cut short")
-                else:
-                    log(f"  {region} {ep.split('/')[2]}: {len(d.get('elements', []))} in {time.time() - t0:.0f}s")
-                    return d
-            else:
-                log(f"  {region} {ep.split('/')[2]}: HTTP {r.status_code} after {time.time() - t0:.0f}s")
-        except requests.RequestException as e:
-            log(f"  {region} {ep.split('/')[2]}: {type(e).__name__} after {time.time() - t0:.0f}s")
-        time.sleep(5)
-    return None
+def element(feature: dict) -> dict | None:
+    """One osmium-export feature -> the slim Overpass-style element the app reads, or None if it isn't ramen."""
+    props = feature.get("properties") or {}
+    tags = {k: v for k, v in props.items() if not k.startswith("@")}
+    if not (tags.get("name") or tags.get("name:en")) or not is_ramen(tags):
+        return None
+    c = _center(feature.get("geometry") or {})
+    if c is None:
+        return None
+    typ = props.get("@type") or "node"
+    oid = props.get("@id")
+    if isinstance(oid, str):
+        oid = int(re.sub(r"\D", "", oid) or 0)
+    if typ == "area":  # osmium area ids: way*2 or relation*2+1
+        typ, oid = ("way", oid // 2) if oid % 2 == 0 else ("relation", oid // 2)
+    return {"type": typ, "id": oid, "lat": round(c[0], 6), "lon": round(c[1], 6),
+            "tags": {k: tags[k] for k in KEEP_TAGS if tags.get(k)}}
 
 
 def slim(d: dict) -> list[dict]:
+    """Overpass JSON -> slim elements (kept for tests and one-off use)."""
     out = []
     for e in d.get("elements", []):
         tags = e.get("tags") or {}
@@ -87,61 +81,37 @@ def slim(d: dict) -> list[dict]:
     return out
 
 
-def main(budget_min: float = 45) -> int:
-    end = time.time() + budget_min * 60
-    lines: list[str] = []
-
-    def log(m):
-        print(m); lines.append(m)
-
-    today = dt.date.today()
-    try:
-        regions = json.loads(STATE.read_text())
-    except Exception:  # noqa: BLE001
-        regions = {}
-    # Oldest answers first, so a bad day still moves the whole country forward.
-    todo = sorted(REGIONS, key=lambda r: regions.get(r, {}).get("day", ""))
-    for rnd in range(3):
-        failed = []
-        for reg in todo:
-            if regions.get(reg, {}).get("day") == today.isoformat():
+def main(argv: list[str]) -> int:
+    src = Path(argv[0])
+    seen, els, n = set(), [], 0
+    with src.open(encoding="utf-8") as f:
+        for line in f:
+            line = line.strip().lstrip("\x1e")
+            if not line:
                 continue
-            d = fetch_region(reg, log, end)
-            if d is None:
-                failed.append(reg)
+            n += 1
+            try:
+                e = element(json.loads(line))
+            except Exception:  # noqa: BLE001
                 continue
-            els = slim(d)
-            old = regions.get(reg, {}).get("elements", [])
-            if old and len(els) < 0.7 * len(old):
-                log(f"  {reg}: only {len(els)} vs {len(old)} before; keeping the last answer")
-                continue
-            regions[reg] = {"day": today.isoformat(), "elements": els}
-            time.sleep(2)
-        todo = failed
-        if not todo or time.time() > end:
-            break
-        time.sleep(60)
-    for reg in list(regions):
-        if (today - dt.date.fromisoformat(regions[reg]["day"])).days > KEEP_DAYS:
-            regions.pop(reg)
-    seen, els = set(), []
-    for reg in sorted(regions):
-        for e in regions[reg]["elements"]:
-            if (e["type"], e["id"]) not in seen:
+            if e and (e["type"], e["id"]) not in seen:
                 seen.add((e["type"], e["id"])); els.append(e)
-    fresh = sum(1 for r in regions.values() if r["day"] == today.isoformat())
-    log(f"OpenStreetMap: {len(els)} ramen places from {len(regions)} states ({fresh} refreshed today; "
-        f"not answered today: {', '.join(todo) or 'none'})")
-    STATE.write_text(json.dumps(regions, separators=(",", ":"), ensure_ascii=False))
-    LOG.write_text("\n".join(lines) + "\n")
-    if els:
-        OUT.write_text(json.dumps({
-            "v": 1, "generated": today.isoformat(),
-            "about": "Ramen places in the US from OpenStreetMap, refreshed daily for the Knewdle NOW app.",
-            "license": "Data © OpenStreetMap contributors, Open Database License (ODbL 1.0): https://www.openstreetmap.org/copyright",
-            "elements": sorted(els, key=lambda x: (x["type"], x["id"]))}, separators=(",", ":"), ensure_ascii=False))
+    els.sort(key=lambda x: (x["type"], x["id"]))
+    try:
+        prev = len(json.loads(OUT.read_text()).get("elements", []))
+    except Exception:  # noqa: BLE001
+        prev = 0
+    print(f"{n} US restaurants on OpenStreetMap; {len(els)} ramen ({len(els) - prev:+d} vs last list)")
+    if prev and len(els) < MIN_SHARE * prev:
+        print("Looks broken (too few); keeping the last list")
+        return 1
+    OUT.write_text(json.dumps({
+        "v": 1, "generated": dt.date.today().isoformat(),
+        "about": "Ramen places in the US from OpenStreetMap (via Geofabrik extracts), refreshed twice a week for the Knewdle NOW app.",
+        "license": "Data © OpenStreetMap contributors, Open Database License (ODbL 1.0): https://www.openstreetmap.org/copyright",
+        "elements": els}, separators=(",", ":"), ensure_ascii=False))
     return 0
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    sys.exit(main(sys.argv[1:]))
