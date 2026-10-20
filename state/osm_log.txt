@@ -1,0 +1,47 @@
+  AL overpass-api.de: ConnectionError after 30s
+  AL maps.mail.ru: HTTP 504 after 49s
+  AL overpass.private.coffee: 8 in 120s
+  AK overpass-api.de: ConnectionError after 30s
+  AK maps.mail.ru: HTTP 504 after 46s
+  AK overpass.private.coffee: ReadTimeout after 190s
+  AZ overpass-api.de: ConnectionError after 30s
+  AZ maps.mail.ru: HTTP 504 after 55s
+  AZ overpass.private.coffee: HTTP 504 after 34s
+  AR overpass-api.de: ConnectionError after 30s
+  AR maps.mail.ru: HTTP 504 after 2s
+  AR overpass.private.coffee: ReadTimeout after 190s
+  CA overpass-api.de: ConnectionError after 30s
+  CA maps.mail.ru: 430 in 104s
+  CO overpass-api.de: ConnectionError after 30s
+  CO maps.mail.ru: 60 in 53s
+  CT overpass-api.de: ConnectionError after 30s
+  CT maps.mail.ru: 14 in 30s
+  DE overpass-api.de: ConnectionError after 30s
+  DE maps.mail.ru: HTTP 504 after 1s
+  DE overpass.private.coffee: 5 in 85s
+  DC overpass-api.de: ConnectionError after 30s
+  DC maps.mail.ru: 10 in 15s
+  FL overpass-api.de: ConnectionError after 30s
+  FL maps.mail.ru: HTTP 504 after 52s
+  FL overpass.private.coffee: cut short
+  GA overpass-api.de: ConnectionError after 30s
+  GA maps.mail.ru: HTTP 504 after 50s
+  GA overpass.private.coffee: ReadTimeout after 190s
+  HI overpass-api.de: ConnectionError after 30s
+  HI maps.mail.ru: HTTP 504 after 50s
+  HI overpass.private.coffee: 35 in 79s
+  ID overpass-api.de: ConnectionError after 30s
+  ID maps.mail.ru: 10 in 28s
+  IL overpass-api.de: ConnectionError after 30s
+  IL maps.mail.ru: HTTP 504 after 1s
+  IL overpass.private.coffee: HTTP 504 after 64s
+  IN overpass-api.de: ConnectionError after 30s
+  IN maps.mail.ru: HTTP 504 after 1s
+  IN overpass.private.coffee: HTTP 504 after 99s
+  IA overpass-api.de: ConnectionError after 30s
+  IA maps.mail.ru: HTTP 504 after 1s
+  IA overpass.private.coffee: HTTP 504 after 123s
+  KS overpass-api.de: ConnectionError after 30s
+  KS maps.mail.ru: HTTP 504 after 55s
+  KS overpass.private.coffee: ReadTimeout after 190s
+OpenStreetMap: 567 ramen places from 8 states (8 refreshed today; not answered today: AK, AZ, AR, FL, GA, IL, IN, IA, KS, KY, LA, ME, MD, MA, MI, MN, MS, MO, MT, NE, NV, NH, NJ, NM, NY, NC, ND, OH, OK, OR, PA, RI, SC, SD, TN, TX, UT, VT, VA, WA, WV, WI, WY, PR)
