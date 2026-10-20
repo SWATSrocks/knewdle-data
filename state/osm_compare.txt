@@ -1,0 +1,85 @@
+Overture 2026-09-23.1: 1831 ramen places in the 24 metros; 3711 Knewdle finds US-wide
+
+New York: OSM 143, Overture 371, finds 238, OSM-only 33, OSM with hours 86  [('overpass-api.de', 0.7, 502), ('overpass.private.coffee', 30.8, 'ReadTimeout'), ('maps.mail.ru', 19.6, 'ok')]
+Los Angeles: every Overpass server failed [('overpass-api.de', 0.4, 502), ('overpass.private.coffee', 30.3, 'ReadTimeout'), ('maps.mail.ru', 30.7, 'ReadTimeout')]
+Chicago: every Overpass server failed [('overpass-api.de', 30.3, 'ReadTimeout'), ('overpass.private.coffee', 30.3, 'ReadTimeout'), ('maps.mail.ru', 1.2, 504)]
+Houston: every Overpass server failed [('overpass-api.de', 30.3, 'ReadTimeout'), ('overpass.private.coffee', 30.3, 'ReadTimeout'), ('maps.mail.ru', 1.1, 504)]
+Phoenix: OSM 19, Overture 42, finds 49, OSM-only 4, OSM with hours 7  [('overpass-api.de', 30.3, 'ReadTimeout'), ('overpass.private.coffee', 30.3, 'ReadTimeout'), ('maps.mail.ru', 20.8, 'ok')]
+Philadelphia: OSM 24, Overture 55, finds 39, OSM-only 4, OSM with hours 15  [('overpass-api.de', 30.3, 'ReadTimeout'), ('overpass.private.coffee', 30.3, 'ReadTimeout'), ('maps.mail.ru', 26.6, 'ok')]
+San Antonio: every Overpass server failed [('overpass-api.de', 30.3, 'ReadTimeout'), ('overpass.private.coffee', 30.3, 'ReadTimeout'), ('maps.mail.ru', 1.2, 504)]
+San Diego: OSM 36, Overture 76, finds 53, OSM-only 5, OSM with hours 20  [('overpass-api.de', 30.3, 'ReadTimeout'), ('overpass.private.coffee', 30.3, 'ReadTimeout'), ('maps.mail.ru', 30.6, 'ok')]
+Dallas: OSM 13, Overture 29, finds 20, OSM-only 1, OSM with hours 8  [('overpass-api.de', 30.3, 'ReadTimeout'), ('overpass.private.coffee', 30.3, 'ReadTimeout'), ('maps.mail.ru', 25.3, 'ok')]
+Austin: OSM 16, Overture 51, finds 29, OSM-only 2, OSM with hours 9  [('overpass-api.de', 30.3, 'ReadTimeout'), ('overpass.private.coffee', 30.3, 'ReadTimeout'), ('maps.mail.ru', 20.3, 'ok')]
+Charlotte: every Overpass server failed [('overpass-api.de', 30.3, 'ReadTimeout'), ('overpass.private.coffee', 30.3, 'ReadTimeout'), ('maps.mail.ru', 30.7, 'ReadTimeout')]
+Lake Norman: every Overpass server failed [('overpass-api.de', 30.3, 'ReadTimeout'), ('overpass.private.coffee', 30.3, 'ReadTimeout'), ('maps.mail.ru', 30.7, 'ReadTimeout')]
+Raleigh: OSM 10, Overture 25, finds 16, OSM-only 3, OSM with hours 8  [('overpass-api.de', 30.3, 'ReadTimeout'), ('overpass.private.coffee', 30.3, 'ReadTimeout'), ('maps.mail.ru', 29.2, 'ok')]
+Atlanta: OSM 11, Overture 46, finds 39, OSM-only 1, OSM with hours 6  [('overpass-api.de', 29.6, 'ok'), ('overpass.private.coffee', 30.3, 'ReadTimeout'), ('maps.mail.ru', 20.7, 'ok')]
+Seattle: every Overpass server failed [('overpass-api.de', 30.3, 'ReadTimeout'), ('overpass.private.coffee', 30.3, 'ReadTimeout'), ('maps.mail.ru', 1.1, 504)]
+Denver: every Overpass server failed [('overpass-api.de', 0.4, 502), ('overpass.private.coffee', 30.3, 'ReadTimeout'), ('maps.mail.ru', 30.6, 'ReadTimeout')]
+Columbus: every Overpass server failed [('overpass-api.de', 30.3, 'ReadTimeout'), ('overpass.private.coffee', 30.3, 'ReadTimeout'), ('maps.mail.ru', 30.7, 'ReadTimeout')]
+Nashville: every Overpass server failed [('overpass-api.de', 30.3, 'ReadTimeout'), ('overpass.private.coffee', 30.3, 'ReadTimeout'), ('maps.mail.ru', 1.1, 504)]
+Portland: every Overpass server failed [('overpass-api.de', 30.3, 'ReadTimeout'), ('overpass.private.coffee', 30.3, 'ReadTimeout'), ('maps.mail.ru', 1.1, 504)]
+Boston: every Overpass server failed [('overpass-api.de', 30.3, 'ReadTimeout'), ('overpass.private.coffee', 30.3, 'ReadTimeout'), ('maps.mail.ru', 30.7, 'ReadTimeout')]
+Miami: every Overpass server failed [('overpass-api.de', 30.3, 'ReadTimeout'), ('overpass.private.coffee', 30.3, 'ReadTimeout'), ('maps.mail.ru', 1.1, 504)]
+Minneapolis: every Overpass server failed [('overpass-api.de', 30.3, 'ReadTimeout'), ('overpass.private.coffee', 30.3, 'ReadTimeout'), ('maps.mail.ru', 1.1, 504)]
+Salt Lake City: every Overpass server failed [('overpass-api.de', 30.5, 'ReadTimeout'), ('overpass.private.coffee', 30.7, 'ReadTimeout'), ('maps.mail.ru', 30.8, 'ReadTimeout')]
+Greenville SC: OSM 4, Overture 5, finds 8, OSM-only 0, OSM with hours 0  [('overpass-api.de', 28.2, 'ok'), ('overpass.private.coffee', 30.3, 'ReadTimeout'), ('maps.mail.ru', 20.5, 'ok')]
+
+TOTAL {'osm': 276, 'only': 53, 'fails': 15, 'hours': 159, 'hours_only': 27, 'phone_add': 30, 'web_add': 11, 'ovt': 1705}
+
+Server answers: {"maps.mail.ru": {"ok": 9, "fail": 15, "avg_s_ok": 23.7}, "overpass-api.de": {"ok": 2, "fail": 22, "avg_s_ok": 28.9}, "overpass.private.coffee": {"ok": 0, "fail": 24, "avg_s_ok": 0.0}}
+
+OSM-only shops:
+   New York: Piki Poké (40.6868,-73.9903) site=https://pikipoke.com/index-brooklyn.html ramen_tag=True
+   New York: Shinobi Ramen (40.7057,-73.9322) site=None ramen_tag=False
+   New York: Samurai Mama (40.7141,-73.9601) site=None ramen_tag=True
+   New York: Ramen, Fried Rice and Noodles (40.7253,-73.9515) site=None ramen_tag=False
+   New York: Late Night Ramen at Takashi (40.7314,-74.0065) site=None ramen_tag=False
+   New York: Okonomi (40.7126,-73.9487) site=https://www.okonomi.us/ ramen_tag=True
+   New York: Tamashi Ramen (40.7445,-73.9537) site=None ramen_tag=False
+   New York: Ten-Ichi Ramen (40.6654,-73.9830) site=None ramen_tag=True
+   New York: Cafe Manna (40.7367,-73.9915) site=None ramen_tag=True
+   New York: Kame Ramen (40.7442,-73.9832) site=None ramen_tag=False
+   New York: Menya Jiro (40.6949,-73.9836) site=https://www.menyajiro-ny.com/menyajiro-brooklyn ramen_tag=True
+   New York: Katagiri (40.7509,-73.9771) site=https://www.katagiri.com ramen_tag=True
+   New York: Kogame Ramen (40.7407,-74.0043) site=None ramen_tag=False
+   New York: Ryujin Brooklyn (40.7111,-73.9506) site=https://www.ryujinbrooklyn.com ramen_tag=True
+   New York: Dragon Sushi (40.8112,-73.9581) site=https://www.dragonsushiny.com/ ramen_tag=True
+   New York: Tamashi Ramen (40.7627,-73.9267) site=None ramen_tag=False
+   New York: Peng's Noodle Folk (40.7710,-73.9620) site=https://www.pengsnoodlefolk.com/ ramen_tag=True
+   New York: Sake Bar Hagi (40.7627,-73.9850) site=https://sakebar-hagi.com/ ramen_tag=True
+   New York: Kushi Kushi Yaki (40.7473,-73.9861) site=https://www.kushikushiyaki.com ramen_tag=True
+   New York: E.A.K. Ramen (40.7518,-73.9959) site=None ramen_tag=False
+   New York: Harajuki Ramen (40.7693,-73.9582) site=None ramen_tag=False
+   New York: Dumpling dojo (40.8267,-74.1047) site=https://dumplingdojo.com/ ramen_tag=True
+   New York: Nohara Ramen (40.7868,-73.7262) site=https://www.nohararamen.com ramen_tag=False
+   New York: Shokudo (40.7530,-74.0256) site=None ramen_tag=True
+   New York: Hitto Ramen (40.5878,-74.0912) site=None ramen_tag=False
+   New York: Rokc (40.8235,-73.9522) site=None ramen_tag=True
+   New York: Kadema Ramen Bar (40.6949,-74.1737) site=None ramen_tag=True
+   New York: We Bowl (40.6307,-74.1033) site=None ramen_tag=True
+   New York: pastaRAMEN (40.7498,-73.8452) site=None ramen_tag=False
+   New York: Ramen Thupka (40.6851,-73.9796) site=None ramen_tag=True
+   New York: Caravan Uyghur Cuisine (40.7051,-74.0097) site=https://www.caravanuyghur.com/ ramen_tag=True
+   New York: Tenmomi (40.8272,-74.1032) site=https://tenmomi-snack-bar.square.site ramen_tag=True
+   New York: Ju-Ichi (40.8148,-74.2189) site=None ramen_tag=True
+   Phoenix: Ja Ramen (33.3764,-112.1837) site=None ramen_tag=True
+   Phoenix: Jalapeño Dragon (33.4154,-111.8169) site=https://jalapenodragon.com ramen_tag=True
+   Phoenix: Strings Ramen Shop (33.3793,-112.0329) site=https://www.ramenstrings.com ramen_tag=True
+   Phoenix: Full Moon Izakaya (33.5511,-112.0570) site=https://full-moon-izakaya.square.site/ ramen_tag=True
+   Philadelphia: Harvey Ramen (40.0960,-75.0149) site=https://harveyramen.com/ ramen_tag=False
+   Philadelphia: Rayaki Ramen (40.0867,-74.9651) site=None ramen_tag=False
+   Philadelphia: Otaka Sushi (39.9874,-75.4073) site=https://www.otakasushi.com/ ramen_tag=True
+   Philadelphia: Cheu Fishtown (39.9723,-75.1346) site=None ramen_tag=True
+   San Diego: Underbelly North Park (32.7413,-117.1300) site=https://godblessunderbelly.com/ ramen_tag=True
+   San Diego: Hy Shinu (32.7376,-116.9402) site=https://hyshinuramen.com/ ramen_tag=True
+   San Diego: Monsta Ramen (32.8196,-117.1560) site=None ramen_tag=True
+   San Diego: Showa Ramen (32.8809,-117.2409) site=None ramen_tag=True
+   San Diego: Sushi Express (32.5415,-117.0315) site=None ramen_tag=True
+   Dallas: Oodle's Noodles (32.7794,-96.8002) site=None ramen_tag=True
+   Austin: Sushi Warriors (30.3149,-97.7330) site=https://www.sushiwarriors.com/ ramen_tag=True
+   Austin: Noodle Lab (30.2864,-97.7411) site=https://housing.utexas.edu/dining/dining-locations/restaurants/noodle-lab ramen_tag=True
+   Raleigh: Hokkaido Ramen House (35.8345,-78.8573) site=https://hokkaidoramenhousenc.com ramen_tag=False
+   Raleigh: don-Don (35.7889,-78.8492) site=https://dondonnc.com/ ramen_tag=True
+   Raleigh: Azami Ramen & Sushi (35.7914,-78.8461) site=None ramen_tag=False
+   Atlanta: Poke Ramen (33.9239,-84.3411) site=None ramen_tag=True
