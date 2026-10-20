@@ -277,6 +277,12 @@ def listings() -> dict[str, list[dict]]:
     for s in load_json(MENU_STATE, {"places": {}}).get("places", {}).values():
         if s.get("kind") in ("shop", "serves"):
             add(s.get("name"), s.get("website"), s.get("address"), s.get("lat"), s.get("lon"))
+    osm = ROOT / "docs" / "osm_ramen.json"
+    for e in (load_json(osm, {}).get("elements", []) if osm.exists() else []):
+        t = e.get("tags", {})
+        street = " ".join(x for x in (t.get("addr:housenumber"), t.get("addr:street")) if x)
+        add(t.get("name") or t.get("name:en"), t.get("website") or t.get("contact:website"),
+            ", ".join(x for x in (street, t.get("addr:city"), t.get("addr:state")) if x) or None, e.get("lat"), e.get("lon"))
     for e in extra.get("published", []):
         if e.get("f") != "hall":  # vendors inside halls link to the hall's site, not their own
             add(e.get("n"), e.get("w"), e.get("a"), e.get("la"), e.get("lo"))

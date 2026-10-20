@@ -60,3 +60,16 @@ def test_note_hours_keeps_then_ages_out():
     C.note_hours(rec, "b.com", {"reached": True, "hours": {"w": [[[660, 1260]]] * 7, "how": "text"}}, "2026-10-01")
     C.note_hours(rec, "b.com", {"reached": True, "closed": True}, "2026-10-02")
     assert "b.com" not in rec
+
+
+def test_osm_slim():
+    from menucheck import osm
+    d = {"elements": [
+        {"type": "node", "id": 5, "lat": 35.1, "lon": -80.2, "tags": {"name": "Ramen A", "amenity": "restaurant", "opening_hours": "Mo-Su 11:00-21:00", "brand:wikidata": "Q1"}},
+        {"type": "way", "id": 2, "center": {"lat": 35.2, "lon": -80.3}, "tags": {"name": "Ramen B", "website": "https://b.com"}},
+        {"type": "node", "id": 9, "lat": 1, "lon": 2, "tags": {"amenity": "restaurant"}},
+    ]}
+    out = osm.slim(d)
+    assert [(e["type"], e["id"]) for e in out] == [("node", 5), ("way", 2)]
+    assert out[0]["tags"] == {"name": "Ramen A", "opening_hours": "Mo-Su 11:00-21:00"}
+    assert out[1]["lat"] == 35.2
