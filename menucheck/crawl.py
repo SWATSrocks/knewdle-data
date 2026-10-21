@@ -39,6 +39,12 @@ BLOCKED_HOSTS = (
     "slicelife.com", "foodboss.com", "wanderlog.com", "ezcater.com", "giftly.com",
     "toast.site", "wikipedia.org", "wikimedia.org", "wikidata.org", "squareup.com", "order.app.hiro.io",
     "spoton.com", "owner.com", "orderonlinemenus.com", "menusifu.com", "chinesemenuonline.com",
+    # Directories and review/listing sites: someone else's collection of data, never the shop's own site.
+    "yellowpages.com", "superpages.com", "menupix.com", "hub.biz", "poi.place", "chowbus.com", "mapquest.com",
+    "foursquare.com", "zomato.com", "restaurantguru.", "manta.com", "bbb.org", "groupon.com", "menuism.com",
+    "citysearch.com", "chamberofcommerce.com", "nextdoor.com", "yably.", "cylex", "opendi.", "find-open.",
+    "restaurantreview.com", "zagat.com", "infatuation.com", "eater.com", "seamlessweb.com", "eatstreet.com",
+    "menuwithprice.com", "menu-price.", "sirved.com", "zaubee.com", "apple.com", "bing.com", "waze.com",
 )
 
 # Website builders often keep menu PDFs/images on these asset hosts; they're still the restaurant's own files.
