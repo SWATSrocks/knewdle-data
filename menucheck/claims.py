@@ -269,7 +269,8 @@ def listings() -> dict[str, list[dict]]:
             return
         lst = by_host.setdefault(h, [])
         if not any(x["name"] == name and abs(x["lat"] - lat) < 0.002 for x in lst):
-            lst.append({"name": name, "address": address, "lat": round(lat, 5), "lon": round(lon, 5)})
+            lst.append({"name": name, "address": address, "lat": round(lat, 5), "lon": round(lon, 5),
+                        "website": (website or "").strip()})
 
     extra = load_json(EXTRA, {})
     for p in extra.get("app_known", []):
@@ -306,7 +307,7 @@ def find_hours(crawler: Crawler, home) -> tuple[list | None, str | None]:
             seen.add(href)
             # "hours" pages first, then location/contact, then about
             tries.append((0 if re.search(r"hour", label, re.I) else 1 if re.search(r"locat|visit|find|contact", label, re.I) else 2, href))
-    for _, href in sorted(tries)[:2]:
+    for _, href in sorted(tries)[:3]:
         page = crawler.fetch(href)
         if page is not None and host_of(page.url) == base:
             week, how = hours_mod.parse(page.content)
@@ -315,6 +316,47 @@ def find_hours(crawler: Crawler, home) -> tuple[list | None, str | None]:
     return None, None
 
 
+def page_key(url: str) -> str | None:
+    """"jinyaramenbar.com/locations/charlotte" for a chain's own page about one store; None for a homepage.
+    The app builds the same key from a listing's website."""
+    u = (url or "").strip()
+    if not u:
+        return None
+    if not u.lower().startswith("http"):
+        u = "https://" + u
+    p = urlparse(u)
+    host = (p.hostname or "").lower().removeprefix("www.")
+    path = re.sub(r"/+$", "", p.path or "").lower()
+    if not host or not path or re.search(r"\.(pdf|jpe?g|png)$", path):
+        return None
+    return host + path
+
+
+def check_chain_pages(crawler: Crawler, host: str, urls: list[str]) -> dict:
+    """Each store page of a multi-location website: {page key: {"w": week, "how": how}} (None where unreadable).
+    One page at a time per website, with the site's own crawl delay."""
+    out = {}
+    for u in urls:
+        if time.time() > CHAIN_DEADLINE[0]:
+            break
+        key = page_key(u)
+        r = crawler.fetch(u if u.lower().startswith("http") else "https://" + u)
+        if r is not None and page_key(r.url) and host_of(r.url) == host:   # not bounced to the homepage
+            week, how = hours_mod.parse(r.content)
+            out[key] = {"w": week, "how": how} if week else None
+        time.sleep(max(1.0, crawler.crawl_delay(u if u.startswith("http") else "https://" + u)))
+    return out
+
+
+def owner_hours(text: str | None):
+    """An owner's posted "Hours: Tue-Sun 11:30am-9pm" as a week, when it reads cleanly."""
+    if not text:
+        return None
+    w = hours_mod.from_text("Hours: " + text) or hours_mod.from_text_any("Hours: " + text)
+    return w if w and hours_mod.valid(w) else None
+
+
+CHAIN_DEADLINE = [float("inf")]
 DEADLINE = [float("inf")]  # time.time() after which remaining sites are left for the next run
 
 
@@ -439,6 +481,30 @@ def main() -> int:
                 if rec["misses"] >= MISSES_TO_UNCLAIM:
                     print(f"  ✗ code removed, unverified: {h}")
                     del claims[h]
+    # Chains: hours from each store's own page on the chain's website (the page the listing links to).
+    pages_rec: dict = state.setdefault("page_hours", {})
+    chain_urls: dict[str, dict[str, str]] = {}
+    for h, ps in by_host.items():
+        if len(ps) > 1 and not any(h == o or h.endswith("." + o) for o in optout):
+            for p in ps:
+                k = page_key(p.get("website"))
+                if k:
+                    chain_urls.setdefault(h, {})[k] = p["website"]
+    due_chains = [h for h in chain_urls if args.all or int(hashlib.sha256(h.encode()).hexdigest(), 16) % 7 == day]
+    print(f"chains: {len(chain_urls)} websites with store pages; checking {len(due_chains)} today "
+          f"({sum(len(chain_urls[h]) for h in due_chains)} pages)")
+    CHAIN_DEADLINE[0] = time.time() + 15 * 60
+    with ThreadPoolExecutor(max_workers=12) as pool:
+        futs = {pool.submit(check_chain_pages, crawler, h, list(chain_urls[h].values())): h for h in due_chains}
+        for f in as_completed(futs):
+            try:
+                res = f.result()
+            except Exception:  # noqa: BLE001
+                continue
+            for k, v in res.items():
+                note_hours(pages_rec, k, {"reached": True, "hours": v})
+    for k in list(pages_rec):
+        note_hours(pages_rec, k, {})
     # Closures that have passed drop off by themselves.
     for rec in claims.values():
         c = rec.get("updates", {}).get("closed")
@@ -450,6 +516,13 @@ def main() -> int:
     for h in list(hours_rec):
         note_hours(hours_rec, h, {})          # age out old finds
     hours_pub = {h: r["w"] for h, r in sorted(hours_rec.items()) if len(by_host.get(h, [])) == 1}
+    for h, rec in claims.items():          # an owner's posted hours win
+        w = owner_hours(rec.get("updates", {}).get("hours"))
+        if w:
+            hours_pub[h] = w
+    live_pages = {page_key(p.get("website")) for ps in by_host.values() if len(ps) > 1 for p in ps}
+    pages_pub = {k: r["w"] for k, r in sorted(pages_rec.items()) if k in live_pages}
+    print(f"hours: {len(pages_pub)} chain store pages with hours")
     print(f"hours: {len(hours_pub)} single-location websites with hours "
           f"({sum(1 for h in by_host if len(by_host[h]) == 1)} single-location websites in all)")
     published = [{"h": h, "since": r["since"], "u": r.get("updated"), **r.get("updates", {})}
@@ -463,7 +536,7 @@ def main() -> int:
     STATE.write_text(json.dumps(state, indent=1, ensure_ascii=False))
     CLAIMED.write_text(json.dumps({"v": 1, "generated": today().isoformat(), "shops": published},
                                   separators=(",", ":"), ensure_ascii=False))
-    HOURS.write_text(json.dumps({"v": 1, "generated": today().isoformat(), "shops": hours_pub},
+    HOURS.write_text(json.dumps({"v": 1, "generated": today().isoformat(), "shops": hours_pub, "pages": pages_pub},
                                 separators=(",", ":")))
     INDEX.write_text(json.dumps({"generated": today().isoformat(), "shops": index},
                                 separators=(",", ":"), ensure_ascii=False))
