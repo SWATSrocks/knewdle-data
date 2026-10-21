@@ -24,7 +24,8 @@
     to see whether ramen is on it.</p>
   <h2>What it does</h2>
   <ul>
-    <li>Visits only the restaurant's own site (never delivery apps, review sites or social media), at most a few pages, roughly once a month.</li>
+    <li>Visits only the restaurant's own site (never delivery apps, review sites or social media), at most a few pages per visit:
+      the menu about once a month, and the homepage (plus an Hours, Location or Contact page) about once a week.</li>
     <li>Always follows <code>robots.txt</code>.</li>
     <li>Keeps only a fact ("serves ramen", and how many ramen dishes) plus a link to your menu. It never copies menu text, prices or photos.</li>
     <li>In the app, your restaurant gets a "Ramen on the menu" tag and a link to your own menu.</li>
@@ -38,6 +39,12 @@
       we read its homepage (and a contact page) once to find the shop's address, so new shops show up in the app.</li>
     <li><strong>Food halls and markets:</strong> we read a food hall's or market's own vendor directory about once a week
       to see which counters serve ramen, and list them at the hall's address.</li>
+    <li><strong>Opening hours:</strong> on that weekly visit we read the opening hours your website shows (or the hours it
+      gives search engines), so the app can say "Open now · closes 9 PM". For chains, we read each store's own page that
+      the listing links to. Just the times; nothing else is kept. Results: <a href="hours.json">hours.json</a>.</li>
+    <li><strong>OpenStreetMap:</strong> twice a week we take the ramen places from OpenStreetMap, using
+      <a href="https://download.geofabrik.de/">Geofabrik</a>'s free extracts. That list is published, open, at
+      <a href="osm_ramen.json">osm_ramen.json</a> under the Open Database License.</li>
     <li><strong>Shop updates:</strong> if your website shows a Knewdle NOW verification line, we read your homepage and your
       "Knewdle NOW updates" section or /knewdle page once a day to keep your listing current.
       <a href="shops/">Claim your shop</a>.</li>
@@ -54,6 +61,8 @@
 Disallow: /</pre>
   <p>Or email <a href="mailto:info@swats.rocks?subject=Knewdle%20NOW%20menu%20check">info@swats.rocks</a> with your website and we'll add it to the skip list.</p>
   <p class="muted">Place data from <a href="https://overturemaps.org">Overture Maps Foundation</a> (CDLA-Permissive-2.0).
+    Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>, available under the
+    Open Database License (ODbL 1.0).
     Contains data from <a href="https://docs.foursquare.com/data-products/docs/access-fsq-os-places">Foursquare Open Source Places</a>,
     © Foursquare Labs, Inc. (Apache License 2.0, <a href="NOTICE-foursquare.txt">notice</a>).
     Results: <a href="menu_ramen.json">menu_ramen.json</a> · <a href="stats.json">stats</a></p>

@@ -536,7 +536,11 @@ def main() -> int:
     STATE.write_text(json.dumps(state, indent=1, ensure_ascii=False))
     CLAIMED.write_text(json.dumps({"v": 1, "generated": today().isoformat(), "shops": published},
                                   separators=(",", ":"), ensure_ascii=False))
-    HOURS.write_text(json.dumps({"v": 1, "generated": today().isoformat(), "shops": hours_pub, "pages": pages_pub},
+    HOURS.write_text(json.dumps({"v": 1, "generated": today().isoformat(),
+                                 "about": "Opening hours as shown on each shop's own website, read weekly by Knewdle NOW.",
+                                 "license": "Open Database License (ODbL 1.0); includes shop websites listed in OpenStreetMap "
+                                            "(© OpenStreetMap contributors) and Overture Maps (CDLA-Permissive-2.0).",
+                                 "shops": hours_pub, "pages": pages_pub},
                                 separators=(",", ":")))
     INDEX.write_text(json.dumps({"generated": today().isoformat(), "shops": index},
                                 separators=(",", ":"), ensure_ascii=False))
