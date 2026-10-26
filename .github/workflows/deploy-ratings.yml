@@ -53,6 +53,9 @@ jobs:
       - name: Smoke test
         run: |
           sleep 10
+          # Leftovers from an earlier failed run would skew the checks below.
+          npx -y wrangler@4 d1 execute knewdle-ratings --remote \
+            --command "DELETE FROM reports WHERE device LIKE 'smoke-test-device-%'; DELETE FROM lb_players WHERE device LIKE 'smoke-test-device-%'"
           BASE=https://knewdle-ratings.swatsrocks.workers.dev
           curl -fsS "$BASE/" ; echo
           curl -fsS "$BASE/averages" ; echo
@@ -77,7 +80,7 @@ jobs:
           curl -fsS -X POST "$BASE/report" -H "content-type: application/json" \
             -d '{"shop":"test.knewdle@0.00,0.00","kind":"open-here","name":"Test","device":"smoke-test-device-0002"}' ; echo
           if curl -fsS "$BASE/closed" | grep -q '"k":"test.knewdle@0.00,0.00"'; then echo "still listed after open-here"; exit 1; fi
-          curl -fsS "$BASE/closed?all=1" | tee /dev/stderr | grep -q '"open":\[{"k":"test.knewdle@0.00,0.00"'
+          curl -fsS "$BASE/closed?all=1" | tee /dev/stderr | python3 -c "import sys,json; d=json.load(sys.stdin); assert any(o['k']=='test.knewdle@0.00,0.00' for o in d['open'])"
           npx -y wrangler@4 d1 execute knewdle-ratings --remote \
             --command "DELETE FROM reports WHERE device IN ('smoke-test-device-0001', 'smoke-test-device-0002')"
           # Leaderboards: a bad nickname is refused, a test player joins, syncs, shows up, then leaves.
