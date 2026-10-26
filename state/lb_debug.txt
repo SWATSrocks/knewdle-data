@@ -1,0 +1,12 @@
+== lb
+{"generated":"2026-10-26T21:33:18.183Z","month":"2026-10","boards":{"month":[],"all":[],"streak":[]},"shops":[{"k":"test.knewdle@0.00,0.00","name":"Test","n":1},{"k":"eatabowlmooresville.com@35.58,-80.81","name":"Eatabowl","n":1}]}
+== bad join
+{"ok":false,"error":"nick-blocked"} HTTP400
+== join
+{"ok":true,"nick":"Smoke Test 03"} HTTP200
+== sync
+{"ok":true,"me":{"joined":true,"nick":"Smoke Test 03","hidden":false,"month":"2026-10","month_shops":2,"all_shops":2,"best_streak":1,"rank":{"month":1,"all":1,"streak":1}}} HTTP200
+== me
+{"ok":true,"me":{"joined":true,"nick":"Smoke Test 03","hidden":false,"month":"2026-10","month_shops":2,"all_shops":2,"best_streak":1,"rank":{"month":1,"all":1,"streak":1}}}
+== leave
+{"ok":true}
