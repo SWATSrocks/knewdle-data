@@ -1,0 +1,23 @@
+name: LB debug
+on: workflow_dispatch
+permissions:
+  contents: write
+jobs:
+  d:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          B=https://knewdle-ratings.swatsrocks.workers.dev
+          {
+          echo "== lb"; curl -sS "$B/lb"; echo
+          echo "== bad join"; curl -sS -w " HTTP%{http_code}" -X POST "$B/lb/join" -H "content-type: application/json" -d '{"device":"smoke-test-device-0003","nick":"sh1tface"}'; echo
+          echo "== join"; curl -sS -w " HTTP%{http_code}" -X POST "$B/lb/join" -H "content-type: application/json" -d '{"device":"smoke-test-device-0003","nick":"Smoke Test 03"}'; echo
+          T=$(date -u +%Y-%m-%d)
+          echo "== sync"; curl -sS -w " HTTP%{http_code}" -X POST "$B/lb/sync" -H "content-type: application/json" -d "{\"device\":\"smoke-test-device-0003\",\"stamps\":[{\"k\":\"test.knewdle@0.00,0.00\",\"d\":[\"$T\"]},{\"k\":\"test2.knewdle@0.01,0.01\",\"d\":[\"$T\"]}]}"; echo
+          echo "== me"; curl -sS "$B/lb/me?device=smoke-test-device-0003"; echo
+          echo "== leave"; curl -sS -X POST "$B/lb/leave" -H "content-type: application/json" -d '{"device":"smoke-test-device-0003"}'; echo
+          } > state/lb_debug.txt 2>&1
+          cat state/lb_debug.txt
+          git config user.name "knewdle-menu-check"; git config user.email "actions@users.noreply.github.com"
+          git add state/lb_debug.txt; git commit -m "lb debug"; git pull --rebase -X theirs origin main; git push
