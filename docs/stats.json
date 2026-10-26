@@ -1,38 +1,45 @@
 {
-  "generated": "2026-10-19",
-  "overture_release": "2026-09-23.1",
-  "candidates": 47692,
-  "checked_this_run": 0,
-  "results_this_run": {},
-  "all_known": {
-    "none": 26919,
-    "platform": 1474,
-    "serves": 2323,
-    "shop": 132,
-    "error": 14670,
-    "robots": 2174
+  "generated": "2026-10-26",
+  "overture_release": "2026-10-21.0",
+  "candidates": 47231,
+  "checked_this_run": 3413,
+  "results_this_run": {
+    "robots": 74,
+    "platform": 136,
+    "error": 492,
+    "none": 2625,
+    "shop": 3,
+    "serves": 83
   },
-  "published": 2455,
-  "more_published": 1256,
+  "all_known": {
+    "none": 27757,
+    "platform": 1536,
+    "serves": 2281,
+    "shop": 128,
+    "error": 13505,
+    "robots": 2024
+  },
+  "published": 2409,
+  "more_published": 1279,
   "more": {
-    "generated": "2026-10-19",
-    "published": 1256,
+    "generated": "2026-10-26",
+    "published": 1279,
     "by_way_found": {
-      "chain": 58,
-      "hall": 9,
-      "noodle": 85,
-      "brand": 1,
-      "name": 17,
-      "site": 45,
-      "fsq": 1039,
+      "chain": 59,
+      "hall": 10,
+      "noodle": 84,
+      "site": 47,
+      "name": 16,
+      "brand": 2,
+      "fsq": 1059,
       "web": 2
     },
     "names": {
-      "app": 4975,
-      "noodle": 115,
-      "name": 96,
-      "brand": 3,
-      "site": 86
+      "app": 4900,
+      "noodle": 111,
+      "name": 94,
+      "site": 88,
+      "brand": 5
     },
     "foursquare": {
       "ramen places": 3544,
@@ -46,7 +53,7 @@
       "Hokkaido Ramen Santouka": 4,
       "Marufuku Ramen": 1,
       "Mensho": 7,
-      "Ramen Tatsu-ya": 7,
+      "Ramen Tatsu-ya": 8,
       "Ramen Danbo": 3,
       "HiroNori Craft Ramen": 1,
       "Ramen-San": 3,
@@ -80,11 +87,8 @@
       "Japan Center Malls": 5
     },
     "web": {
-      "ok": 2,
       "not ramen": 1,
-      "unreachable": 1,
-      "empty": 3,
-      "no US address": 4
+      "unreachable": 1
     }
   }
 }
