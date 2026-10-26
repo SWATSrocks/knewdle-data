@@ -80,3 +80,19 @@ jobs:
           curl -fsS "$BASE/closed?all=1" | tee /dev/stderr | grep -q '"open":\[{"k":"test.knewdle@0.00,0.00"'
           npx -y wrangler@4 d1 execute knewdle-ratings --remote \
             --command "DELETE FROM reports WHERE device IN ('smoke-test-device-0001', 'smoke-test-device-0002')"
+          # Leaderboards: a bad nickname is refused, a test player joins, syncs, shows up, then leaves.
+          code=$(curl -s -o /dev/null -w "%{http_code}" -X POST "$BASE/lb/join" -H "content-type: application/json" \
+            -d '{"device":"smoke-test-device-0003","nick":"sh1tface"}')
+          echo "blocked nickname answered HTTP $code (expected 400)"; [ "$code" = "400" ]
+          curl -fsS -X POST "$BASE/lb/join" -H "content-type: application/json" \
+            -d '{"device":"smoke-test-device-0003","nick":"Smoke Test 03"}' ; echo
+          TODAY=$(date -u +%Y-%m-%d)
+          curl -fsS -X POST "$BASE/lb/sync" -H "content-type: application/json" \
+            -d "{\"device\":\"smoke-test-device-0003\",\"stamps\":[{\"k\":\"test.knewdle@0.00,0.00\",\"d\":[\"$TODAY\"]},{\"k\":\"test2.knewdle@0.01,0.01\",\"d\":[\"$TODAY\"]}]}" \
+            | tee /dev/stderr | grep -q '"month_shops":2'
+          curl -fsS "$BASE/lb/me?device=smoke-test-device-0003" | tee /dev/stderr | grep -q '"nick":"Smoke Test 03"'
+          curl -fsS -H "cache-control: no-cache" "$BASE/lb" ; echo
+          curl -fsS -X POST "$BASE/lb/leave" -H "content-type: application/json" -d '{"device":"smoke-test-device-0003"}' ; echo
+          curl -fsS "$BASE/lb/me?device=smoke-test-device-0003" | grep -q '"joined":false'
+          npx -y wrangler@4 d1 execute knewdle-ratings --remote \
+            --command "DELETE FROM limits WHERE who = 'lb:smoke-test-device-0003'"

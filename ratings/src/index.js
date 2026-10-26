@@ -10,6 +10,14 @@
  *                   (last 365 days: 1 phone that was at the shop, or 2+ phones from anywhere; never a shop
  *                   someone found open in person since the last "closed" report)
  *   GET  /closed?all=1 -> same, but every shop with any "closed" report, plus "open": [{"k", "last"}]
+ *   Leaderboards (opt-in, nickname only; never which shops or when, only totals):
+ *   POST /lb/join   {"device", "nick"}            -> {"ok": true, "nick"} (3-16 letters/numbers, family-friendly, unique)
+ *   POST /lb/sync   {"device", "stamps": [{"k": shop, "d": ["2026-10-21", ...]}]} -> {"ok": true, "me": {...}}
+ *                   (the phone's Passport visit dates; the Worker keeps only the totals it computes from them)
+ *   POST /lb/leave  {"device"}                    -> {"ok": true}  (removes the nickname and totals)
+ *   GET  /lb        -> {"month": "2026-10", "boards": {"month": [{"nick","n"}], "all": [...], "streak": [...]},
+ *                       "shops": [{"k", "name", "n"}]}   (shops: most in-person visitors this month)
+ *   GET  /lb/me?device=... -> {"joined": true, "nick", "month_shops", "all_shops", "best_streak", "rank": {...}}
  *   GET  /          -> short description
  *
  * Stars only (no text), one rating per phone per shop (changing it replaces the old one).
@@ -157,6 +165,164 @@ async function averages(env) {
     200, { "cache-control": "public, max-age=900" });
 }
 
+// ---------------------------------------------------------------------------------------------
+// Leaderboards
+// ---------------------------------------------------------------------------------------------
+const NICK = /^[A-Za-z0-9][A-Za-z0-9 _.\-]{1,14}[A-Za-z0-9]$/;   // 3-16 characters
+const LB_SINCE = "2026-09-01";        // stamps before the Passport existed don't count
+const LB_MAX_SHOPS_PER_DAY = 6;       // more distinct shops than this in one day: only the first 6 count
+const LB_MAX_DAY_SPREAD_KM = 300;     // shops farther apart than this on the same day: that day doesn't count
+const LB_TOP = 25;
+const LB_SYNCS_PER_DAY = 40;
+// Words a nickname may not contain (checked after undoing look-alike letters and repeats: "fuuuck", "sh1t").
+const BLOCKED = ["fuck", "fuk", "shit", "bitch", "cunt", "dick", "cock", "pussy", "asshole", "whore", "slut", "nigg",
+  "niga", "fag", "retard", "rapist", "porn", "penis", "vagina", "nazi", "hitler", "kike", "chink", "tranny", "dyke",
+  "twat", "wank", "jizz", "molest", "pedo", "boob", "tits", "kkk", "heil", "admin", "moderator", "knewdle", "official",
+  "swatsrocks", "support"];
+
+function nickKey(nick) {
+  return nick.toLowerCase().replace(/[^a-z0-9]/g, "");
+}
+
+function nickBlocked(nick) {
+  const leet = { "0": "o", "1": "i", "3": "e", "4": "a", "5": "s", "7": "t", "8": "b", "@": "a", "$": "s", "!": "i" };
+  const plain = nick.toLowerCase().split("").map((c) => leet[c] ?? c).join("").replace(/[^a-z]/g, "");
+  const squeezed = plain.replace(/(.)\1+/g, "$1");   // "fuuuck" -> "fuck"
+  return BLOCKED.some((w) => plain.includes(w) || (!/(.)\1/.test(w) && squeezed.includes(w)));
+}
+
+function today() {
+  return new Date().toISOString().slice(0, 10);
+}
+
+async function body(request) {
+  try {
+    return await request.json();
+  } catch {
+    return null;
+  }
+}
+
+function km(a, b) {
+  const r = Math.PI / 180, dLat = (b[0] - a[0]) * r, dLon = (b[1] - a[1]) * r;
+  const h = Math.sin(dLat / 2) ** 2 + Math.cos(a[0] * r) * Math.cos(b[0] * r) * Math.sin(dLon / 2) ** 2;
+  return 12742 * Math.asin(Math.sqrt(h));
+}
+
+/** Totals from a Passport's visit dates, after dropping anything implausible. */
+function lbTotals(stamps, now = new Date()) {
+  const maxDay = new Date(now.getTime() + 86400000).toISOString().slice(0, 10);
+  const month = now.toISOString().slice(0, 7);
+  const byDay = new Map();   // day -> [[shop, [lat, lon]]]
+  for (const s of Array.isArray(stamps) ? stamps.slice(0, 1000) : []) {
+    const k = String(s && s.k || "").toLowerCase();
+    if (!SHOP.test(k)) continue;
+    const at = k.split("@")[1].split(",").map(Number);
+    const days = new Set((Array.isArray(s.d) ? s.d.slice(0, 400) : []).map(String)
+      .filter((d) => /^\d{4}-\d{2}-\d{2}$/.test(d) && d >= LB_SINCE && d <= maxDay));
+    for (const d of days) {
+      if (!byDay.has(d)) byDay.set(d, []);
+      byDay.get(d).push([k, at]);
+    }
+  }
+  const all = new Set(), inMonth = new Set(), weeks = new Set();
+  for (const [d, list] of byDay) {
+    const shops = [...new Map(list).entries()].sort().slice(0, LB_MAX_SHOPS_PER_DAY);
+    let spread = 0;
+    for (let i = 0; i < shops.length; i++) for (let j = i + 1; j < shops.length; j++) spread = Math.max(spread, km(shops[i][1], shops[j][1]));
+    if (spread > LB_MAX_DAY_SPREAD_KM) continue;
+    for (const [k] of shops) {
+      all.add(k);
+      if (d.startsWith(month)) inMonth.add(k);
+    }
+    weeks.add(Math.floor((Date.parse(d + "T00:00:00Z") / 86400000 + 3) / 7));
+  }
+  const ws = [...weeks].sort((a, b) => a - b);
+  let best = 0, run = 0;
+  for (let i = 0; i < ws.length; i++) {
+    run = i > 0 && ws[i] === ws[i - 1] + 1 ? run + 1 : 1;
+    best = Math.max(best, run);
+  }
+  return { month, month_shops: inMonth.size, all_shops: all.size, best_streak: best };
+}
+
+async function lbJoin(request, env) {
+  const b = await body(request);
+  const device = String(b && b.device || "");
+  const nick = String(b && b.nick || "").trim().replace(/\s+/g, " ");
+  if (!DEVICE.test(device)) return json({ ok: false, error: "bad request" }, 400);
+  if (!NICK.test(nick) || nickKey(nick).length < 3) return json({ ok: false, error: "nick-format" }, 400);
+  if (nickBlocked(nick)) return json({ ok: false, error: "nick-blocked" }, 400);
+  const key = nickKey(nick);
+  const taken = await env.DB.prepare("SELECT device FROM lb_players WHERE nick_norm = ?").bind(key).first();
+  if (taken && taken.device !== device) return json({ ok: false, error: "nick-taken" }, 409);
+  await env.DB.prepare(
+    "INSERT INTO lb_players (device, nick, nick_norm, joined) VALUES (?, ?, ?, ?) " +
+      "ON CONFLICT (device) DO UPDATE SET nick = excluded.nick, nick_norm = excluded.nick_norm"
+  ).bind(device, nick, key, today()).run();
+  return json({ ok: true, nick });
+}
+
+async function lbSync(request, env) {
+  const b = await body(request);
+  const device = String(b && b.device || "");
+  if (!DEVICE.test(device)) return json({ ok: false, error: "bad request" }, 400);
+  const me = await env.DB.prepare("SELECT device FROM lb_players WHERE device = ?").bind(device).first();
+  if (!me) return json({ ok: false, error: "not-joined" }, 404);
+  const day = today();
+  const who = "lb:" + device;
+  const lim = await env.DB.prepare("SELECT count FROM limits WHERE who = ? AND day = ?").bind(who, day).first();
+  if (lim && lim.count >= LB_SYNCS_PER_DAY) return json({ ok: false, error: "too many today" }, 429);
+  const t = lbTotals(b.stamps);
+  await env.DB.batch([
+    env.DB.prepare("UPDATE lb_players SET month = ?, month_shops = ?, all_shops = ?, best_streak = ?, updated = ? WHERE device = ?")
+      .bind(t.month, t.month_shops, t.all_shops, t.best_streak, day, device),
+    env.DB.prepare("INSERT INTO limits (who, day, count) VALUES (?, ?, 1) ON CONFLICT (who, day) DO UPDATE SET count = count + 1")
+      .bind(who, day),
+  ]);
+  return json({ ok: true, me: await lbMeRow(env, device) });
+}
+
+async function lbLeave(request, env) {
+  const b = await body(request);
+  const device = String(b && b.device || "");
+  if (!DEVICE.test(device)) return json({ ok: false, error: "bad request" }, 400);
+  await env.DB.prepare("DELETE FROM lb_players WHERE device = ?").bind(device).run();
+  return json({ ok: true });
+}
+
+async function lbMeRow(env, device) {
+  const month = new Date().toISOString().slice(0, 7);
+  const p = await env.DB.prepare("SELECT nick, hidden, month, month_shops, all_shops, best_streak FROM lb_players WHERE device = ?")
+    .bind(device).first();
+  if (!p) return { joined: false };
+  const ms = p.month === month ? p.month_shops : 0;
+  return {
+    joined: true, nick: p.nick, hidden: !!p.hidden, month, month_shops: ms, all_shops: p.all_shops, best_streak: p.best_streak,
+    rank: {
+      month: ms > 0 ? 1 + (await env.DB.prepare("SELECT COUNT(*) AS c FROM lb_players WHERE hidden = 0 AND month = ? AND month_shops > ?").bind(month, ms).first()).c : null,
+      all: p.all_shops > 0 ? 1 + (await env.DB.prepare("SELECT COUNT(*) AS c FROM lb_players WHERE hidden = 0 AND all_shops > ?").bind(p.all_shops).first()).c : null,
+      streak: p.best_streak > 0 ? 1 + (await env.DB.prepare("SELECT COUNT(*) AS c FROM lb_players WHERE hidden = 0 AND best_streak > ?").bind(p.best_streak).first()).c : null,
+    },
+  };
+}
+
+async function lbBoards(env) {
+  const month = new Date().toISOString().slice(0, 7);
+  const q = (sql, ...args) => env.DB.prepare(sql).bind(...args).all().then((r) => r.results);
+  const [m, a, s, shops] = await Promise.all([
+    q("SELECT nick, month_shops AS n FROM lb_players WHERE hidden = 0 AND month = ? AND month_shops > 0 " +
+      "ORDER BY month_shops DESC, all_shops DESC, joined ASC LIMIT ?", month, LB_TOP),
+    q("SELECT nick, all_shops AS n FROM lb_players WHERE hidden = 0 AND all_shops > 0 ORDER BY all_shops DESC, joined ASC LIMIT ?", LB_TOP),
+    q("SELECT nick, best_streak AS n FROM lb_players WHERE hidden = 0 AND best_streak > 0 ORDER BY best_streak DESC, joined ASC LIMIT ?", LB_TOP),
+    q("SELECT shop AS k, MAX(name) AS name, COUNT(DISTINCT device) AS n FROM reports WHERE kind = 'open-here' AND updated >= ? " +
+      "GROUP BY shop ORDER BY n DESC, MAX(updated) DESC LIMIT 20", month + "-01"),
+  ]);
+  return json({ generated: new Date().toISOString(), month, boards: { month: m, all: a, streak: s }, shops },
+    200, { "cache-control": "public, max-age=300" });
+}
+
+
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
@@ -170,6 +336,15 @@ export default {
       if (url.pathname === "/report" && request.method === "POST") return await report(request, env);
       if (url.pathname === "/unreport" && request.method === "POST") return await unreport(request, env);
       if (url.pathname === "/closed" && request.method === "GET") return await closed(env, url.searchParams.get("all") === "1");
+      if (url.pathname === "/lb" && request.method === "GET") return await lbBoards(env);
+      if (url.pathname === "/lb/me" && request.method === "GET") {
+        const device = String(url.searchParams.get("device") || "");
+        if (!DEVICE.test(device)) return json({ ok: false, error: "bad request" }, 400);
+        return json({ ok: true, me: await lbMeRow(env, device) });
+      }
+      if (url.pathname === "/lb/join" && request.method === "POST") return await lbJoin(request, env);
+      if (url.pathname === "/lb/sync" && request.method === "POST") return await lbSync(request, env);
+      if (url.pathname === "/lb/leave" && request.method === "POST") return await lbLeave(request, env);
       if (url.pathname === "/") return json({ name: "Knewdle NOW ratings", info: "https://swatsrocks.github.io/knewdle-data/" });
       return json({ ok: false, error: "not found" }, 404);
     } catch (e) {
