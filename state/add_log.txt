@@ -1,0 +1,21 @@
+Added by hand: 1 website(s)
+  reading 1 of them this run
+  🍜 mrtokyopremium.com: Mr. Tokyo Premium: Endless Sushi • Ramen • Hibachi • Sake (1 location(s))
+  (web: 1s)
+{
+  "generated": "2026-10-27",
+  "published": 1272,
+  "by_way_found": {
+    "chain": 59,
+    "hall": 10,
+    "noodle": 82,
+    "site": 47,
+    "name": 15,
+    "brand": 2,
+    "fsq": 1054,
+    "web": 3
+  },
+  "web": {
+    "ok": 1
+  }
+}

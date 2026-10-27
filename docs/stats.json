@@ -20,75 +20,22 @@
     "robots": 2024
   },
   "published": 2409,
-  "more_published": 1279,
+  "more_published": 1272,
   "more": {
-    "generated": "2026-10-26",
-    "published": 1279,
+    "generated": "2026-10-27",
+    "published": 1272,
     "by_way_found": {
       "chain": 59,
       "hall": 10,
-      "noodle": 84,
+      "noodle": 82,
       "site": 47,
-      "name": 16,
+      "name": 15,
       "brand": 2,
-      "fsq": 1059,
-      "web": 2
-    },
-    "names": {
-      "app": 4900,
-      "noodle": 111,
-      "name": 94,
-      "site": 88,
-      "brand": 5
-    },
-    "foursquare": {
-      "ramen places": 3544,
-      "closed": 1285
-    },
-    "chains": {
-      "JINYA Ramen Bar": 57,
-      "Ramen Kizuki": 16,
-      "Ippudo": 3,
-      "Ichiran": 3,
-      "Hokkaido Ramen Santouka": 4,
-      "Marufuku Ramen": 1,
-      "Mensho": 7,
-      "Ramen Tatsu-ya": 8,
-      "Ramen Danbo": 3,
-      "HiroNori Craft Ramen": 1,
-      "Ramen-San": 3,
-      "Tsujita LA": 0,
-      "Daikokuya": 0,
-      "RAKKAN Ramen": 9,
-      "Momosan Ramen": 5,
-      "Hinodeya Ramen": 8,
-      "KYURAMEN": 34,
-      "Silverlake Ramen": 32,
-      "Kinton Ramen": 0,
-      "Yoshiharu Ramen": 0,
-      "Ichicoro Ramen": 0
-    },
-    "halls": {
-      "Transfer Co. Food Hall": 1,
-      "Union Market": 2,
-      "Legacy Hall": 1,
-      "Japan Village": 1,
-      "Uwajimaya Seattle": 1,
-      "Uwajimaya Beaverton": 1,
-      "Mitsuwa Marketplace Torrance": 1,
-      "Mitsuwa Marketplace Chicago": 1,
-      "Mitsuwa Marketplace Plano": 2,
-      "Mitsuwa Marketplace Edgewater": 2,
-      "Pine Street Market": 1,
-      "North Market": 1,
-      "Time Out Market New York": 1,
-      "Halidom Eatery": 1,
-      "Chattahoochee Food Works": 1,
-      "Japan Center Malls": 5
+      "fsq": 1054,
+      "web": 3
     },
     "web": {
-      "not ramen": 1,
-      "unreachable": 1
+      "ok": 1
     }
   }
 }
