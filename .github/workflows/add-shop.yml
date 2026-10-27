@@ -1,0 +1,60 @@
+name: Add a shop
+
+# Run by hand to add a ramen shop the map data doesn't know yet (a brand-new shop, say). Adds it to add.txt,
+# reads its own website for ramen and its address, and publishes it in the app's list within minutes.
+# Leave both boxes empty to just re-read everything already in add.txt.
+on:
+  workflow_dispatch:
+    inputs:
+      website:
+        description: "The shop's own website (e.g. mrtokyopremium.com)"
+        default: ""
+      name:
+        description: "Shop name as it should appear (optional)"
+        default: ""
+
+permissions:
+  contents: write
+
+concurrency:
+  group: menu-check
+  cancel-in-progress: false
+
+jobs:
+  add:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      SITE: ${{ github.event.inputs.website }}
+      NAME: ${{ github.event.inputs.name }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -r requirements.txt
+      - name: Add to add.txt
+        run: |
+          python3 - <<'PY'
+          import os, re
+          site = re.sub(r"[|#\n]", " ", os.environ.get("SITE", "")).strip()
+          name = re.sub(r"[|#\n]", " ", os.environ.get("NAME", "")).strip()
+          if site:
+              host = re.sub(r"^https?://", "", site).split("/")[0].lower().removeprefix("www.")
+              lines = open("add.txt").read().splitlines()
+              keep = [l for l in lines if not l.split("#")[0].strip().lower().removeprefix("https://").removeprefix("http://").removeprefix("www.").startswith(host)]
+              keep.append(host + (" | " + name if name else ""))
+              open("add.txt", "w").write("\n".join(keep) + "\n")
+              print("added", host, name)
+          PY
+      - name: Read the website(s)
+        run: python -u -m menucheck.discover --skip names,foursquare,chains,halls --manual-only 2>&1 | tee state/add_log.txt
+      - name: Publish
+        run: |
+          git config user.name "knewdle-menu-check"
+          git config user.email "actions@users.noreply.github.com"
+          git add add.txt state/extra_state.json state/add_log.txt docs/menu_ramen.json docs/stats.json
+          git diff --cached --quiet || git commit -m "Add a shop: ${SITE:-re-read add.txt}"
+          git pull --rebase -X theirs origin main || true
+          git push

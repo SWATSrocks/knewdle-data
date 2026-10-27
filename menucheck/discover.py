@@ -29,6 +29,7 @@ OUT = ROOT / "docs" / "menu_ramen.json"
 STATS = ROOT / "docs" / "stats.json"
 CONFIG = ROOT / "config.json"
 OPTOUT = ROOT / "optout.txt"
+ADD = ROOT / "add.txt"        # websites of ramen shops to add by hand (new shops the map data doesn't know yet)
 
 CREDITS = ("Places from Overture Maps Foundation (CDLA-Permissive-2.0). Contains data from Foursquare Open "
            "Source Places, (c) Foursquare Labs, Inc. (Apache License 2.0, see NOTICE-foursquare.txt). "
@@ -62,16 +63,43 @@ def opted_out(website: str | None, optout: set[str]) -> bool:
     return bool(h) and any(h == o or h.endswith("." + o) for o in optout)
 
 
+def load_added() -> dict[str, str | None]:
+    """add.txt: one shop per line, "website | Shop name" (the name is optional); # starts a comment."""
+    if not ADD.exists():
+        return {}
+    out: dict[str, str | None] = {}
+    for line in ADD.read_text().splitlines():
+        line = line.split("#", 1)[0].strip()
+        if not line:
+            continue
+        site, _, name = (x.strip() for x in line.partition("|"))
+        h = host_of(site if "://" in site else "https://" + site)
+        if h and "." in h:
+            out[h.removeprefix("www.")] = name[:60] or None
+    return out
+
+
 def run_web(state: dict, crawler: Crawler, geocode: Geocoder, max_domains: int, optout: set[str],
-            save=lambda: None, read_budget_s: float = 25 * 60) -> Counter:
+            save=lambda: None, read_budget_s: float = 25 * 60, manual_only: bool = False) -> Counter:
     from .ctlog import all_domains, read_domain
     domains: dict = state.setdefault("domains", {})
     first_run = "baseline" not in state
-    print("Certificate logs: searching crt.sh…")
-    seen, by, ok = all_domains()
-    print(f"  {len(seen)} ramen-named domains in certificate logs ({len(ok)} searches answered)")
-    if not ok:
-        return Counter({"crt.sh unavailable": 1})
+    # Shops added by hand: read like a new ramen website (their own site must show ramen and an address).
+    added = load_added()
+    for d, nm in added.items():
+        rec = domains.setdefault(d, {"first": today()})
+        rec["manual"] = 1
+        if nm:
+            rec["manual_name"] = nm
+        if days_since(rec.get("checked")) > 7 or rec.get("status") != "ok":
+            rec.pop("checked", None)   # (re)read soon after being added, then like any other website
+    if manual_only:
+        seen, by, ok = {}, {}, set()
+        print(f"Added by hand: {len(added)} website(s)")
+    else:
+        print("Certificate logs: searching crt.sh…")
+        seen, by, ok = all_domains()
+        print(f"  {len(seen)} ramen-named domains in certificate logs ({len(ok)} searches answered)")
     answered_before = set(state.get("patterns_answered", []))
     for d, cert_day in seen.items():
         if d not in domains:
@@ -82,14 +110,14 @@ def run_web(state: dict, crawler: Crawler, geocode: Geocoder, max_domains: int, 
         if cert_day and (not rec.get("cert") or cert_day < rec["cert"]):
             rec["cert"] = cert_day
     state["patterns_answered"] = sorted(answered_before | ok)
-    if first_run:
+    if first_run and ok:
         state["baseline"] = today()
 
     due = [d for d, rec in domains.items()
-           if not opted_out(d, optout)
+           if not opted_out(d, optout) and (not manual_only or rec.get("manual"))
            and days_since(rec.get("checked")) >= DOMAIN_RECHECK_DAYS.get(rec.get("status"), DEFAULT_RECHECK)]
-    # Newest first, so brand-new shops are looked at before the backlog.
-    due.sort(key=lambda d: domains[d].get("first", ""), reverse=True)
+    # Hand-added first, then newest first, so brand-new shops are looked at before the backlog.
+    due.sort(key=lambda d: (bool(domains[d].get("manual")), domains[d].get("first", "")), reverse=True)
     due = due[:max_domains]
     print(f"  reading {len(due)} of them this run")
     save()  # keep the domain list even if reading runs out of time
@@ -105,7 +133,7 @@ def run_web(state: dict, crawler: Crawler, geocode: Geocoder, max_domains: int, 
             except Exception as e:  # noqa: BLE001
                 res = {"status": "error", "err": type(e).__name__}
             rec = domains[d]
-            for k in ("status", "name", "website", "locations", "to", "err"):
+            for k in ("status", "name", "website", "locations", "to", "err"):  # (manual_name is kept)
                 rec.pop(k, None)
             rec.update(res)
             rec["checked"] = today()
@@ -257,7 +285,7 @@ def build_published(state: dict, optout: set[str]) -> tuple[list[dict], Counter]
                 extra["nw"] = 1
             if loc.get("soon"):
                 extra["so"] = 1
-            add({"id": f"web_{d}_{loc['key']}", "name": rec.get("name") or d, "lat": loc["lat"], "lon": loc["lon"],
+            add({"id": f"web_{d}_{loc['key']}", "name": rec.get("manual_name") or rec.get("name") or d, "lat": loc["lat"], "lon": loc["lon"],
                  "address": loc.get("address"), "website": rec.get("website") or f"https://{d}/"}, "web", extra)
     out.sort(key=lambda e: e["id"])
     return out, why
@@ -291,6 +319,7 @@ def main() -> int:
     ap.add_argument("--chain", default=None, help="testing: only read chains whose name contains this")
     ap.add_argument("--max-domains", type=int, default=1500)
     ap.add_argument("--dry-run", action="store_true")
+    ap.add_argument("--manual-only", action="store_true", help="web step: only the websites in add.txt")
     args = ap.parse_args()
     skip = {s.strip() for s in args.skip.split(",") if s.strip()}
 
@@ -309,7 +338,7 @@ def main() -> int:
              ("foursquare", lambda: run_foursquare(state)),
              ("chains", lambda: run_chains(state, crawler, geocode, args.chain)),
              ("halls", lambda: run_halls(state, crawler, geocode)),
-             ("web", lambda: run_web(state, crawler, geocode, args.max_domains, optout, save))]
+             ("web", lambda: run_web(state, crawler, geocode, args.max_domains, optout, save, manual_only=args.manual_only))]
     for name, step in steps:
         if name in skip:
             continue

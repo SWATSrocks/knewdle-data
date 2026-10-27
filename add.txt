@@ -1,0 +1,4 @@
+# Ramen shops to add by hand: new shops the map data doesn't know yet.
+# One per line: website | Shop name   (the name is optional; their own site must mention ramen and show an address)
+# The "Add a shop" action (Actions tab) adds a line here and publishes the shop in a few minutes.
+mrtokyopremium.com | Mr. Tokyo Premium
