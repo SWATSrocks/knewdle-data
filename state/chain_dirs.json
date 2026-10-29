@@ -1,14 +1,14 @@
 {
  "Noodles & Company": {
   "last": {
-   "date": "2026-10-28",
+   "date": "2026-10-29",
    "hidden": 61,
    "listings": 457,
    "missing": 61
   },
   "states": {
    "az": {
-    "checked": "2026-10-23",
+    "checked": "2026-10-29",
     "stores": [
      "gilbert/2975-south-market-street",
      "goodyear/15290-w-mcdowell-road",
@@ -20,7 +20,7 @@
     ]
    },
    "ca": {
-    "checked": "2026-10-23",
+    "checked": "2026-10-29",
     "stores": [
      "carlsbad/2521-palomar-airport-road",
      "citrus-heights/6123-sunrise-blvd",
@@ -31,7 +31,7 @@
     ]
    },
    "co": {
-    "checked": "2026-10-23",
+    "checked": "2026-10-29",
     "stores": [
      "arvada/6408-yank-way",
      "arvada/8071-wadsworth-blvd",
@@ -81,7 +81,7 @@
     ]
    },
    "ct": {
-    "checked": "2026-10-23",
+    "checked": "2026-10-29",
     "stores": [
      "manchester/1442-pleasant-valley-road",
      "middletown/808-washington-street",
@@ -90,14 +90,14 @@
     ]
    },
    "fl": {
-    "checked": "2026-10-23",
+    "checked": "2026-10-29",
     "stores": [
      "orlando/12101-university-blvd",
      "orlando/7822-w-sand-lake-rd"
     ]
    },
    "ia": {
-    "checked": "2026-10-23",
+    "checked": "2026-10-29",
     "stores": [
      "ames/400-s-duff-avenue",
      "cedar-rapids/310-collins-road-ne",
@@ -112,7 +112,7 @@
     ]
    },
    "id": {
-    "checked": "2026-10-23",
+    "checked": "2026-10-29",
     "stores": [
      "boise/535-n-milwaukee",
      "chubbuck/4013-yellowstone-avenue",
@@ -123,7 +123,7 @@
     ]
    },
    "il": {
-    "checked": "2026-10-23",
+    "checked": "2026-10-29",
     "stores": [
      "arlington-heights/66-s-arlington-heights-road",
      "aurora/2365-n-farnsworth",
@@ -173,7 +173,7 @@
     ]
    },
    "in": {
-    "checked": "2026-10-23",
+    "checked": "2026-10-29",
     "stores": [
      "bloomington/2560-e-3rd-st",
      "bloomington/517-e-kirkwood-avenue",
@@ -197,7 +197,7 @@
     ]
    },
    "ks": {
-    "checked": "2026-10-23",
+    "checked": "2026-10-29",
     "stores": [
      "lawrence/8-west-8th-street",
      "manhattan/705-n-3rd-street",
@@ -211,7 +211,7 @@
     ]
    },
    "ky": {
-    "checked": "2026-10-23",
+    "checked": "2026-10-29",
     "stores": [
      "lexington/2468-nicholasville-road",
      "louisville/1225-s-hurstbourne-pkwy",
@@ -220,7 +220,7 @@
     ]
    },
    "md": {
-    "checked": "2026-10-23",
+    "checked": "2026-10-29",
     "stores": [
      "baltimore/5350-campbell-blvd",
      "bel-air/621-bel-air-road",
@@ -242,7 +242,7 @@
     ]
    },
    "mi": {
-    "checked": "2026-10-23",
+    "checked": "2026-10-29",
     "stores": [
      "ann-arbor/2245-w-stadium-blvd",
      "ann-arbor/3601-washtenaw-ave",
@@ -266,7 +266,7 @@
     ]
    },
    "mn": {
-    "checked": "2026-10-23",
+    "checked": "2026-10-29",
     "stores": [
      "apple-valley/14879-florence-trail",
      "blaine/10340-baltimore-st",
@@ -310,7 +310,7 @@
     ]
    },
    "mo": {
-    "checked": "2026-10-23",
+    "checked": "2026-10-29",
     "stores": [
      "chesterfield/1784-clarkson-rd",
      "columbia/21-conley-road",
@@ -321,14 +321,14 @@
     ]
    },
    "mt": {
-    "checked": "2026-10-23",
+    "checked": "2026-10-29",
     "stores": [
      "bozeman/1459-north-19th-ave",
      "missoula/3680-brooks-st"
     ]
    },
    "nc": {
-    "checked": "2026-10-23",
+    "checked": "2026-10-29",
     "stores": [
      "apex/1055-beaver-creek-commons-drive",
      "cary/200-crossroads-blvd",
@@ -343,7 +343,7 @@
     ]
    },
    "nd": {
-    "checked": "2026-10-23",
+    "checked": "2026-10-29",
     "stores": [
      "bismarck/303-s-third-st",
      "fargo/2603-kirsten-lane",
@@ -354,7 +354,7 @@
     ]
    },
    "ne": {
-    "checked": "2026-10-23",
+    "checked": "2026-10-29",
     "stores": [
      "lincoln/2801-pine-lake-road",
      "lincoln/5001-o-street",
@@ -364,13 +364,13 @@
     ]
    },
    "nv": {
-    "checked": "2026-10-23",
+    "checked": "2026-10-29",
     "stores": [
      "las-vegas/2400-south-rancho-drive"
     ]
    },
    "oh": {
-    "checked": "2026-10-23",
+    "checked": "2026-10-29",
     "stores": [
      "beavercreek/11-greene-blvd",
      "columbus/1390-w-5th-ave",
@@ -388,7 +388,7 @@
     ]
    },
    "or": {
-    "checked": "2026-10-23",
+    "checked": "2026-10-29",
     "stores": [
      "beaverton/4655-sw-griffith-dr",
      "clackamas/12190-se-82nd-ave",
@@ -397,7 +397,7 @@
     ]
    },
    "pa": {
-    "checked": "2026-10-23",
+    "checked": "2026-10-29",
     "stores": [
      "camp-hill/164-south-32nd-street",
      "cranberry-township/2030-mackenzie-way",
@@ -409,20 +409,20 @@
     ]
    },
    "sc": {
-    "checked": "2026-10-23",
+    "checked": "2026-10-29",
     "stores": [
      "myrtle-beach/8221-n-kings-hwy"
     ]
    },
    "sd": {
-    "checked": "2026-10-23",
+    "checked": "2026-10-29",
     "stores": [
      "rapid-city/1734-eglin-street",
      "sioux-falls/5005-s-louise-ave"
     ]
    },
    "tn": {
-    "checked": "2026-10-23",
+    "checked": "2026-10-29",
     "stores": [
      "clarksville/2702-wilma-rudolph-blvd",
      "franklin/995-meridian-blvd",
@@ -430,7 +430,7 @@
     ]
    },
    "ut": {
-    "checked": "2026-10-23",
+    "checked": "2026-10-29",
     "stores": [
      "draper/191-east-12300-south",
      "farmington/1032-west-park-lane",
@@ -449,7 +449,7 @@
     ]
    },
    "va": {
-    "checked": "2026-10-23",
+    "checked": "2026-10-29",
     "stores": [
      "alexandria/3105-duke-street",
      "alexandria/5900-kingstowne-blvd",
@@ -472,13 +472,13 @@
     ]
    },
    "wa": {
-    "checked": "2026-10-23",
+    "checked": "2026-10-29",
     "stores": [
      "vancouver/4311-northeast-thurston-way"
     ]
    },
    "wi": {
-    "checked": "2026-10-23",
+    "checked": "2026-10-29",
     "stores": [
      "appleton/3719-east-calumet",
      "appleton/4333-wisconsin-ave-and-hwy-41",
