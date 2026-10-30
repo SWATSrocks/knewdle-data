@@ -18,6 +18,11 @@
  *   GET  /lb        -> {"month": "2026-10", "boards": {"month": [{"nick","n"}], "all": [...], "streak": [...]},
  *                       "shops": [{"k", "name", "n"}]}   (shops: most in-person visitors this month)
  *   GET  /lb/me?device=... -> {"joined": true, "nick", "month_shops", "all_shops", "best_streak", "rank": {...}}
+ *   Install alerts (for the developer's private "Knewdle Pulse" widget):
+ *   POST /install   {"device", "src", "medium"} -> {"ok": true}   (sent once, the first time the app opens;
+ *                   src/medium = the Play install link's utm tags, e.g. "instagram"/"qr"; nothing about the person)
+ *   GET  /pulse?key=PULSE_KEY -> {"total", "today", "day", "last", "sources_today", "recent"}  (404 without the key)
+ *   A new install is also pushed to the private ntfy.sh topic derived from PULSE_KEY, which only the widget knows.
  *   GET  /          -> short description
  *
  * Stars only (no text), one rating per phone per shop (changing it replaces the old one).
@@ -323,6 +328,62 @@ async function lbBoards(env) {
 }
 
 
+// ---------- install alerts (developer only) ----------
+const INSTALLS_PER_ADDRESS_PER_DAY = 5;
+function etDay(d = new Date()) {
+  return new Intl.DateTimeFormat("en-CA", { timeZone: "America/New_York" }).format(d); // 2026-10-29
+}
+function tag(v) {
+  return String(v || "").toLowerCase().replace(/[^a-z0-9_.\-]/g, "").slice(0, 32);
+}
+async function pulseTopic(key) {
+  const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode("knewdle-pulse:" + key));
+  return "kn-" + [...new Uint8Array(buf)].map((b) => b.toString(16).padStart(2, "0")).join("").slice(0, 32);
+}
+function sameKey(a, b) {
+  if (typeof a !== "string" || typeof b !== "string" || a.length !== b.length) return false;
+  let x = 0; for (let i = 0; i < a.length; i++) x |= a.charCodeAt(i) ^ b.charCodeAt(i);
+  return x === 0;
+}
+async function pulseStats(env) {
+  const day = etDay();
+  const [tot, td, last, srcs, recent] = await Promise.all([
+    env.DB.prepare("SELECT COUNT(*) AS n FROM installs").first(),
+    env.DB.prepare("SELECT COUNT(*) AS n FROM installs WHERE day = ?").bind(day).first(),
+    env.DB.prepare("SELECT ts, src, medium FROM installs ORDER BY ts DESC LIMIT 1").first(),
+    env.DB.prepare("SELECT src, COUNT(*) AS n FROM installs WHERE day = ? GROUP BY src ORDER BY n DESC").bind(day).all(),
+    env.DB.prepare("SELECT ts, src, medium FROM installs ORDER BY ts DESC LIMIT 20").all(),
+  ]);
+  return { total: tot ? tot.n : 0, today: td ? td.n : 0, day, last: last || null,
+           sources_today: srcs.results || [], recent: recent.results || [] };
+}
+async function install(request, env) {
+  const b = await body(request);
+  const device = String(b && b.device || "");
+  if (!DEVICE.test(device)) return json({ ok: false, error: "bad request" }, 400);
+  const src = tag(b.src) || "unknown", medium = tag(b.medium) || "unknown";
+  const who = "in:" + await sha256(request.headers.get("cf-connecting-ip") || "?");
+  const day = today();
+  const lim = await env.DB.prepare("SELECT count FROM limits WHERE who = ? AND day = ?").bind(who, day).first();
+  if (lim && lim.count >= INSTALLS_PER_ADDRESS_PER_DAY) return json({ ok: true });
+  const [r] = await env.DB.batch([
+    env.DB.prepare("INSERT OR IGNORE INTO installs (device, src, medium, day, ts) VALUES (?, ?, ?, ?, ?)")
+      .bind(device, src, medium, etDay(), Date.now()),
+    env.DB.prepare("INSERT INTO limits (who, day, count) VALUES (?, ?, 1) ON CONFLICT (who, day) DO UPDATE SET count = count + 1")
+      .bind(who, day),
+  ]);
+  const isNew = r && r.meta && r.meta.changes > 0;
+  if (isNew && env.PULSE_KEY && !device.startsWith("smoke-test-device")) {
+    try {
+      const st = await pulseStats(env);
+      const msg = JSON.stringify({ kind: "install", total: st.total, today: st.today, src, medium, ts: Date.now() });
+      await fetch("https://ntfy.sh/" + await pulseTopic(env.PULSE_KEY), { method: "POST", body: msg });
+    } catch (e) { /* the widget also checks /pulse every 15 minutes */ }
+  }
+  return json({ ok: true });
+}
+
+
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
@@ -345,6 +406,11 @@ export default {
       if (url.pathname === "/lb/join" && request.method === "POST") return await lbJoin(request, env);
       if (url.pathname === "/lb/sync" && request.method === "POST") return await lbSync(request, env);
       if (url.pathname === "/lb/leave" && request.method === "POST") return await lbLeave(request, env);
+      if (url.pathname === "/install" && request.method === "POST") return await install(request, env);
+      if (url.pathname === "/pulse" && request.method === "GET") {
+        if (!env.PULSE_KEY || !sameKey(String(url.searchParams.get("key") || ""), env.PULSE_KEY)) return json({ ok: false, error: "not found" }, 404);
+        return json({ ok: true, ...(await pulseStats(env)) }, 200, { "cache-control": "no-store" });
+      }
       if (url.pathname === "/") return json({ name: "Knewdle NOW ratings", info: "https://swatsrocks.github.io/knewdle-data/" });
       return json({ ok: false, error: "not found" }, 404);
     } catch (e) {

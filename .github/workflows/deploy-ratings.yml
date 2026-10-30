@@ -50,6 +50,11 @@ jobs:
         run: npx -y wrangler@4 d1 execute knewdle-ratings --remote --file schema.sql
       - name: Deploy
         run: npx -y wrangler@4 deploy
+      - name: Install-alert key (optional PULSE_KEY secret, for the private Knewdle Pulse widget)
+        env:
+          PULSE_KEY: ${{ secrets.PULSE_KEY }}
+        run: |
+          if [ -n "$PULSE_KEY" ]; then printf '%s' "$PULSE_KEY" | npx -y wrangler@4 secret put PULSE_KEY; else echo "No PULSE_KEY secret yet: install alerts are counted but not pushed"; fi
       - name: Smoke test
         run: |
           sleep 10
@@ -99,3 +104,14 @@ jobs:
           curl -fsS "$BASE/lb/me?device=smoke-test-device-0003" | grep -q '"joined":false'
           npx -y wrangler@4 d1 execute knewdle-ratings --remote \
             --command "DELETE FROM limits WHERE who = 'lb:smoke-test-device-0003'"
+          # Install alerts: a bad install is refused, a test one is counted (never pushed), the stats need the key.
+          code=$(curl -s -o /dev/null -w "%{http_code}" -X POST "$BASE/install" -H "content-type: application/json" -d '{"device":"x"}')
+          echo "bad install answered HTTP $code (expected 400)"; [ "$code" = "400" ]
+          curl -fsS -X POST "$BASE/install" -H "content-type: application/json" \
+            -d '{"device":"smoke-test-device-0004","src":"smoke","medium":"test"}' ; echo
+          code=$(curl -s -o /dev/null -w "%{http_code}" "$BASE/pulse?key=wrong")
+          echo "pulse without the key answered HTTP $code (expected 404)"; [ "$code" = "404" ]
+          npx -y wrangler@4 d1 execute knewdle-ratings --remote \
+            --command "SELECT src, medium FROM installs WHERE device = 'smoke-test-device-0004'"
+          npx -y wrangler@4 d1 execute knewdle-ratings --remote \
+            --command "DELETE FROM installs WHERE device LIKE 'smoke-test-device-%'"

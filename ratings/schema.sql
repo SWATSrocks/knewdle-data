@@ -42,3 +42,14 @@ CREATE TABLE IF NOT EXISTS lb_players (
 CREATE INDEX IF NOT EXISTS lb_by_month ON lb_players (month, month_shops);
 CREATE INDEX IF NOT EXISTS lb_by_all ON lb_players (all_shops);
 CREATE INDEX IF NOT EXISTS lb_by_streak ON lb_players (best_streak);
+
+-- Install alerts for the developer: one row per phone (its random install ID), the first time the app opens.
+-- Only the Play install source tag (e.g. "instagram" / "qr") and when; nothing about the person.
+CREATE TABLE IF NOT EXISTS installs (
+  device TEXT PRIMARY KEY,
+  src    TEXT NOT NULL,
+  medium TEXT NOT NULL,
+  day    TEXT NOT NULL,
+  ts     INTEGER NOT NULL
+);
+CREATE INDEX IF NOT EXISTS installs_day ON installs (day);
