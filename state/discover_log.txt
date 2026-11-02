@@ -1,18 +1,17 @@
-Names: scanning Overture…
-  Overture 2026-10-21.0: {'app': 4900, 'noodle': 111, 'name': 94, 'site': 88, 'brand': 5} (27s)
-  (names: 28s)
+Names: Overture 2026-10-21.0 already scanned with these rules; skipping (new release monthly)
+  (names: 0s)
 {
-  "generated": "2026-10-26",
-  "published": 1278,
+  "generated": "2026-11-02",
+  "published": 1272,
   "by_way_found": {
-    "chain": 58,
+    "chain": 59,
     "hall": 10,
-    "noodle": 84,
+    "noodle": 82,
     "site": 47,
-    "name": 16,
+    "name": 15,
     "brand": 2,
-    "fsq": 1059,
-    "web": 2
+    "fsq": 1054,
+    "web": 3
   },
   "names": {
     "app": 4900,
@@ -25,17 +24,17 @@ Names: scanning Overture…
 Foursquare: release 2026-10-15 already read; skipping (new releases about monthly)
   (foursquare: 0s)
 {
-  "generated": "2026-10-26",
-  "published": 1278,
+  "generated": "2026-11-02",
+  "published": 1272,
   "by_way_found": {
-    "chain": 58,
+    "chain": 59,
     "hall": 10,
-    "noodle": 84,
+    "noodle": 82,
     "site": 47,
-    "name": 16,
+    "name": 15,
     "brand": 2,
-    "fsq": 1059,
-    "web": 2
+    "fsq": 1054,
+    "web": 3
   },
   "names": {
     "app": 4900,
@@ -51,7 +50,7 @@ Foursquare: release 2026-10-15 already read; skipping (new releases about monthl
 }
 Chains: reading store locators…
   JINYA Ramen Bar: 57 US locations (82 pages read)
-  Ramen Kizuki: 16 US locations (1 pages read)
+  Ramen Kizuki: 15 US locations (1 pages read)
   Ippudo: 3 US locations (2 pages read)
   Ichiran: 3 US locations (4 pages read)
   Hokkaido Ramen Santouka: 4 US locations (1 pages read)
@@ -73,19 +72,19 @@ Chains: reading store locators…
   Yoshiharu Ramen: 0 US locations (1 pages read)
     Ichicoro Ramen: couldn't read https://www.ichicororamen.com/ (not allowed or unavailable)
   Ichicoro Ramen: 0 US locations (1 pages read)
-  (chains: 343s)
+  (chains: 344s)
 {
-  "generated": "2026-10-26",
-  "published": 1279,
+  "generated": "2026-11-02",
+  "published": 1272,
   "by_way_found": {
     "chain": 59,
     "hall": 10,
-    "noodle": 84,
+    "noodle": 82,
     "site": 47,
-    "name": 16,
+    "name": 15,
     "brand": 2,
-    "fsq": 1059,
-    "web": 2
+    "fsq": 1054,
+    "web": 3
   },
   "names": {
     "app": 4900,
@@ -100,7 +99,7 @@ Chains: reading store locators…
   },
   "chains": {
     "JINYA Ramen Bar": 57,
-    "Ramen Kizuki": 16,
+    "Ramen Kizuki": 15,
     "Ippudo": 3,
     "Ichiran": 3,
     "Hokkaido Ramen Santouka": 4,
@@ -123,32 +122,32 @@ Chains: reading store locators…
   }
 }
 Halls: reading food hall and market vendor directories…
-    Camp North End: couldn't read https://camp.nc/visit/eat-drink/ (not allowed or unavailable)
   Durham Food Hall: no ramen vendors (1 pages read)
   Optimist Hall: no ramen vendors (1 pages read)
   Legacy Hall: Chef Chin’s Hibachi Ramen (1 pages read)
   Uwajimaya Seattle: Samurai Noodle (1 pages read)
   Uwajimaya Beaverton: Ramen Ryoma (1 pages read)
-  Mitsuwa Marketplace Chicago: Santouka (1 pages read)
   Mitsuwa Marketplace Torrance: Santouka (1 pages read)
+  Mitsuwa Marketplace Chicago: Santouka (1 pages read)
   Mitsuwa Marketplace Plano: Kabukiya Ramen, Totto Yama (1 pages read)
-  Mitsuwa Marketplace Edgewater: Santouka, Tsujita (1 pages read)
-  Pine Street Market: Matsunoki Ramen (1 pages read)
   Transfer Co. Food Hall: Yatai (11 pages read)
-  Time Out Market New York: Okiboru (1 pages read)
+  Pine Street Market: Matsunoki Ramen (1 pages read)
+  Mitsuwa Marketplace Edgewater: Santouka, Tsujita (1 pages read)
+  Japan Village: Ramen Setagaya (17 pages read)
+  Boxyard RTP: no ramen vendors (1 pages read)
   North Market: Satori Ramen Bar (1 pages read)
   Halidom Eatery: Wasabi Sushi & Ramen (1 pages read)
   Chattahoochee Food Works: Ramen and Poke Station By Flying Fish (1 pages read)
+  Time Out Market New York: Okiboru (1 pages read)
   Krog Street Market: no ramen vendors (1 pages read)
-  Grand Central Market: no ramen vendors (1 pages read)
-  Japan Village: Ramen Setagaya (17 pages read)
-  Boxyard RTP: no ramen vendors (1 pages read)
   Chelsea Market: no ramen vendors (1 pages read)
-  Essex Market: no ramen vendors (1 pages read)
+  Grand Central Market: no ramen vendors (1 pages read)
+  Camp North End: no ramen vendors (21 pages read)
   Assembly Food Hall: no ramen vendors (1 pages read)
-  Liberty Public Market: no ramen vendors (1 pages read)
-  DeKalb Market Hall: no ramen vendors (1 pages read)
   Reading Terminal Market: no ramen vendors (1 pages read)
+  Essex Market: no ramen vendors (1 pages read)
+  DeKalb Market Hall: no ramen vendors (1 pages read)
+  Liberty Public Market: no ramen vendors (1 pages read)
   Denver Central Market: no ramen vendors (1 pages read)
   Politan Row Colony Square: no ramen vendors (1 pages read)
   Ferry Building Marketplace: no ramen vendors (1 pages read)
@@ -157,19 +156,19 @@ Halls: reading food hall and market vendor directories…
   Union Market: Ramen by UZU, Son of a Fish (37 pages read)
   Japan Center Malls: K Dragon Cuisine, Kushi Tsuru, Nande-Ya, Osakaya, Kui Shin Bo (47 pages read)
   Ponce City Market: no ramen vendors (60 pages read)
-  (halls: 130s)
+  (halls: 139s)
 {
-  "generated": "2026-10-26",
-  "published": 1279,
+  "generated": "2026-11-02",
+  "published": 1272,
   "by_way_found": {
     "chain": 59,
     "hall": 10,
-    "noodle": 84,
+    "noodle": 82,
     "site": 47,
-    "name": 16,
+    "name": 15,
     "brand": 2,
-    "fsq": 1059,
-    "web": 2
+    "fsq": 1054,
+    "web": 3
   },
   "names": {
     "app": 4900,
@@ -184,7 +183,7 @@ Halls: reading food hall and market vendor directories…
   },
   "chains": {
     "JINYA Ramen Bar": 57,
-    "Ramen Kizuki": 16,
+    "Ramen Kizuki": 15,
     "Ippudo": 3,
     "Ichiran": 3,
     "Hokkaido Ramen Santouka": 4,
@@ -225,58 +224,48 @@ Halls: reading food hall and market vendor directories…
   }
 }
 Certificate logs: searching crt.sh…
-    crt.sh nemar: OperationalError: connection is bad: connection to server at "2a0e:ac00:c7:d449::5bc7:d449", port 5432 failed: Network is unreachable
-    crt.sh nemara:*: 174 names, 13 new ramen domains (47s)
+    crt.sh nemar: 3637 names, 437 new ramen domains (95s)
+    crt.sh nemara:*: 170 names, 13 new ramen domains (58s)
     crt.sh nemarb:*: OperationalError: connection is bad: connection to server at "2a0e:ac00:c7:d449::5bc7:d449", port 5432 failed: Network is unreachable
-    crt.sh nemarc:*: 102 names, 1 new ramen domains (51s)
-    crt.sh nemard:*: 16 names, 0 new ramen domains (42s)
-    crt.sh nemare:*: OperationalError: connection is bad: connection to server at "2a0e:ac00:c7:d449::5bc7:d449", port 5432 failed: Network is unreachable
+    crt.sh nemarc:*: 100 names, 1 new ramen domains (46s)
+    crt.sh nemard:*: OperationalError: connection is bad: connection to server at "2a0e:ac00:c7:d449::5bc7:d449", port 5432 failed: Network is unreachable
+    crt.sh nemare:*: 82 names, 4 new ramen domains (55s)
     crt.sh nemarf:*: OperationalError: connection is bad: connection to server at "2a0e:ac00:c7:d449::5bc7:d449", port 5432 failed: Network is unreachable
-    crt.sh nemarg:*: 82 names, 2 new ramen domains (55s)
+    crt.sh nemarg:*: 82 names, 2 new ramen domains (68s)
     crt.sh nemarh:*: OperationalError: connection is bad: connection to server at "2a0e:ac00:c7:d449::5bc7:d449", port 5432 failed: Network is unreachable
-    crt.sh nemari:*: 402 names, 12 new ramen domains (34s)
-    crt.sh nemarj:*: 4 names, 0 new ramen domains (40s)
-    crt.sh nemark:*: OperationalError: connection is bad: connection to server at "2a0e:ac00:c7:d449::5bc7:d449", port 5432 failed: Network is unreachable
-    crt.sh nemarl:*: 7 names, 0 new ramen domains (33s)
-    crt.sh nemarm:*: 8 names, 0 new ramen domains (35s)
-    crt.sh nemarn:*: 154 names, 7 new ramen domains (34s)
-    crt.sh nemaro:*: 441 names, 15 new ramen domains (33s)
-    crt.sh nemarp:*: OperationalError: connection is bad: connection to server at "2a0e:ac00:c7:d449::5bc7:d449", port 5432 failed: Network is unreachable
-    crt.sh nemarq:*: OperationalError: connection is bad: connection to server at "2a0e:ac00:c7:d449::5bc7:d449", port 5432 failed: Network is unreachable
-    crt.sh nemarr:*: OperationalError: connection is bad: connection to server at "2a0e:ac00:c7:d449::5bc7:d449", port 5432 failed: Network is unreachable
+    crt.sh nemari:*: 397 names, 12 new ramen domains (81s)
+    crt.sh nemarj:*: 4 names, 0 new ramen domains (63s)
+    crt.sh nemark:*: 24183 names, 1 new ramen domains (108s)
+    crt.sh nemarl:*: 10 names, 0 new ramen domains (71s)
+    crt.sh nemarm:*: 8 names, 0 new ramen domains (107s)
+    crt.sh nemarn:*: 152 names, 7 new ramen domains (79s)
+    crt.sh nemaro:*: 425 names, 16 new ramen domains (68s)
+    crt.sh nemarp:*: 93 names, 2 new ramen domains (72s)
+    crt.sh nemarq:*: 11 names, 1 new ramen domains (65s)
+    crt.sh nemarr:*: 5 names, 0 new ramen domains (68s)
     crt.sh nemars:*: OperationalError: connection is bad: connection to server at "2a0e:ac00:c7:d449::5bc7:d449", port 5432 failed: Network is unreachable
-    crt.sh nemart:*: OperationalError: connection is bad: connection to server at "2a0e:ac00:c7:d449::5bc7:d449", port 5432 failed: Network is unreachable
+    crt.sh nemart:*: OperationalError: consuming input failed: server closed the connection unexpectedly
     crt.sh nemaru:*: OperationalError: connection is bad: connection to server at "2a0e:ac00:c7:d449::5bc7:d449", port 5432 failed: Network is unreachable
-    crt.sh nemarv:*: OperationalError: connection is bad: connection to server at "2a0e:ac00:c7:d449::5bc7:d449", port 5432 failed: Network is unreachable
-    crt.sh nemarw:*: OperationalError: connection is bad: connection to server at "2a0e:ac00:c7:d449::5bc7:d449", port 5432 failed: Network is unreachable
-    crt.sh nemarx:*: OperationalError: connection is bad: connection to server at "2a0e:ac00:c7:d449::5bc7:d449", port 5432 failed: Network is unreachable
-    crt.sh nemary:*: OperationalError: connection is bad: connection to server at "2a0e:ac00:c7:d449::5bc7:d449", port 5432 failed: Network is unreachable
-    crt.sh nemarz:*: OperationalError: connection is bad: connection to server at "2a0e:ac00:c7:d449::5bc7:d449", port 5432 failed: Network is unreachable
-    crt.sh nemar0:*: OperationalError: connection is bad: connection to server at "2a0e:ac00:c7:d449::5bc7:d449", port 5432 failed: Network is unreachable
-    crt.sh nemar1:*: OperationalError: connection is bad: connection to server at "2a0e:ac00:c7:d449::5bc7:d449", port 5432 failed: Network is unreachable
-    crt.sh nemar2:*: OperationalError: connection is bad: connection to server at "2a0e:ac00:c7:d449::5bc7:d449", port 5432 failed: Network is unreachable
-    crt.sh nemar3:*: OperationalError: connection is bad: connection to server at "2a0e:ac00:c7:d449::5bc7:d449", port 5432 failed: Network is unreachable
-    crt.sh nemar4:*: OperationalError: connection is bad: connection to server at "2a0e:ac00:c7:d449::5bc7:d449", port 5432 failed: Network is unreachable
-    crt.sh nemar5:*: 6 names, 0 new ramen domains (25s)
-    crt.sh nemar6:*: OperationalError: connection is bad: connection to server at "2a0e:ac00:c7:d449::5bc7:d449", port 5432 failed: Network is unreachable
-    crt.sh nemar7:*: OperationalError: connection is bad: connection to server at "2a0e:ac00:c7:d449::5bc7:d449", port 5432 failed: Network is unreachable
-    crt.sh nemar8:*: OperationalError: connection is bad: connection to server at "2a0e:ac00:c7:d449::5bc7:d449", port 5432 failed: Network is unreachable
-    crt.sh nemar9:*: 1 names, 0 new ramen domains (18s)
-  50 ramen-named domains in certificate logs (12 searches answered)
-  reading 2 of them this run
-  (web: 1198s)
+    crt.sh nemarv:*: OperationalError: consuming input failed: server closed the connection unexpectedly
+    crt.sh nemarw:*: 8 names, 0 new ramen domains (73s)
+    crt.sh nemarx:*: OperationalError: consuming input failed: server closed the connection unexpectedly
+    crt.sh nemary:*: 17 names, 0 new ramen domains (125s)
+    crt.sh: out of time, 11 searches left for next run
+  496 ramen-named domains in certificate logs (17 searches answered)
+  reading 6 of them this run
+  (web: 1589s)
 {
-  "generated": "2026-10-26",
-  "published": 1279,
+  "generated": "2026-11-02",
+  "published": 1272,
   "by_way_found": {
     "chain": 59,
     "hall": 10,
-    "noodle": 84,
+    "noodle": 82,
     "site": 47,
-    "name": 16,
+    "name": 15,
     "brand": 2,
-    "fsq": 1059,
-    "web": 2
+    "fsq": 1054,
+    "web": 3
   },
   "names": {
     "app": 4900,
@@ -291,7 +280,7 @@ Certificate logs: searching crt.sh…
   },
   "chains": {
     "JINYA Ramen Bar": 57,
-    "Ramen Kizuki": 16,
+    "Ramen Kizuki": 15,
     "Ippudo": 3,
     "Ichiran": 3,
     "Hokkaido Ramen Santouka": 4,
@@ -331,6 +320,7 @@ Certificate logs: searching crt.sh…
     "Japan Center Malls": 5
   },
   "web": {
+    "no US address": 4,
     "not ramen": 1,
     "unreachable": 1
   }
