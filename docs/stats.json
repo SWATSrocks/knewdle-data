@@ -1,18 +1,25 @@
 {
-  "generated": "2026-11-02",
+  "generated": "2026-11-03",
   "overture_release": "2026-10-21.0",
   "candidates": 47231,
-  "checked_this_run": 0,
-  "results_this_run": {},
-  "all_known": {
-    "none": 27757,
-    "platform": 1536,
-    "serves": 2281,
-    "shop": 128,
-    "error": 13505,
-    "robots": 2024
+  "checked_this_run": 2093,
+  "results_this_run": {
+    "robots": 63,
+    "none": 825,
+    "serves": 914,
+    "shop": 120,
+    "error": 160,
+    "platform": 11
   },
-  "published": 2409,
+  "all_known": {
+    "none": 27707,
+    "platform": 1547,
+    "serves": 2353,
+    "shop": 120,
+    "error": 13417,
+    "robots": 2087
+  },
+  "published": 2473,
   "more_published": 1273,
   "more": {
     "generated": "2026-11-02",
