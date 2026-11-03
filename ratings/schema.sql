@@ -44,7 +44,8 @@ CREATE INDEX IF NOT EXISTS lb_by_all ON lb_players (all_shops);
 CREATE INDEX IF NOT EXISTS lb_by_streak ON lb_players (best_streak);
 
 -- Install alerts for the developer: one row per phone (its random install ID), the first time the app opens.
--- Only the Play install source tag (e.g. "instagram" / "qr") and when; nothing about the person.
+-- The Play install source tag (e.g. "instagram" / "qr"), when, and (from Nov 2026) the city Cloudflare places the
+-- phone's network in, rounded to ~1 km (city/region/lat/lon columns are added by migrate.sql). Nothing about the person.
 CREATE TABLE IF NOT EXISTS installs (
   device TEXT PRIMARY KEY,
   src    TEXT NOT NULL,

@@ -22,6 +22,10 @@
  *   POST /install   {"device", "src", "medium"} -> {"ok": true}   (sent once, the first time the app opens;
  *                   src/medium = the Play install link's utm tags, e.g. "instagram"/"qr"; nothing about the person)
  *   GET  /pulse?key=PULSE_KEY -> {"total", "today", "day", "last", "sources_today", "recent"}  (404 without the key)
+ *   GET  /pulse/map?key=PULSE_KEY&days=7 -> {"installs": [{city, region, lat, lon, n, src}], "earlier": [{lat, lon, n}]}
+ *                   installs: by the city Cloudflare places each install's network in (city level, never the address);
+ *                   earlier: phones from before city tracking, placed at the first shop they rated or reported
+ *                   (rounded to ~10 km). Developer-only: 404 without the key.
  *   A new install is also pushed to the private ntfy.sh topic derived from PULSE_KEY, which only the widget knows.
  *   GET  /          -> short description
  *
@@ -366,9 +370,16 @@ async function install(request, env) {
   const day = today();
   const lim = await env.DB.prepare("SELECT count FROM limits WHERE who = ? AND day = ?").bind(who, day).first();
   if (lim && lim.count >= INSTALLS_PER_ADDRESS_PER_DAY) return json({ ok: true });
+  // City-level place from Cloudflare's network lookup (no GPS, never the address itself).
+  const cf = request.cf || {};
+  const geoOk = cf.country === "US" && Number.isFinite(Number(cf.latitude)) && Number.isFinite(Number(cf.longitude));
+  const city = geoOk ? String(cf.city || "").slice(0, 60) || null : null;
+  const region = geoOk ? String(cf.regionCode || cf.region || "").slice(0, 40) || null : null;
+  const lat = geoOk ? Math.round(Number(cf.latitude) * 100) / 100 : null;
+  const lon = geoOk ? Math.round(Number(cf.longitude) * 100) / 100 : null;
   const [r] = await env.DB.batch([
-    env.DB.prepare("INSERT OR IGNORE INTO installs (device, src, medium, day, ts) VALUES (?, ?, ?, ?, ?)")
-      .bind(device, src, medium, etDay(), Date.now()),
+    env.DB.prepare("INSERT OR IGNORE INTO installs (device, src, medium, day, ts, city, region, lat, lon) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)")
+      .bind(device, src, medium, etDay(), Date.now(), city, region, lat, lon),
     env.DB.prepare("INSERT INTO limits (who, day, count) VALUES (?, ?, 1) ON CONFLICT (who, day) DO UPDATE SET count = count + 1")
       .bind(who, day),
   ]);
@@ -376,11 +387,61 @@ async function install(request, env) {
   if (isNew && env.PULSE_KEY && !device.startsWith("smoke-test-device")) {
     try {
       const st = await pulseStats(env);
-      const msg = JSON.stringify({ kind: "install", total: st.total, today: st.today, src, medium, ts: Date.now() });
+      const msg = JSON.stringify({ kind: "install", total: st.total, today: st.today, src, medium, ts: Date.now(),
+                                   city: city ? city + (region ? ", " + region : "") : null });
       await fetch("https://ntfy.sh/" + await pulseTopic(env.PULSE_KEY), { method: "POST", body: msg });
     } catch (e) { /* the widget also checks /pulse every 15 minutes */ }
   }
   return json({ ok: true });
+}
+
+// Where installs come from, for the private Pulse map.
+function shopPoint(shop) {
+  const m = /@(-?\d+(?:\.\d+)?),(-?\d+(?:\.\d+)?)$/.exec(String(shop || ""));
+  if (!m) return null;
+  const lat = Number(m[1]), lon = Number(m[2]);
+  if (!Number.isFinite(lat) || !Number.isFinite(lon) || (Math.abs(lat) < 0.5 && Math.abs(lon) < 0.5)) return null;
+  return [Math.round(lat * 10) / 10, Math.round(lon * 10) / 10];
+}
+async function pulseMap(env, days) {
+  const since = days > 0 ? Date.now() - days * 86400000 : 0;
+  const [inst, all, rated, reported] = await Promise.all([
+    env.DB.prepare("SELECT city, region, lat, lon, src, medium FROM installs WHERE lat IS NOT NULL AND ts >= ? AND device NOT LIKE 'smoke-test-device%'")
+      .bind(since).all(),
+    env.DB.prepare("SELECT device, lat, ts FROM installs").all(),
+    env.DB.prepare("SELECT device, shop, updated FROM ratings WHERE device NOT LIKE 'smoke-test-device%'").all(),
+    env.DB.prepare("SELECT device, shop, updated FROM reports WHERE device NOT LIKE 'smoke-test-device%'").all(),
+  ]);
+  const byCity = new Map();
+  for (const r of inst.results || []) {
+    const k = (r.city || "?") + "|" + (r.region || "") ;
+    const c = byCity.get(k) || { city: r.city, region: r.region, lat: 0, lon: 0, n: 0, src: {} };
+    c.lat += r.lat; c.lon += r.lon; c.n += 1;
+    const label = r.src === "google-play" && r.medium === "organic" ? "play-search" : (r.src || "unknown");
+    c.src[label] = (c.src[label] || 0) + 1;
+    byCity.set(k, c);
+  }
+  const installs = [...byCity.values()].map((c) => ({ ...c, lat: Math.round(c.lat / c.n * 100) / 100, lon: Math.round(c.lon / c.n * 100) / 100 }))
+    .sort((a, b) => b.n - a.n);
+  // Earlier phones: no city on file, so use the first shop they rated or reported (they were there in person).
+  const located = new Set((all.results || []).filter((r) => r.lat !== null).map((r) => r.device));
+  const first = new Map();
+  for (const r of [...(rated.results || []), ...(reported.results || [])]) {
+    if (located.has(r.device)) continue;
+    const p = shopPoint(r.shop);
+    if (!p) continue;
+    const f = first.get(r.device);
+    if (!f || r.updated < f.updated) first.set(r.device, { updated: r.updated, p });
+  }
+  const byArea = new Map();
+  for (const { p } of first.values()) {
+    const k = p.join(",");
+    byArea.set(k, (byArea.get(k) || 0) + 1);
+  }
+  const earlier = [...byArea.entries()].map(([k, n]) => { const [lat, lon] = k.split(",").map(Number); return { lat, lon, n }; })
+    .sort((a, b) => b.n - a.n);
+  return { days, installs, earlier, installs_total: installs.reduce((t, c) => t + c.n, 0),
+           earlier_total: earlier.reduce((t, c) => t + c.n, 0) };
 }
 
 
@@ -407,6 +468,11 @@ export default {
       if (url.pathname === "/lb/sync" && request.method === "POST") return await lbSync(request, env);
       if (url.pathname === "/lb/leave" && request.method === "POST") return await lbLeave(request, env);
       if (url.pathname === "/install" && request.method === "POST") return await install(request, env);
+      if (url.pathname === "/pulse/map" && request.method === "GET") {
+        if (!env.PULSE_KEY || !sameKey(String(url.searchParams.get("key") || ""), env.PULSE_KEY)) return json({ ok: false, error: "not found" }, 404);
+        const days = Math.max(0, Math.min(3650, parseInt(url.searchParams.get("days") || "0", 10) || 0));
+        return json({ ok: true, ...(await pulseMap(env, days)) }, 200, { "cache-control": "no-store" });
+      }
       if (url.pathname === "/pulse" && request.method === "GET") {
         if (!env.PULSE_KEY || !sameKey(String(url.searchParams.get("key") || ""), env.PULSE_KEY)) return json({ ok: false, error: "not found" }, 404);
         return json({ ok: true, ...(await pulseStats(env)) }, 200, { "cache-control": "no-store" });
