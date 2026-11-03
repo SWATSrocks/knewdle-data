@@ -2,7 +2,9 @@ name: Add a shop
 
 # Run by hand to add a ramen shop the map data doesn't know yet (a brand-new shop, say). Adds it to add.txt,
 # reads its own website for ramen and its address, and publishes it in the app's list within minutes.
-# Leave both boxes empty to just re-read everything already in add.txt.
+# Leave the boxes empty to just re-read everything already in add.txt.
+# Ate there yourself but their website can't be read (no site, blocked, a delivery-app page)? Fill in the
+# address too: the shop goes in vouched.txt and is published as-is, without reading the website.
 on:
   workflow_dispatch:
     inputs:
@@ -10,7 +12,10 @@ on:
         description: "The shop's own website (e.g. mrtokyopremium.com)"
         default: ""
       name:
-        description: "Shop name as it should appear (optional)"
+        description: "Shop name as it should appear (optional; required with an address)"
+        default: ""
+      address:
+        description: "Only if you've had ramen there and the site can't be read: street, City, ST 12345"
         default: ""
 
 permissions:
@@ -27,6 +32,7 @@ jobs:
     env:
       SITE: ${{ github.event.inputs.website }}
       NAME: ${{ github.event.inputs.name }}
+      ADDRESS: ${{ github.event.inputs.address }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -40,7 +46,16 @@ jobs:
           import os, re
           site = re.sub(r"[|#\n]", " ", os.environ.get("SITE", "")).strip()
           name = re.sub(r"[|#\n]", " ", os.environ.get("NAME", "")).strip()
-          if site:
+          address = re.sub(r"[|#\n]", " ", os.environ.get("ADDRESS", "")).strip()
+          if address:
+              if not name:
+                  raise SystemExit("Add the shop's name too when you give an address.")
+              lines = open("vouched.txt").read().splitlines() if os.path.exists("vouched.txt") else []
+              keep = [l for l in lines if l.split("|")[0].strip().lower() != name.lower()]
+              keep.append(f"{name} | {address}" + (f" | {site}" if site else ""))
+              open("vouched.txt", "w").write("\n".join(keep) + "\n")
+              print("vouched", name, address)
+          elif site:
               host = re.sub(r"^https?://", "", site).split("/")[0].lower().removeprefix("www.")
               lines = open("add.txt").read().splitlines()
               keep = [l for l in lines if not l.split("#")[0].strip().lower().removeprefix("https://").removeprefix("http://").removeprefix("www.").startswith(host)]
@@ -54,7 +69,7 @@ jobs:
         run: |
           git config user.name "knewdle-menu-check"
           git config user.email "actions@users.noreply.github.com"
-          git add add.txt state/extra_state.json state/add_log.txt docs/menu_ramen.json docs/stats.json
-          git diff --cached --quiet || git commit -m "Add a shop: ${SITE:-re-read add.txt}"
+          git add add.txt vouched.txt state/extra_state.json state/add_log.txt docs/menu_ramen.json docs/stats.json
+          git diff --cached --quiet || git commit -m "Add a shop: ${NAME:-${SITE:-re-read add.txt}}"
           git pull --rebase -X theirs origin main || true
           git push

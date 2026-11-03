@@ -392,3 +392,60 @@ def test_asset_host_with_access_denied_robots_still_read():
         assert not any(p.url.endswith(".pdf") for p in r2.pages)
     finally:
         srv.shutdown()
+
+
+# ---- rules 7: one bowl on a regular menu counts (fusion / Chinese / Thai spots with one great ramen) ----
+FUSION_ONE_BOWL = """
+Appetizers
+Pork Dumplings $8
+Scallion Pancake $7
+Noodle Soups
+Beef Noodle Soup $14
+Spicy Tonkotsu Ramen $15
+Rice Plates
+General Tso's Chicken $13
+"""
+
+RAMEN_HEADING_ONE = """
+Starters
+Crab Rangoon $7
+Edamame $5
+Ramen
+House Special Bowl $16 pork broth, chashu, soft egg
+Entrees
+Orange Chicken $13
+"""
+
+STIR_FRY_NOT_RAMEN = """
+Lo Mein $11
+Fried Rice $10
+Chicken Stir Fry with ramen noodles $13
+Spring Rolls $5
+"""
+
+ADD_ON_NOT_RAMEN = """
+Pho $13
+Banh Mi $9
+Bun Bo Hue $14
+Add ramen noodles $2
+"""
+
+
+def test_one_ramen_on_regular_menu_counts():
+    v = classify(FUSION_ONE_BOWL, "Kung Foo Noodle")
+    assert v.kind == "serves" and v.dishes == 1 and v.reason == "1 ramen dish", v
+
+
+def test_ramen_heading_with_one_priced_bowl_counts():
+    v = classify(RAMEN_HEADING_ONE)
+    assert v.kind == "serves" and v.reason == "1 ramen dish", v
+
+
+def test_ramen_noodles_as_ingredient_dont_count():
+    assert classify(STIR_FRY_NOT_RAMEN).kind == "none"
+    assert classify(ADD_ON_NOT_RAMEN).kind == "none"
+
+
+def test_one_bowl_needs_a_real_menu():
+    # A blog post or "about" page mentioning one ramen isn't a menu.
+    assert classify("We love ramen night!\nMiso Ramen\nCome visit us").kind == "none"

@@ -1,0 +1,4 @@
+# Shops you've eaten ramen at yourself whose website we can't read (no site, blocked, or a delivery-app page).
+# One per line:   Shop name | street, City, ST zip | website (optional) | lat, lon (optional)
+# Published with the next menu check or "Add a shop" run. Delete a line to remove the shop.
+Kung Foo Noodle | 8625C Lindholm Dr, Huntersville, NC 28078 | kungfoonoodle.com | 35.446463, -80.879681

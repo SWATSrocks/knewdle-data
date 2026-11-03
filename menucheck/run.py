@@ -37,7 +37,7 @@ CONFIG = ROOT / "config.json"
 OPTOUT = ROOT / "optout.txt"
 
 # Days before a place is checked again, by last result.
-RECHECK_DAYS = {"shop": 30, "serves": 30, "none": 90, "error": 30, "robots": 120, "platform": 180}
+RECHECK_DAYS = {"shop": 30, "serves": 30, "none": 90, "error": 14, "robots": 120, "platform": 180}
 
 
 def today() -> str:
@@ -144,8 +144,11 @@ def main() -> int:
         if prev is None or prev.get("website") != c["website"]:
             due.append((0, c))
         elif prev.get("rv", 1) < RULES_VERSION and (
-                prev.get("kind") in ("none", "shop") or (prev.get("kind") == "serves" and prev.get("dishes", 0) >= 5)):
-            due.append((1, c))  # judged under older, stricter rules: look again
+                (prev.get("kind") == "none" and (prev.get("rv", 1) < 6 or prev.get("dishes", 0) >= 1))
+                or prev.get("kind") == "shop" or (prev.get("kind") == "serves" and prev.get("dishes", 0) >= 5)):
+            # Judged under older, stricter rules: look again. (Rules 7 only changed one-dish menus, so a
+            # "none" from rules 6 with no ramen dish at all doesn't need another read yet.)
+            due.append((1, c))
         elif days_since(prev.get("checked")) >= RECHECK_DAYS.get(prev.get("kind", "error"), 30):
             due.append((2, c))
     due.sort(key=lambda x: (x[0], places_state.get(x[1]["id"], {}).get("checked") or ""))

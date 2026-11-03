@@ -6,8 +6,11 @@ Only facts are kept (how many ramen dishes, which kind of place), never the menu
     serves  at least 2 real ramen dishes, OR
             one ramen bowl offered with 2+ broth choices ("choice of tonkotsu, shoyu or miso"), OR
             one genuine ramen bowl: a named ramen broth plus 2+ classic toppings
-            ("tonkotsu broth, pork belly, narutomaki, soft egg...")
-    none    otherwise (a one-off "ramen bowl" special with no broth, "ramen salad", etc. don't count)
+            ("tonkotsu broth, pork belly, narutomaki, soft egg..."), OR
+            one ramen dish on a real menu: a priced dish line that is a bowl of ramen ("Pork Belly Ramen $15"),
+            or a "Ramen" section heading with a priced dish under it. Fusion and Chinese/Thai/Korean spots
+            often have exactly one great bowl, and that's the hidden ramen we promise to find.
+    none    otherwise ("ramen salad", "add ramen noodles", stir-fried ramen noodles, coming-soon specials, etc.)
 """
 from __future__ import annotations
 
@@ -28,7 +31,11 @@ NOT_A_BOWL = re.compile(
     r"ramen\s+(?:salad|slaw|burger|bun|crunch|crusted|crumble|noodle salad|chips|bites|fries|pizza|"
     r"taco|egg roll|eggroll|wings?|crisps?|bar\b|bars\b|cookie|brittle|seasoning)"
     r"|instant ramen|cup (?:of )?ramen|top ramen|maruchan|ramen (?:week|night|tuesday|monday|wednesday|thursday|friday)"
-    r"|(?:sold out|coming soon|ask about)",
+    r"|(?:sold out|coming soon|ask about)"
+    # ramen noodles used as an ingredient or swap, not a bowl of ramen
+    r"|(?:sub|substitute|swap|switch|upgrade|add|extra|with|w/)\s+(?:to\s+|for\s+)?ramen noodles?"
+    r"|(?:stir[- ]?fr\w*|fried|lo mein|chow mein|yaki ?soba|pad thai)[^.$]{0,30}ramen"
+    r"|ramen noodles?[^.$]{0,20}(?:stir[- ]?fr\w*|fried)",
     re.IGNORECASE,
 )
 
@@ -39,7 +46,7 @@ MAX_LINE = 160
 
 
 # Bump when the rules change, so places judged "none" under older rules get re-checked.
-RULES_VERSION = 6  # 6: menu PDFs under /accounts/ paths (BentoBox) are followed
+RULES_VERSION = 7  # 7: one priced ramen dish (or a priced dish under a "Ramen" heading) counts
 
 # Named ramen broths. CLASSIC ones are needed to count a bowl; the others only count as extra choices.
 CLASSIC_BROTHS = {
@@ -129,6 +136,43 @@ def _dish_key(line: str) -> str:
 NOODLE_NAME = re.compile(r"(?<![a-z])(?:ramen|noodle|broth|menya|men-ya|soba|udon|tsukemen|tonkotsu|ラーメン)", re.I)
 
 
+# Where a ramen dish line would carry its price: on the line, or on one of the next two lines.
+def _priced_near(lines: list[str], i: int) -> bool:
+    return any(PRICE.search(l) for l in lines[i:i + 3])
+
+
+RAMEN_HEADING = re.compile(r"^\W*(?:our |house |signature )?ramen(?: bowls?| noodle soups?| menu| specials?)?\W*$", re.I)
+
+
+# Rotating specials come and go, so a lone ramen bowl there doesn't count (a regular menu item does).
+SPECIALS_HEADING = re.compile(
+    r"^\W*(?:(?:weekly|daily|today'?s|chef'?s|seasonal|monthly|limited[- ]time|rotating)\s+)?"
+    r"(?:specials?|features?|limited[- ]time(?: offers?)?|seasonal(?: menu)?)\W*$", re.I)
+
+
+def _under_specials(lines: list[str], i: int) -> bool:
+    return any(SPECIALS_HEADING.match(l) for l in lines[max(0, i - 3):i])
+
+
+def _one_dish(lines: list[str], dishes: dict[str, str], priced: int) -> str | None:
+    """One real ramen dish on a real menu (3+ priced items): returns the dish line, or None."""
+    if priced < 3:
+        return None
+    for i, line in enumerate(lines):
+        if (line in dishes.values() and _priced_near(lines, i) and len(PRICE.sub("", line).strip()) <= 70
+                and not _under_specials(lines, i)):
+            return line
+    # A "RAMEN" section heading with a priced dish right under it (the dish name may not say ramen).
+    for i, line in enumerate(lines):
+        if RAMEN_HEADING.match(line):
+            for nxt in lines[i + 1:i + 4]:
+                if RAMEN_HEADING.match(nxt) or NOT_A_BOWL.search(nxt) or NOT_A_DISH.search(nxt):
+                    break
+                if PRICE.search(nxt) and len(PRICE.sub("", nxt).strip()) >= 3:
+                    return nxt
+    return None
+
+
 def classify(text: str, name: str = "") -> Verdict:
     lines = _lines(text)
     priced = sum(1 for l in lines if PRICE.search(l))
@@ -159,4 +203,7 @@ def classify(text: str, name: str = "") -> Verdict:
         rule, broths, line = single
         return Verdict("serves", 1, priced, [line], broths=broths,
                        reason="1 bowl, %d broth choices" % broths if rule == "choices" else "1 genuine ramen bowl")
+    one = _one_dish(lines, dishes, priced)
+    if one:
+        return Verdict("serves", 1, priced, [one], reason="1 ramen dish")
     return Verdict("none", n, priced, list(dishes.values())[:3])

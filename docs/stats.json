@@ -13,19 +13,19 @@
     "robots": 2024
   },
   "published": 2409,
-  "more_published": 1272,
+  "more_published": 1273,
   "more": {
     "generated": "2026-11-02",
-    "published": 1272,
+    "published": 1273,
     "by_way_found": {
+      "web": 4,
       "chain": 59,
       "hall": 10,
       "noodle": 82,
       "site": 47,
       "name": 15,
       "brand": 2,
-      "fsq": 1054,
-      "web": 3
+      "fsq": 1054
     },
     "names": {
       "app": 4900,
@@ -83,6 +83,9 @@
       "no US address": 4,
       "not ramen": 1,
       "unreachable": 1
+    },
+    "vouched": {
+      "published": 1
     }
   }
 }

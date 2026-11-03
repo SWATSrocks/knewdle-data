@@ -19,8 +19,11 @@ No servers, no keys, no card.
 3. **Verdict** (`menucheck/classify.py`):
    - **shop**: 5+ ramen dishes making up a real share of the menu.
    - **serves**: 2+ ramen dishes, or one ramen bowl offered with 2+ broth choices, or one genuine
-     ramen bowl (a named broth like tonkotsu/shoyu/miso/shio plus 2+ classic toppings).
-   - **none**: 0–1 mentions. "Ramen salad", "ramen burger", one-off specials and "Sacramento" don't count.
+     ramen bowl (a named broth like tonkotsu/shoyu/miso/shio plus 2+ classic toppings), or **one ramen dish on
+     the regular menu** (a priced "Spicy Tonkotsu Ramen", or a priced dish under a "Ramen" heading). Fusion,
+     Chinese, Thai and Korean spots often have exactly one great bowl: that's the hidden ramen we promise to find.
+   - **none**: no ramen dish. "Ramen salad", "ramen burger", "add ramen noodles", stir-fried ramen noodles,
+     a ramen bowl only on a rotating Specials list, and "Sacramento" don't count.
 4. **Publish**: `docs/menu_ramen.json` (served by GitHub Pages). Only facts are kept: name, location, website,
    menu link, how many ramen dishes. Never menu text, prices or photos.
 
@@ -46,6 +49,13 @@ Runs at the start of each weekly job and publishes its finds in the same file, u
 - Addresses become map points with the free U.S. Census Bureau geocoder. Nothing already shown by the app is repeated.
 
 Run only this part: **Actions → Menu check → Run workflow → steps: `more`**.
+
+## Shops you've vouched for (`vouched.txt`)
+
+Had ramen somewhere whose website the check can't read (no website, a site that blocks bots, or one that
+just sends you to a delivery app)? Add it to `vouched.txt`: `Shop name | street, City, ST 12345 | website | lat, lon`
+(website and lat, lon optional). Or use **Actions → Add a shop** and fill in the name and address. It's published as-is
+on the next run, without reading the website.
 
 ## Claimed shops (`menucheck/claims.py`, daily)
 

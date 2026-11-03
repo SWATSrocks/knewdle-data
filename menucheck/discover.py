@@ -13,6 +13,7 @@ from __future__ import annotations
 import argparse
 import datetime as dt
 import json
+import re
 import sys
 import time
 from collections import Counter
@@ -30,6 +31,7 @@ STATS = ROOT / "docs" / "stats.json"
 CONFIG = ROOT / "config.json"
 OPTOUT = ROOT / "optout.txt"
 ADD = ROOT / "add.txt"        # websites of ramen shops to add by hand (new shops the map data doesn't know yet)
+VOUCHED = ROOT / "vouched.txt"  # shops checked in person whose website can't be read
 
 CREDITS = ("Places from Overture Maps Foundation (CDLA-Permissive-2.0). Contains data from Foursquare Open "
            "Source Places, (c) Foursquare Labs, Inc. (Apache License 2.0, see NOTICE-foursquare.txt). "
@@ -77,6 +79,59 @@ def load_added() -> dict[str, str | None]:
         if h and "." in h:
             out[h.removeprefix("www.")] = name[:60] or None
     return out
+
+
+_COORDS = re.compile(r"^\s*(-?\d{1,2}\.\d+)\s*,\s*(-?\d{1,3}\.\d+)\s*$")
+_ADDR = re.compile(r"^\s*(?P<street>[^,]+),\s*(?P<city>[^,]+),\s*(?P<state>[A-Z]{2})\s*(?P<zip>\d{5})?\s*$")
+
+
+def load_vouched() -> list[dict]:
+    """vouched.txt: "Shop name | street, City, ST zip | website | lat, lon" (website and lat, lon optional)."""
+    if not VOUCHED.exists():
+        return []
+    out = []
+    for raw in VOUCHED.read_text().splitlines():
+        line = raw.split("#", 1)[0].strip()
+        if not line:
+            continue
+        parts = [x.strip() for x in line.split("|")]
+        if len(parts) < 2 or not parts[0]:
+            print(f"  vouched.txt: skipped (needs 'name | address'): {raw}")
+            continue
+        m = _ADDR.match(parts[1])
+        if not m:
+            print(f"  vouched.txt: skipped (address should be 'street, City, ST 12345'): {raw}")
+            continue
+        entry = {"name": parts[0][:60], **m.groupdict(), "website": None, "lat": None, "lon": None}
+        for extra in parts[2:]:
+            c = _COORDS.match(extra)
+            if c:
+                entry["lat"], entry["lon"] = float(c.group(1)), float(c.group(2))
+            elif extra:
+                entry["website"] = extra if "://" in extra else "https://" + extra
+        out.append(entry)
+    return out
+
+
+def run_vouched(state: dict, geocode: Geocoder) -> Counter:
+    from .places import Location
+    tally, places = Counter(), []
+    for v in load_vouched():
+        loc = Location(v["street"], v["city"], v["state"], v["zip"] or "", lat=v["lat"], lon=v["lon"])
+        if loc.lat is None:
+            p = geocode(loc)
+            if p is None:
+                print(f"  vouched: couldn't place {v['name']} at {loc.oneline}")
+                tally["not placed"] += 1
+                continue
+            loc.lat, loc.lon = p
+        key = re.sub(r"[^a-z0-9]", "", (v["name"] + loc.key).lower())[:40]
+        places.append({"id": f"vouched_{key}", "name": v["name"], "lat": loc.lat, "lon": loc.lon,
+                       "address": loc.address, "website": v["website"]})
+        tally["published"] += 1
+    state["vouched"] = places
+    print(f"Vouched shops: {len(places)}")
+    return tally
 
 
 def run_web(state: dict, crawler: Crawler, geocode: Geocoder, max_domains: int, optout: set[str],
@@ -263,6 +318,9 @@ def build_published(state: dict, optout: set[str]) -> tuple[list[dict], Counter]
         out.append({"id": entry["id"], "n": entry["name"], "la": entry["lat"], "lo": entry["lon"],
                     "a": entry.get("address"), "w": entry.get("website"), "f": f, **(extra or {})})
 
+    # Shops checked in person come first: that's the best word there is.
+    for p in state.get("vouched", []):
+        add(p, "web", {"v": 1})
     # Chains first (their own site is the best word on where they are), then Overture, then new websites.
     for name, rec in sorted(state.get("chains", {}).items()):
         for p in rec.get("places", []):
@@ -315,7 +373,7 @@ def write_outputs(state: dict, published: list[dict], why: Counter, run_stats: d
 
 def main() -> int:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--skip", default="", help="comma list of: names,foursquare,chains,halls,web")
+    ap.add_argument("--skip", default="", help="comma list of: vouched,names,foursquare,chains,halls,web")
     ap.add_argument("--chain", default=None, help="testing: only read chains whose name contains this")
     ap.add_argument("--max-domains", type=int, default=1500)
     ap.add_argument("--dry-run", action="store_true")
@@ -334,7 +392,8 @@ def main() -> int:
         published, why = build_published(state, optout)
         write_outputs(state, published, why, run_stats, args.dry_run, quiet=True)
 
-    steps = [("names", lambda: run_names(state)[0]),
+    steps = [("vouched", lambda: run_vouched(state, geocode)),
+             ("names", lambda: run_names(state)[0]),
              ("foursquare", lambda: run_foursquare(state)),
              ("chains", lambda: run_chains(state, crawler, geocode, args.chain)),
              ("halls", lambda: run_halls(state, crawler, geocode)),

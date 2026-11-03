@@ -218,3 +218,22 @@ def test_hall_noise_ignored():
       <div><h3>\xe3\x83\x8b\xe3\x83\xa5\xe3\x83\xbc\xe3\x82\xbf\xe3\x83\x83\xe3\x83\x81</h3><p>NEW TOUCH Ramen Cup 3var. $1.99</p></div>
       <div><h3>Food Stalls</h3><p>Ramen, udon and more.</p></div></body></html>"""
     assert [n for n, _ in vendors_on_page(cards, "Pine Street Market")] == ["Matsunoki Ramen"]
+
+
+def test_vouched_lines(tmp_path, monkeypatch):
+    from menucheck import discover as d
+    f = tmp_path / "vouched.txt"
+    f.write_text("# comment\n"
+                 "Kung Foo Noodle | 8625C Lindholm Dr, Huntersville, NC 28078 | kungfoonoodle.com | 35.446463, -80.879681\n"
+                 "No Address Shop\n"
+                 "Bad | somewhere\n"
+                 "Plain Spot | 1 Main St, Davidson, NC\n")
+    monkeypatch.setattr(d, "VOUCHED", f)
+    v = d.load_vouched()
+    assert [x["name"] for x in v] == ["Kung Foo Noodle", "Plain Spot"]
+    assert v[0]["lat"] == 35.446463 and v[0]["website"] == "https://kungfoonoodle.com" and v[0]["zip"] == "28078"
+    state = {}
+    d.run_vouched(state, lambda loc: (35.5, -80.8))
+    assert {p["name"] for p in state["vouched"]} == {"Kung Foo Noodle", "Plain Spot"}
+    pub, _ = d.build_published(state, set())
+    assert all(p.get("v") == 1 for p in pub)
