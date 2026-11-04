@@ -24,6 +24,7 @@
  *   GET  /pulse?key=PULSE_KEY -> {"total", "today", "day", "last", "sources_today", "recent"}  (404 without the key)
  *   GET  /pulse/map?key=PULSE_KEY&days=7 -> {"installs": [{city, region, lat, lon, n, src}], "earlier": [{lat, lon, n}]}
  *                   installs: by the city Cloudflare places each install's network in (city level, never the address);
+ *                   in_range / unplaced: all installs in the range, and how many had no city (unplaced_by_country);
  *                   earlier: phones from before city tracking, placed at the first shop they rated or reported
  *                   (rounded to ~10 km). Developer-only: 404 without the key.
  *   A new install is also pushed to the private ntfy.sh topic derived from PULSE_KEY, which only the widget knows.
@@ -372,14 +373,16 @@ async function install(request, env) {
   if (lim && lim.count >= INSTALLS_PER_ADDRESS_PER_DAY) return json({ ok: true });
   // City-level place from Cloudflare's network lookup (no GPS, never the address itself).
   const cf = request.cf || {};
-  const geoOk = cf.country === "US" && Number.isFinite(Number(cf.latitude)) && Number.isFinite(Number(cf.longitude));
+  // Any country (a phone abroad, on a VPN or a carrier that routes through another country still counts).
+  const geoOk = Number.isFinite(Number(cf.latitude)) && Number.isFinite(Number(cf.longitude));
+  const country = String(cf.country || "").slice(0, 2) || null;
   const city = geoOk ? String(cf.city || "").slice(0, 60) || null : null;
-  const region = geoOk ? String(cf.regionCode || cf.region || "").slice(0, 40) || null : null;
+  const region = geoOk ? String((country === "US" ? cf.regionCode : country) || cf.region || "").slice(0, 40) || null : null;
   const lat = geoOk ? Math.round(Number(cf.latitude) * 100) / 100 : null;
   const lon = geoOk ? Math.round(Number(cf.longitude) * 100) / 100 : null;
   const [r] = await env.DB.batch([
-    env.DB.prepare("INSERT OR IGNORE INTO installs (device, src, medium, day, ts, city, region, lat, lon) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)")
-      .bind(device, src, medium, etDay(), Date.now(), city, region, lat, lon),
+    env.DB.prepare("INSERT OR IGNORE INTO installs (device, src, medium, day, ts, city, region, lat, lon, country) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")
+      .bind(device, src, medium, etDay(), Date.now(), city, region, lat, lon, country),
     env.DB.prepare("INSERT INTO limits (who, day, count) VALUES (?, ?, 1) ON CONFLICT (who, day) DO UPDATE SET count = count + 1")
       .bind(who, day),
   ]);
@@ -405,13 +408,19 @@ function shopPoint(shop) {
 }
 async function pulseMap(env, days) {
   const since = days > 0 ? Date.now() - days * 86400000 : 0;
-  const [inst, all, rated, reported] = await Promise.all([
+  const [inst, all, rated, reported, unplaced] = await Promise.all([
     env.DB.prepare("SELECT city, region, lat, lon, src, medium FROM installs WHERE lat IS NOT NULL AND ts >= ? AND device NOT LIKE 'smoke-test-device%'")
       .bind(since).all(),
     env.DB.prepare("SELECT device, lat, ts FROM installs").all(),
     env.DB.prepare("SELECT device, shop, updated FROM ratings WHERE device NOT LIKE 'smoke-test-device%'").all(),
     env.DB.prepare("SELECT device, shop, updated FROM reports WHERE device NOT LIKE 'smoke-test-device%'").all(),
+    // Installs since city tracking began (the first one with a city) that still have none.
+    env.DB.prepare("SELECT COALESCE(country, '') AS c, COUNT(*) AS n FROM installs WHERE lat IS NULL AND ts >= ? " +
+      "AND ts >= (SELECT COALESCE(MIN(ts), 9e15) FROM installs WHERE lat IS NOT NULL) AND device NOT LIKE 'smoke-test-device%' GROUP BY c")
+      .bind(since).all(),
   ]);
+  const noPlace = {};
+  for (const r of unplaced.results || []) noPlace[r.c || "unknown"] = r.n;
   const byCity = new Map();
   for (const r of inst.results || []) {
     const k = (r.city || "?") + "|" + (r.region || "") ;
@@ -440,7 +449,10 @@ async function pulseMap(env, days) {
   }
   const earlier = [...byArea.entries()].map(([k, n]) => { const [lat, lon] = k.split(",").map(Number); return { lat, lon, n }; })
     .sort((a, b) => b.n - a.n);
-  return { days, installs, earlier, installs_total: installs.reduce((t, c) => t + c.n, 0),
+  const placedN = installs.reduce((t, c) => t + c.n, 0);
+  const unplacedN = Object.values(noPlace).reduce((t, n) => t + n, 0);
+  return { days, installs, earlier, installs_total: placedN, in_range: placedN + unplacedN, unplaced: unplacedN,
+           unplaced_by_country: noPlace,
            earlier_total: earlier.reduce((t, c) => t + c.n, 0) };
 }
 

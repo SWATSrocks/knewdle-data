@@ -3,3 +3,4 @@ ALTER TABLE installs ADD COLUMN city TEXT;
 ALTER TABLE installs ADD COLUMN region TEXT;
 ALTER TABLE installs ADD COLUMN lat REAL;
 ALTER TABLE installs ADD COLUMN lon REAL;
+ALTER TABLE installs ADD COLUMN country TEXT;
