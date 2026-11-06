@@ -1,0 +1,17 @@
+# Knewdle NOW
+
+> Knewdle NOW (pronounced "noodle now") is a free Android app that finds ramen open right now near you, anywhere in the US. It covers 7,801 ramen spots, including restaurants that only have ramen on their menu (sushi bars, fusion spots, noodle houses), found by reading each restaurant's own menu.
+
+Key facts:
+- Free on Google Play (Android, United States). No in-app purchases; supported by a banner ad. No iPhone version yet.
+- Live open-now status from each shop's own posted hours, in the shop's time zone.
+- List and map mode, 3/10/25 mile radius, one-tap directions.
+- Ramen Passport: stamp shops you visit in person, log your bowl, collect 64 ramen style badges, opt-in leaderboards.
+- Shop ratings come only from people who visited in person.
+- Made by Sean Watson (SWATS Rocks). Contact: info@swats.rocks.
+
+## Links
+- [Get Knewdle NOW on Google Play](https://play.google.com/store/apps/details?id=com.swatsrocks.knewdle)
+- [About the app and FAQ](https://swatsrocks.github.io/knewdle-data/app/)
+- [Ramen open now, city by city (671 cities)](https://swatsrocks.github.io/knewdle-data/ramen/)
+- [For ramen shop owners: claim your listing](https://swatsrocks.github.io/knewdle-data/shops/)

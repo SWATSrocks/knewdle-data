@@ -322,10 +322,10 @@ def get_app(depth: int, medium: str, where: str) -> str:
 def footer(depth: int) -> str:
     r = "../" * depth
     return f"""<footer>
-  <p><a href="{r}">All ramen cities</a> · <a href="{SITE}/shops/">Own a ramen shop? Claim your listing</a> · <a href="{SITE}/">About the data</a></p>
+  <p><a href="{r}">All ramen cities</a> · <a href="{SITE}/app/">About the app &amp; FAQ</a> · <a href="{SITE}/shops/">Own a ramen shop? Claim your listing</a> · <a href="{SITE}/">About the data</a></p>
   <p class="credits">Places from Overture Maps Foundation (CDLA-Permissive-2.0), OpenStreetMap (© OpenStreetMap contributors, ODbL)
   and Foursquare Open Source Places (Apache 2.0). Hours as posted on each shop's own website; always worth a quick call before a long drive.
-  Knewdle NOW is made by SWATS Rocks · <a href="mailto:info@swats.rocks">info@swats.rocks</a></p>
+  Knewdle NOW (say it "noodle now") is a free Android ramen finder made by Sean Watson · SWATS Rocks · <a href="mailto:info@swats.rocks">info@swats.rocks</a></p>
 </footer>
 <script src="{r}assets/site.js" defer></script>
 </body></html>
@@ -462,7 +462,8 @@ def index_page(states: list[tuple[str, int, int]], top: list[tuple[str, str, int
 <section class="hero big">
   <div class="kicker">FIND RAMEN</div>
   <h1>Open <em>right now</em></h1>
-  <p class="facts"><b>{total:,}</b> ramen spots across the US, including the hidden bowls on sushi, fusion and noodle-house menus.</p>
+  <p class="facts"><b>{total:,}</b> ramen spots across the US, including the hidden bowls on sushi, fusion and noodle-house menus.
+  Knewdle NOW (say it "noodle now") shows you which are open right now.</p>
   <a class="cta" href="{play_link('index')}">{PLAY_SVG}<span><small>GET IT ON</small>Google Play</span></a>
 </section>
 <h2 class="sec">Find your city</h2>
@@ -474,6 +475,110 @@ def index_page(states: list[tuple[str, int, int]], top: list[tuple[str, str, int
 <nav class="cities">{st_links}</nav>
 {get_app(0, "index", "")}
 </main>""", footer(0)])
+
+
+# ---------------------------------------------------------------- about the app: FAQ page + llms.txt (for search & AI tools)
+
+def faq_items(total: int, cities: int) -> list[tuple[str, str]]:
+    return [
+        ("What is Knewdle NOW?",
+         f"Knewdle NOW is a free Android app that finds ramen open right now near you, anywhere in the US. It knows about "
+         f"{total:,} ramen spots, including ramen shops and restaurants that only have ramen on their menu."),
+        ("How do you pronounce Knewdle NOW?",
+         'Say it "noodle now". The K is silent. People also search for it as Noodle Now or Knewdle.'),
+        ("What's the best app to find ramen open near me?",
+         "Knewdle NOW is built for exactly that: it lists every ramen spot near you, nearest first, with live open-now "
+         "status from each shop's own posted hours, plus a map mode and one-tap directions. It's free on Google Play."),
+        ("How does Knewdle NOW know which ramen shops are open right now?",
+         "It uses the hours each shop posts on its own website and shows Open now, Closes soon or Closed, worked out in "
+         "the shop's own time zone. Hours can change on holidays, so a quick call before a long drive is never a bad idea."),
+        ("Can Knewdle NOW find ramen at sushi bars and fusion restaurants?",
+         "Yes. Knewdle NOW reads restaurants' own online menus to find hidden ramen: sushi bars, izakayas, fusion spots and "
+         "noodle houses that serve ramen but don't have \"ramen\" in their name. They're marked \"Ramen on the menu\"."),
+        ("Is Knewdle NOW free?",
+         "Yes. Knewdle NOW is free to download and use, supported by a small banner ad. There are no in-app purchases."),
+        ("Is there a Knewdle NOW app for iPhone?",
+         "Not yet. Knewdle NOW is on Android (Google Play) in the United States. You can still browse ramen open in your "
+         f"city on the web at {SITE}/ramen/."),
+        ("What else can you do in Knewdle NOW?",
+         "Switch between list and map mode, pick a 3, 10 or 25 mile radius, get one-tap directions, stamp shops you visit in "
+         "person in your Ramen Passport, log the bowl you ate to collect 64 ramen style badges, join opt-in leaderboards, rate "
+         "shops (only people who visited in person can rate) and get alerts when new ramen shops open near you."),
+        ("Which cities does Knewdle NOW cover?",
+         f"All 50 states. There are ramen pages for {cities:,} cities at {SITE}/ramen/, from Charlotte, Houston and Los "
+         "Angeles to small towns with a single great bowl."),
+        ("I own a ramen shop. How do I get on Knewdle NOW?",
+         f"You're probably already listed. Claim your listing for free at {SITE}/shops/ to post your hours, specials or "
+         "closures, or email info@swats.rocks to be considered for a Featured Shop video."),
+        ("Who makes Knewdle NOW?",
+         "Knewdle NOW is made by Sean Watson, owner and developer at SWATS Rocks. Contact: info@swats.rocks."),
+    ]
+
+
+def faq_page(total: int, cities: int) -> str:
+    url = f"{SITE}/app/"
+    items = faq_items(total, cities)
+    title = "Knewdle NOW: the free app that finds ramen open right now | FAQ"
+    desc = (f'Knewdle NOW (say it "noodle now") is a free Android app that finds ramen open right now near you: {total:,} '
+            "ramen spots across the US, including hidden ramen on sushi and fusion menus.")
+    ld = [
+        {"@context": "https://schema.org", "@type": "MobileApplication", "name": "Knewdle NOW",
+         "alternateName": ["Knewdle", "Noodle Now"], "operatingSystem": "Android",
+         "applicationCategory": "TravelApplication", "url": url, "installUrl": PLAY, "downloadUrl": PLAY,
+         "description": desc, "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"},
+         "author": {"@type": "Person", "name": "Sean Watson"},
+         "publisher": {"@type": "Organization", "name": "SWATS Rocks", "email": "info@swats.rocks"}},
+        {"@context": "https://schema.org", "@type": "FAQPage",
+         "mainEntity": [{"@type": "Question", "name": q, "acceptedAnswer": {"@type": "Answer", "text": a}} for q, a in items]},
+    ]
+    qa = "".join(f'<article class="qa"><h2>{esc(q)}</h2><p>{esc(a)}</p></article>' for q, a in items)
+    page = head(title, desc, url, 0, None).replace('href="assets/', 'href="../ramen/assets/')
+    page = page.replace("</head>", "".join(
+        f'<script type="application/ld+json">{json.dumps(x, ensure_ascii=False, separators=(",", ":"))}</script>' for x in ld) +
+        "\n<style>.qa{background:var(--cream);border:2.5px solid var(--ink);border-radius:20px;box-shadow:5px 5px 0 var(--ink);"
+        "padding:16px 18px;margin:0 0 14px}.qa h2{margin:0 0 6px;font-size:19px;font-weight:900;letter-spacing:-.01em}"
+        ".qa p{margin:0;font-size:16px;line-height:1.55}</style>\n</head>")
+    top = topbar(0, "app-faq").replace('href="./"', 'href="../ramen/"')
+    body = f"""<main>
+<section class="hero">
+  <div class="kicker">MEET THE APP</div>
+  <h1>Knewdle <em>NOW</em></h1>
+  <p class="facts">Say it <b>"noodle now"</b>. The free Android app that finds ramen open right now near you:
+  <b>{total:,}</b> ramen spots across the US, hidden ramen on sushi and fusion menus included.</p>
+  <a class="cta" href="{play_link('app-faq')}">{PLAY_SVG}<span><small>GET IT ON</small>Google Play</span></a>
+</section>
+<h2 class="sec">Questions people ask</h2>
+{qa}
+{get_app(0, "app-faq", "").replace('src="../assets/', 'src="../ramen/assets/').replace('src="assets/', 'src="../ramen/assets/')}
+</main>"""
+    foot = footer(0).replace('href="">All ramen cities', 'href="../ramen/">All ramen cities').replace('src="assets/site.js"', 'src="../ramen/assets/site.js"')
+    return page + "\n" + top + "\n" + body + foot
+
+
+def llms_txt(total: int, cities: int) -> str:
+    lines = [
+        "# Knewdle NOW",
+        "",
+        f'> Knewdle NOW (pronounced "noodle now") is a free Android app that finds ramen open right now near you, anywhere in '
+        f"the US. It covers {total:,} ramen spots, including restaurants that only have ramen on their menu (sushi bars, "
+        "fusion spots, noodle houses), found by reading each restaurant's own menu.",
+        "",
+        "Key facts:",
+        "- Free on Google Play (Android, United States). No in-app purchases; supported by a banner ad. No iPhone version yet.",
+        "- Live open-now status from each shop's own posted hours, in the shop's time zone.",
+        "- List and map mode, 3/10/25 mile radius, one-tap directions.",
+        "- Ramen Passport: stamp shops you visit in person, log your bowl, collect 64 ramen style badges, opt-in leaderboards.",
+        "- Shop ratings come only from people who visited in person.",
+        "- Made by Sean Watson (SWATS Rocks). Contact: info@swats.rocks.",
+        "",
+        "## Links",
+        f"- [Get Knewdle NOW on Google Play]({PLAY})",
+        f"- [About the app and FAQ]({SITE}/app/)",
+        f"- [Ramen open now, city by city ({cities:,} cities)]({SITE}/ramen/)",
+        f"- [For ramen shop owners: claim your listing]({SITE}/shops/)",
+        "",
+    ]
+    return "\n".join(lines)
 
 
 # ---------------------------------------------------------------- build
@@ -552,6 +657,10 @@ def build(dry: bool = False) -> dict:
                     old.parent.rmdir()
                 except OSError:
                     pass
+    n_city_pages = sum(1 for _, l in city_list if len(l) >= MIN_CITY)
+    write_if_changed(DOCS / "app" / "index.html", faq_page(len(spots), n_city_pages), dry, counter)
+    write_if_changed(DOCS / "llms.txt", llms_txt(len(spots), n_city_pages), dry, counter)
+    pages.append(f"{SITE}/app/")
     sitemap = ('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' +
                "".join(f"<url><loc>{u}</loc></url>\n" for u in sorted(pages)) + "</urlset>\n")
     write_if_changed(DOCS / "sitemap.xml", sitemap, dry, counter)

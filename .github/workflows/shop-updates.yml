@@ -60,7 +60,7 @@ jobs:
           git add docs/ratings.json docs/closed.json 2>/dev/null || true
           git add docs/hours.json 2>/dev/null || true
           git add state/chain_dirs.json 2>/dev/null || true
-          git add -A docs/ramen docs/sitemap.xml 2>/dev/null || true
+          git add -A docs/ramen docs/app docs/llms.txt docs/sitemap.xml 2>/dev/null || true
           git diff --cached --quiet || git commit -m "Shop updates $(date -u +%Y-%m-%d)"
           git pull --rebase -X theirs origin main || true
           git push
