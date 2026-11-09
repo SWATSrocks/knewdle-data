@@ -116,6 +116,8 @@ jobs:
           echo "bad install answered HTTP $code (expected 400)"; [ "$code" = "400" ]
           curl -fsS -X POST "$BASE/install" -H "content-type: application/json" \
             -d '{"device":"smoke-test-device-0004","src":"smoke","medium":"test"}' ; echo
+          code=$(curl -s -o /dev/null -w "%{http_code}" "$BASE/pulse/origin?key=wrong")
+          echo "pulse origin without the key answered HTTP $code (expected 404)"; [ "$code" = "404" ]
           code=$(curl -s -o /dev/null -w "%{http_code}" "$BASE/pulse/map?key=wrong")
           echo "pulse map without the key answered HTTP $code (expected 404)"; [ "$code" = "404" ]
           code=$(curl -s -o /dev/null -w "%{http_code}" "$BASE/pulse?key=wrong")

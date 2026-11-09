@@ -22,6 +22,8 @@
  *   POST /install   {"device", "src", "medium"} -> {"ok": true}   (sent once, the first time the app opens;
  *                   src/medium = the Play install link's utm tags, e.g. "instagram"/"qr"; nothing about the person)
  *   GET  /pulse?key=PULSE_KEY -> {"total", "today", "day", "last", "sources_today", "recent"}  (404 without the key)
+ *   GET  /pulse/origin?key=PULSE_KEY -> {"stores": {"Google Play": n, …}, "copies": [...], "copies_total"}: which store installed
+ *                   each copy, and copies that aren't the real app (another package name, or a signing key no Play install has).
  *   GET  /pulse/map?key=PULSE_KEY&days=7 -> {"installs": [{city, region, lat, lon, n, src}], "earlier": [{lat, lon, n}]}
  *                   installs: by the city Cloudflare places each install's network in (city level, never the address);
  *                   in_range / unplaced: all installs in the range, and how many had no city (unplaced_by_country);
@@ -350,6 +352,55 @@ function sameKey(a, b) {
   let x = 0; for (let i = 0; i < a.length; i++) x |= a.charCodeAt(i) ^ b.charCodeAt(i);
   return x === 0;
 }
+// ---- Where each copy of the app came from (catches copies on other stores and repackaged clones) ----
+const OUR_PKG = "com.swatsrocks.knewdle";
+const STORES = {
+  "com.android.vending": "Google Play", "com.sec.android.app.samsungapps": "Galaxy Store", "com.amazon.venezia": "Amazon Appstore",
+  "com.huawei.appmarket": "Huawei AppGallery", "cm.aptoide.pt": "Aptoide", "com.apkpure.aegon": "APKPure", "com.uptodown": "Uptodown",
+  "com.xiaomi.market": "Xiaomi GetApps", "com.xiaomi.mipicks": "Xiaomi GetApps", "com.heytap.market": "OPPO App Market",
+  "com.oppo.market": "OPPO App Market", "com.bbk.appstore": "vivo App Store", "com.vivo.appstore": "vivo App Store",
+  "com.android.shell": "Installed from a computer", "com.google.android.packageinstaller": "APK file (sideloaded)",
+  "com.android.packageinstaller": "APK file (sideloaded)", "none": "Unknown / preinstalled",
+};
+function storeName(installer) {
+  if (!installer) return null;
+  return STORES[installer] || installer;
+}
+function pkgName(v) { return String(v || "").replace(/[^A-Za-z0-9_.]/g, "").slice(0, 100) || null; }
+function sigHex(v) { const h = String(v || "").toLowerCase().replace(/[^0-9a-f]/g, "").slice(0, 64); return h.length >= 16 ? h : null; }
+// The signatures Google Play installs carry are the real app; anything else (or another package name) is suspect.
+async function trustedSigs(env) {
+  const r = await env.DB.prepare("SELECT DISTINCT sig FROM installs WHERE installer = 'com.android.vending' AND pkg = ? AND sig IS NOT NULL")
+    .bind(OUR_PKG).all();
+  return new Set((r.results || []).map((x) => x.sig));
+}
+function suspectWhy(row, trusted) {
+  if (row.pkg && row.pkg !== OUR_PKG) return "renamed copy (" + row.pkg + ")";
+  if (row.sig && trusted.size && !trusted.has(row.sig)) return "signed with a different key";
+  return null;
+}
+async function originStats(env) {
+  const [stores, rows, trusted] = await Promise.all([
+    env.DB.prepare("SELECT COALESCE(installer, '') AS i, COUNT(*) AS n FROM installs WHERE device NOT LIKE 'smoke-test-device%' GROUP BY i ORDER BY n DESC").all(),
+    env.DB.prepare("SELECT ts, installer, pkg, sig, city, region, country FROM installs WHERE (sig IS NOT NULL OR pkg IS NOT NULL) AND device NOT LIKE 'smoke-test-device%' ORDER BY ts DESC LIMIT 2000").all(),
+    trustedSigs(env),
+  ]);
+  const byStore = {};
+  let unknown = 0;
+  for (const r of stores.results || []) {
+    if (!r.i) { unknown += r.n; continue; }
+    const name = storeName(r.i); byStore[name] = (byStore[name] || 0) + r.n;
+  }
+  const copies = [];
+  for (const r of rows.results || []) {
+    const why = suspectWhy(r, trusted);
+    if (why) copies.push({ ts: r.ts, store: storeName(r.installer) || "unknown", why, sig: (r.sig || "").slice(0, 12),
+                           where: r.city ? r.city + (r.region ? ", " + r.region : "") : (r.country || null) });
+  }
+  return { stores: byStore, not_reported: unknown, copies: copies.slice(0, 20), copies_total: copies.length,
+           trusted_keys: [...trusted].map((s) => s.slice(0, 12)) };
+}
+
 async function pulseStats(env) {
   const day = etDay();
   const [tot, td, last, srcs, recent] = await Promise.all([
@@ -357,16 +408,20 @@ async function pulseStats(env) {
     env.DB.prepare("SELECT COUNT(*) AS n FROM installs WHERE day = ?").bind(day).first(),
     env.DB.prepare("SELECT ts, src, medium FROM installs ORDER BY ts DESC LIMIT 1").first(),
     env.DB.prepare("SELECT src, COUNT(*) AS n FROM installs WHERE day = ? GROUP BY src ORDER BY n DESC").bind(day).all(),
-    env.DB.prepare("SELECT ts, src, medium FROM installs ORDER BY ts DESC LIMIT 20").all(),
+    env.DB.prepare("SELECT ts, src, medium, installer FROM installs ORDER BY ts DESC LIMIT 20").all(),
   ]);
+  const rec = (recent.results || []).map((r) => ({ ts: r.ts, src: r.src, medium: r.medium, store: storeName(r.installer) }));
   return { total: tot ? tot.n : 0, today: td ? td.n : 0, day, last: last || null,
-           sources_today: srcs.results || [], recent: recent.results || [] };
+           sources_today: srcs.results || [], recent: rec };
 }
 async function install(request, env) {
   const b = await body(request);
   const device = String(b && b.device || "");
   if (!DEVICE.test(device)) return json({ ok: false, error: "bad request" }, 400);
   const src = tag(b.src) || "unknown", medium = tag(b.medium) || "unknown";
+  // Which store installed this copy, its package name and its signing-key fingerprint (sent by 1.16.4+).
+  const installer = b.installer === undefined ? null : (pkgName(b.installer) || "none");
+  const pkg = pkgName(b.pkg), sig = sigHex(b.sig);
   const who = "in:" + await sha256(request.headers.get("cf-connecting-ip") || "?");
   const day = today();
   const lim = await env.DB.prepare("SELECT count FROM limits WHERE who = ? AND day = ?").bind(who, day).first();
@@ -381,17 +436,27 @@ async function install(request, env) {
   const lat = geoOk ? Math.round(Number(cf.latitude) * 100) / 100 : null;
   const lon = geoOk ? Math.round(Number(cf.longitude) * 100) / 100 : null;
   const [r] = await env.DB.batch([
-    env.DB.prepare("INSERT OR IGNORE INTO installs (device, src, medium, day, ts, city, region, lat, lon, country) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")
-      .bind(device, src, medium, etDay(), Date.now(), city, region, lat, lon, country),
+    env.DB.prepare("INSERT OR IGNORE INTO installs (device, src, medium, day, ts, city, region, lat, lon, country, installer, pkg, sig) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")
+      .bind(device, src, medium, etDay(), Date.now(), city, region, lat, lon, country, installer, pkg, sig),
     env.DB.prepare("INSERT INTO limits (who, day, count) VALUES (?, ?, 1) ON CONFLICT (who, day) DO UPDATE SET count = count + 1")
       .bind(who, day),
   ]);
   const isNew = r && r.meta && r.meta.changes > 0;
-  if (isNew && env.PULSE_KEY && !device.startsWith("smoke-test-device")) {
+  if (!isNew && (installer || pkg || sig)) {
+    // A phone that installed before 1.16.4 reporting where it came from, once, after updating.
+    await env.DB.prepare("UPDATE installs SET installer = COALESCE(installer, ?), pkg = COALESCE(pkg, ?), sig = COALESCE(sig, ?) WHERE device = ?")
+      .bind(installer, pkg, sig, device).run();
+  }
+  let suspect = null;
+  if ((pkg || sig) && !device.startsWith("smoke-test-device")) {
+    try { suspect = suspectWhy({ pkg, sig }, await trustedSigs(env)); } catch (e) { suspect = null; }
+  }
+  if ((isNew || suspect) && env.PULSE_KEY && !device.startsWith("smoke-test-device")) {
     try {
       const st = await pulseStats(env);
-      const msg = JSON.stringify({ kind: "install", total: st.total, today: st.today, src, medium, ts: Date.now(),
-                                   city: city ? city + (region ? ", " + region : "") : null });
+      const msg = JSON.stringify({ kind: isNew ? "install" : "origin", total: st.total, today: st.today, src, medium, ts: Date.now(),
+                                   city: city ? city + (region ? ", " + region : "") : null,
+                                   store: storeName(installer), suspect });
       await fetch("https://ntfy.sh/" + await pulseTopic(env.PULSE_KEY), { method: "POST", body: msg });
     } catch (e) { /* the widget also checks /pulse every 15 minutes */ }
   }
@@ -484,6 +549,10 @@ export default {
         if (!env.PULSE_KEY || !sameKey(String(url.searchParams.get("key") || ""), env.PULSE_KEY)) return json({ ok: false, error: "not found" }, 404);
         const days = Math.max(0, Math.min(3650, parseInt(url.searchParams.get("days") || "0", 10) || 0));
         return json({ ok: true, ...(await pulseMap(env, days)) }, 200, { "cache-control": "no-store" });
+      }
+      if (url.pathname === "/pulse/origin" && request.method === "GET") {
+        if (!env.PULSE_KEY || !sameKey(String(url.searchParams.get("key") || ""), env.PULSE_KEY)) return json({ ok: false, error: "not found" }, 404);
+        return json({ ok: true, ...(await originStats(env)) }, 200, { "cache-control": "no-store" });
       }
       if (url.pathname === "/pulse" && request.method === "GET") {
         if (!env.PULSE_KEY || !sameKey(String(url.searchParams.get("key") || ""), env.PULSE_KEY)) return json({ ok: false, error: "not found" }, 404);
