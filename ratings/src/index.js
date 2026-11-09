@@ -22,6 +22,9 @@
  *   POST /install   {"device", "src", "medium"} -> {"ok": true}   (sent once, the first time the app opens;
  *                   src/medium = the Play install link's utm tags, e.g. "instagram"/"qr"; nothing about the person)
  *   GET  /pulse?key=PULSE_KEY -> {"total", "today", "day", "last", "sources_today", "recent"}  (404 without the key)
+ *   POST /events {"device", "events": [{k: shop key, name, la, lo, t: kind, d: day, w?, h?, s?}]} -> per-shop daily totals
+ *                   for the shops' reports (seen/open/go/site/menu/share/call/stamp/bowl); nothing per person is kept.
+ *   GET  /pulse/shops?key=PULSE_KEY&days=30 -> every shop with activity and its counts;  /pulse/shop?…&shop=<key> -> one shop's detail.
  *   GET  /pulse/origin?key=PULSE_KEY -> {"stores": {"Google Play": n, …}, "copies": [...], "copies_total"}: which store installed
  *                   each copy, and copies that aren't the real app (another package name, or a signing key no Play install has).
  *   GET  /pulse/map?key=PULSE_KEY&days=7 -> {"installs": [{city, region, lat, lon, n, src}], "earlier": [{lat, lon, n}]}
@@ -352,6 +355,103 @@ function sameKey(a, b) {
   let x = 0; for (let i = 0; i < a.length; i++) x |= a.charCodeAt(i) ^ b.charCodeAt(i);
   return x === 0;
 }
+// ---- Shop insights (for the shops' monthly reports) ----
+const EVENT_KINDS = new Set(["seen", "open", "go", "site", "menu", "share", "call", "stamp", "bowl"]);
+const EVENT_POSTS_PER_DEVICE_PER_DAY = 40;
+const SHOP_KEY = /^[a-z0-9.\-]{1,120}@-?\d{1,3}\.\d{2},-?\d{1,3}\.\d{2}$/;
+function cleanName(v) { return String(v || "").replace(/[\u0000-\u001f<>]/g, "").trim().slice(0, 80); }
+async function events(request, env) {
+  const b = await body(request);
+  const device = String(b && b.device || "");
+  const list = Array.isArray(b && b.events) ? b.events.slice(0, 300) : null;
+  if (!DEVICE.test(device) || !list) return json({ ok: false, error: "bad request" }, 400);
+  if (device.startsWith("smoke-test-device")) return json({ ok: true, kept: 0 });
+  const who = "ev:" + await sha256(device);
+  const day = today();
+  const lim = await env.DB.prepare("SELECT count FROM limits WHERE who = ? AND day = ?").bind(who, day).first();
+  if (lim && lim.count >= EVENT_POSTS_PER_DEVICE_PER_DAY) return json({ ok: false, error: "slow down" }, 429);
+  const now = new Date();
+  const stmts = [env.DB.prepare("INSERT INTO limits (who, day, count) VALUES (?, ?, 1) ON CONFLICT (who, day) DO UPDATE SET count = count + 1").bind(who, day)];
+  const names = new Map();
+  let kept = 0;
+  for (const e of list) {
+    if (!e || typeof e !== "object") continue;
+    const shop = String(e.k || "").toLowerCase();
+    const kind = String(e.t || "");
+    const d = /^\d{4}-\d{2}-\d{2}$/.test(String(e.d || "")) ? String(e.d) : etDay(now);
+    // Only recent days (a phone offline for a while still counts; nothing from the far past or future).
+    const age = (now - new Date(d + "T12:00:00Z")) / 86400000;
+    if (!SHOP_KEY.test(shop) || !EVENT_KINDS.has(kind) || age > 45 || age < -2) continue;
+    const month = d.slice(0, 7);
+    kept++;
+    if (!names.has(shop) && cleanName(e.name)) {
+      const la = Number(e.la), lo = Number(e.lo);
+      names.set(shop, [cleanName(e.name), Number.isFinite(la) ? la : null, Number.isFinite(lo) ? lo : null]);
+    }
+    if (kind === "bowl") {
+      const style = String(e.s || "").toLowerCase().replace(/[^a-z0-9_]/g, "").slice(0, 40);
+      if (!style) continue;
+      stmts.push(env.DB.prepare("INSERT INTO shop_bowls (shop, month, style, n) VALUES (?, ?, ?, 1) ON CONFLICT (shop, month, style) DO UPDATE SET n = n + 1")
+        .bind(shop, month, style));
+      continue;
+    }
+    stmts.push(env.DB.prepare("INSERT INTO shop_stats (shop, day, kind, n) VALUES (?, ?, ?, 1) ON CONFLICT (shop, day, kind) DO UPDATE SET n = n + 1")
+      .bind(shop, d, kind));
+    if (kind === "stamp") {
+      const v = (await sha256((env.PULSE_KEY || "salt") + "|" + month + "|" + device)).slice(0, 16);
+      stmts.push(env.DB.prepare("INSERT INTO shop_visitors (shop, month, v, n) VALUES (?, ?, ?, 1) ON CONFLICT (shop, month, v) DO UPDATE SET n = n + 1")
+        .bind(shop, month, v));
+      const w = parseInt(e.w, 10), h = parseInt(e.h, 10);
+      if (w >= 0 && w <= 6 && h >= 0 && h <= 23) {
+        stmts.push(env.DB.prepare("INSERT INTO shop_hours (shop, month, dow, hour, n) VALUES (?, ?, ?, ?, 1) ON CONFLICT (shop, month, dow, hour) DO UPDATE SET n = n + 1")
+          .bind(shop, month, w, h));
+      }
+    }
+  }
+  for (const [shop, [name, la, lo]] of names) {
+    stmts.push(env.DB.prepare("INSERT INTO shop_info (shop, name, lat, lon, updated) VALUES (?, ?, ?, ?, ?) " +
+      "ON CONFLICT (shop) DO UPDATE SET name = excluded.name, lat = COALESCE(excluded.lat, lat), lon = COALESCE(excluded.lon, lon), updated = excluded.updated")
+      .bind(shop, name, la, lo, day));
+  }
+  for (let i = 0; i < stmts.length; i += 90) await env.DB.batch(stmts.slice(i, i + 90));
+  return json({ ok: true, kept });
+}
+function sinceDay(days) { return days > 0 ? etDay(new Date(Date.now() - (days - 1) * 86400000)) : "0000-00-00"; }
+async function pulseShops(env, days) {
+  const since = sinceDay(days);
+  const [stats, info, vis] = await Promise.all([
+    env.DB.prepare("SELECT shop, kind, SUM(n) AS n FROM shop_stats WHERE day >= ? GROUP BY shop, kind").bind(since).all(),
+    env.DB.prepare("SELECT shop, name, lat, lon FROM shop_info").all(),
+    env.DB.prepare("SELECT shop, COUNT(*) AS people, SUM(CASE WHEN n >= 2 THEN 1 ELSE 0 END) AS repeat FROM shop_visitors WHERE month >= ? GROUP BY shop")
+      .bind(since.slice(0, 7)).all(),
+  ]);
+  const meta = new Map((info.results || []).map((r) => [r.shop, r]));
+  const out = new Map();
+  for (const r of stats.results || []) {
+    const m = meta.get(r.shop) || {};
+    const pt = shopPoint(r.shop);
+    const o = out.get(r.shop) || { shop: r.shop, name: m.name || r.shop.split("@")[0], lat: m.lat ?? (pt ? pt[0] : null), lon: m.lon ?? (pt ? pt[1] : null),
+      seen: 0, open: 0, go: 0, site: 0, menu: 0, share: 0, call: 0, stamp: 0, people: 0, repeat: 0 };
+    o[r.kind] = r.n;
+    out.set(r.shop, o);
+  }
+  for (const v of vis.results || []) { const o = out.get(v.shop); if (o) { o.people = v.people; o.repeat = v.repeat; } }
+  const shops = [...out.values()].sort((a, b) => b.stamp - a.stamp || b.go - a.go || b.open - a.open || b.seen - a.seen);
+  return { days, shops: shops.slice(0, 1000), shops_total: shops.length };
+}
+async function pulseShop(env, shop, days) {
+  const since = sinceDay(days), month = since.slice(0, 7);
+  const [daily, hours, bowls, vis, info] = await Promise.all([
+    env.DB.prepare("SELECT day, kind, n FROM shop_stats WHERE shop = ? AND day >= ? ORDER BY day").bind(shop, since).all(),
+    env.DB.prepare("SELECT dow, hour, SUM(n) AS n FROM shop_hours WHERE shop = ? AND month >= ? GROUP BY dow, hour").bind(shop, month).all(),
+    env.DB.prepare("SELECT style, SUM(n) AS n FROM shop_bowls WHERE shop = ? AND month >= ? GROUP BY style ORDER BY n DESC").bind(shop, month).all(),
+    env.DB.prepare("SELECT COUNT(*) AS people, SUM(CASE WHEN n >= 2 THEN 1 ELSE 0 END) AS repeat FROM shop_visitors WHERE shop = ? AND month >= ?").bind(shop, month).first(),
+    env.DB.prepare("SELECT name, lat, lon FROM shop_info WHERE shop = ?").bind(shop).first(),
+  ]);
+  return { shop, name: info ? info.name : shop.split("@")[0], days, daily: daily.results || [], hours: hours.results || [],
+           bowls: bowls.results || [], people: vis ? vis.people || 0 : 0, repeat: vis ? vis.repeat || 0 : 0 };
+}
+
 // ---- Where each copy of the app came from (catches copies on other stores and repackaged clones) ----
 const OUR_PKG = "com.swatsrocks.knewdle";
 const STORES = {
@@ -545,6 +645,15 @@ export default {
       if (url.pathname === "/lb/sync" && request.method === "POST") return await lbSync(request, env);
       if (url.pathname === "/lb/leave" && request.method === "POST") return await lbLeave(request, env);
       if (url.pathname === "/install" && request.method === "POST") return await install(request, env);
+      if (url.pathname === "/events" && request.method === "POST") return await events(request, env);
+      if ((url.pathname === "/pulse/shops" || url.pathname === "/pulse/shop") && request.method === "GET") {
+        if (!env.PULSE_KEY || !sameKey(String(url.searchParams.get("key") || ""), env.PULSE_KEY)) return json({ ok: false, error: "not found" }, 404);
+        const days = Math.max(0, Math.min(3650, parseInt(url.searchParams.get("days") || "30", 10) || 0));
+        if (url.pathname === "/pulse/shops") return json({ ok: true, ...(await pulseShops(env, days)) }, 200, { "cache-control": "no-store" });
+        const shop = String(url.searchParams.get("shop") || "").toLowerCase();
+        if (!SHOP_KEY.test(shop)) return json({ ok: false, error: "bad request" }, 400);
+        return json({ ok: true, ...(await pulseShop(env, shop, days)) }, 200, { "cache-control": "no-store" });
+      }
       if (url.pathname === "/pulse/map" && request.method === "GET") {
         if (!env.PULSE_KEY || !sameKey(String(url.searchParams.get("key") || ""), env.PULSE_KEY)) return json({ ok: false, error: "not found" }, 404);
         const days = Math.max(0, Math.min(3650, parseInt(url.searchParams.get("days") || "0", 10) || 0));

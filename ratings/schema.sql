@@ -54,3 +54,47 @@ CREATE TABLE IF NOT EXISTS installs (
   ts     INTEGER NOT NULL
 );
 CREATE INDEX IF NOT EXISTS installs_day ON installs (day);
+
+-- Shop insights for the shops' monthly reports (Knewdle NOW 1.17+). Totals only, per shop per day:
+-- seen (in someone's results), open (page opened), go ("Let's go!"), site, menu, share, call, stamp (verified visit),
+-- bowl (a logged style). No device IDs, no locations of people, no history of who went where.
+CREATE TABLE IF NOT EXISTS shop_stats (
+  shop TEXT NOT NULL,
+  day  TEXT NOT NULL,
+  kind TEXT NOT NULL,
+  n    INTEGER NOT NULL DEFAULT 0,
+  PRIMARY KEY (shop, day, kind)
+);
+CREATE INDEX IF NOT EXISTS shop_stats_day ON shop_stats (day);
+CREATE TABLE IF NOT EXISTS shop_info (
+  shop    TEXT PRIMARY KEY,
+  name    TEXT NOT NULL,
+  lat     REAL,
+  lon     REAL,
+  updated TEXT
+);
+-- New vs repeat visitors: v is a code that changes every month (a hash of the install ID, the month and a secret),
+-- so a visitor can't be followed from one month to the next.
+CREATE TABLE IF NOT EXISTS shop_visitors (
+  shop  TEXT NOT NULL,
+  month TEXT NOT NULL,
+  v     TEXT NOT NULL,
+  n     INTEGER NOT NULL DEFAULT 0,
+  PRIMARY KEY (shop, month, v)
+);
+-- Busiest times (stamps by weekday 0=Mon and hour) and what people ordered (logged bowl styles), per month.
+CREATE TABLE IF NOT EXISTS shop_hours (
+  shop  TEXT NOT NULL,
+  month TEXT NOT NULL,
+  dow   INTEGER NOT NULL,
+  hour  INTEGER NOT NULL,
+  n     INTEGER NOT NULL DEFAULT 0,
+  PRIMARY KEY (shop, month, dow, hour)
+);
+CREATE TABLE IF NOT EXISTS shop_bowls (
+  shop  TEXT NOT NULL,
+  month TEXT NOT NULL,
+  style TEXT NOT NULL,
+  n     INTEGER NOT NULL DEFAULT 0,
+  PRIMARY KEY (shop, month, style)
+);
