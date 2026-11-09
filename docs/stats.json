@@ -1,38 +1,41 @@
 {
-  "generated": "2026-11-03",
+  "generated": "2026-11-09",
   "overture_release": "2026-10-21.0",
   "candidates": 47231,
-  "checked_this_run": 2093,
+  "checked_this_run": 14622,
   "results_this_run": {
-    "robots": 63,
-    "none": 825,
-    "serves": 914,
-    "shop": 120,
-    "error": 160,
-    "platform": 11
+    "error": 11104,
+    "serves": 1341,
+    "none": 1710,
+    "platform": 380,
+    "shop": 15,
+    "robots": 72
   },
   "all_known": {
-    "none": 27707,
-    "platform": 1547,
-    "serves": 2353,
-    "shop": 120,
-    "error": 13417,
-    "robots": 2087
+    "none": 29417,
+    "platform": 1927,
+    "serves": 2329,
+    "shop": 135,
+    "robots": 2159,
+    "error": 11264
   },
-  "published": 2473,
-  "more_published": 1273,
+  "published": 2464,
+  "more_published": 1285,
   "more": {
-    "generated": "2026-11-02",
-    "published": 1273,
+    "generated": "2026-11-09",
+    "published": 1285,
     "by_way_found": {
       "web": 4,
       "chain": 59,
-      "hall": 10,
+      "hall": 11,
       "noodle": 82,
-      "site": 47,
-      "name": 15,
+      "site": 53,
+      "name": 16,
       "brand": 2,
-      "fsq": 1054
+      "fsq": 1058
+    },
+    "vouched": {
+      "published": 1
     },
     "names": {
       "app": 4900,
@@ -84,15 +87,15 @@
       "Time Out Market New York": 1,
       "Halidom Eatery": 1,
       "Chattahoochee Food Works": 1,
-      "Japan Center Malls": 5
+      "Japan Center Malls": 29
     },
     "web": {
-      "no US address": 4,
-      "not ramen": 1,
-      "unreachable": 1
-    },
-    "vouched": {
-      "published": 1
+      "no US address": 16,
+      "unreachable": 148,
+      "ok": 1,
+      "empty": 2,
+      "elsewhere": 3,
+      "not ramen": 2
     }
   }
 }
