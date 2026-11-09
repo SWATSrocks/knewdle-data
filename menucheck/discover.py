@@ -32,6 +32,45 @@ CONFIG = ROOT / "config.json"
 OPTOUT = ROOT / "optout.txt"
 ADD = ROOT / "add.txt"        # websites of ramen shops to add by hand (new shops the map data doesn't know yet)
 VOUCHED = ROOT / "vouched.txt"  # shops checked in person whose website can't be read
+NOT_RAMEN = ROOT / "not_ramen.txt"  # places a map source filed as ramen by mistake
+
+# Map sources (Foursquare, Overture) sometimes file a place under "ramen restaurant" by mistake, often because its name
+# shares a word with a ramen chain ("Rakkan Equestrian Center"). These words mean "not a restaurant at all".
+NOT_A_RESTAURANT = re.compile(
+    r"\b(equestrian|stables?|riding|ranch|farms?|kennels?|veterinar\w*|vet clinic|church|chapel|ministr\w*|"
+    r"school|academy|daycare|preschool|universit\w*|college|salon|barber\w*|nails?|spa|massage|dental|dentist\w*|"
+    r"clinic|hospital|medical|chiropract\w*|pharmacy|optical|apartments?|condos?|realty|real estate|storage|"
+    r"auto|automotive|tires?|car wash|collision|repair|plumbing|roofing|hvac|insurance|bank|credit union|"
+    r"law firm|attorneys?|gym|fitness|yoga|pilates|crossfit|martial arts|golf|bowling alley|museum|library|"
+    r"cinema|theat(?:er|re)|hotel|motel|inn & suites|laundr\w*|cleaners|print\w* shop|tattoo|pawn|"
+    r"self storage|warehouse|logistics)\b", re.I)
+# ...unless the name also says it's food ("School Sushi", "Waikele Golf Course Restaurant").
+FOOD_WORDS = re.compile(
+    r"ramen|noodle|sushi|kitchen|restaurant|grill|poke|dumpling|cafe|café|asian|bar\b|eatery|food|bistro|fare|"
+    r"diner|izakaya|bowl|pho|thai|japanese|korean|chinese|hibachi|teriyaki|bao|bento|soba|udon|wok|eats?\b", re.I)
+
+
+def load_not_ramen() -> list[tuple[str, str | None]]:
+    """not_ramen.txt: "Place name | City, ST" (or just a name), compared case-insensitively."""
+    if not NOT_RAMEN.exists():
+        return []
+    out = []
+    for raw in NOT_RAMEN.read_text().splitlines():
+        line = raw.split("#", 1)[0].strip()
+        if not line:
+            continue
+        name, _, where = (x.strip() for x in line.partition("|"))
+        if name:
+            out.append((re.sub(r"\s+", " ", name.lower()), re.sub(r"\s+", " ", where.lower()) or None))
+    return out
+
+
+def is_not_ramen(name: str, address: str | None, hidden: list[tuple[str, str | None]]) -> bool:
+    n = re.sub(r"\s+", " ", (name or "").lower()).strip()
+    if NOT_A_RESTAURANT.search(n) and not FOOD_WORDS.search(n):
+        return True
+    a = (address or "").lower()
+    return any(n == hn and (not hw or hw in a) for hn, hw in hidden)
 
 CREDITS = ("Places from Overture Maps Foundation (CDLA-Permissive-2.0). Contains data from Foursquare Open "
            "Source Places, (c) Foursquare Labs, Inc. (Apache License 2.0, see NOTICE-foursquare.txt). "
@@ -308,10 +347,14 @@ def build_published(state: dict, optout: set[str]) -> tuple[list[dict], Counter]
         if s.get("kind") in ("shop", "serves"):
             known.add(s)
     out, why = [], Counter()
+    hidden = load_not_ramen()
 
     def add(entry: dict, f: str, extra: dict | None = None):
         p = {"name": entry["name"], "lat": entry["lat"], "lon": entry["lon"], "website": entry.get("website")}
         if opted_out(p["website"], optout) or known.has(p):
+            return
+        if f != "web" and is_not_ramen(entry["name"], entry.get("address"), hidden):   # vouched shops are never hidden
+            why["not ramen (hidden)"] += 1
             return
         known.add(p)
         why[f] += 1

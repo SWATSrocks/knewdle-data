@@ -57,6 +57,13 @@ just sends you to a delivery app)? Add it to `vouched.txt`: `Shop name | street,
 (website and lat, lon optional). Or use **Actions → Add a shop** and fill in the name and address. It's published as-is
 on the next run, without reading the website.
 
+## Not ramen (`not_ramen.txt`)
+
+Map sources sometimes file a place as a ramen restaurant by mistake (Foursquare listed "Rakkan Equestrian Center", a
+horse-riding center, because of the ramen chain's name). Add a line to `not_ramen.txt` (`Place name | City, ST`) and it
+disappears from the app and the city pages on the next run. Places whose names say they're not restaurants at all
+(stables, salons, clinics, gyms…) and have no food word in them are skipped automatically.
+
 ## Claimed shops (`menucheck/claims.py`, daily)
 
 Owners claim their listing at `docs/shops/` (https://swatsrocks.github.io/knewdle-data/shops/): they find their shop and

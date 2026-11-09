@@ -1,0 +1,4 @@
+# Places that show up as ramen spots but aren't (a map source filed them wrong). One per line:
+#   Place name | City, ST        (or just the place name to hide it everywhere)
+# Removed from the app and the city pages on the next run. Delete a line to bring a place back.
+Rakkan Equestrian Center | Bend, OR

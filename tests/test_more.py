@@ -237,3 +237,17 @@ def test_vouched_lines(tmp_path, monkeypatch):
     assert {p["name"] for p in state["vouched"]} == {"Kung Foo Noodle", "Plain Spot"}
     pub, _ = d.build_published(state, set())
     assert all(p.get("v") == 1 for p in pub)
+
+
+def test_not_ramen(tmp_path, monkeypatch):
+    from menucheck import discover as d
+    f = tmp_path / "not_ramen.txt"
+    f.write_text("# comment\nRakkan Equestrian Center | Bend, OR\nMystery Spot\n")
+    monkeypatch.setattr(d, "NOT_RAMEN", f)
+    h = d.load_not_ramen()
+    assert d.is_not_ramen("Rakkan Equestrian Center", "60920 Larsen Rd, Bend, OR", h)
+    assert d.is_not_ramen("Mystery Spot", "1 Main St, Austin, TX", h)
+    assert d.is_not_ramen("Sunny Acres Riding Stables", "x", [])          # not a restaurant at all
+    for real in ("Paper Horse", "Noodle Factory", "Dumpling Dojo", "School Sushi", "Waikele Golf Course Restaurant",
+                 "Rakkan Ramen", "Yumi Sushi Red Bank"):
+        assert not d.is_not_ramen(real, "x", h), real
