@@ -1,0 +1,36 @@
+name: Hide not-ramen places
+
+# A line added to not_ramen.txt takes effect right away (the app picks it up on its next data refresh, within 6 hours).
+on:
+  push:
+    branches: [main]
+    paths: [not_ramen.txt]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: publish-data
+  cancel-in-progress: false
+
+jobs:
+  hide:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -r requirements.txt
+      - name: Remove listed places and rebuild the city pages
+        run: python -u -m menucheck.hide
+      - name: Publish
+        run: |
+          git config user.name "knewdle-bot"
+          git config user.email "knewdle-bot@users.noreply.github.com"
+          git add docs/menu_ramen.json docs/ramen docs/app docs/llms.txt docs/sitemap.xml
+          git diff --cached --quiet && { echo "nothing to change"; exit 0; }
+          git commit -m "Hide not-ramen places"
+          git pull --rebase origin main
+          git push
