@@ -49,7 +49,8 @@ def load_json(p: Path, default):
     return json.loads(p.read_text()) if p.exists() else default
 
 
-def manual(path: Path = MANUAL) -> list[dict]:
+def manual(path: Path | None = None) -> list[dict]:
+    path = path or MANUAL
     out = []
     if not path.exists():
         return out
