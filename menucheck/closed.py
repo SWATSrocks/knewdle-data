@@ -37,6 +37,7 @@ from .places import PlaceIndex, host_of, same_place
 
 ROOT = Path(__file__).resolve().parent.parent
 MANUAL = ROOT / "closed.txt"
+OPEN_LIST = ROOT / "open.txt"
 EXTRA = ROOT / "state" / "extra_state.json"
 MENU_STATE = ROOT / "state" / "menu_state.json"
 CLAIMS = ROOT / "state" / "claims_state.json"
@@ -48,11 +49,11 @@ def load_json(p: Path, default):
     return json.loads(p.read_text()) if p.exists() else default
 
 
-def manual() -> list[dict]:
+def manual(path: Path = MANUAL) -> list[dict]:
     out = []
-    if not MANUAL.exists():
+    if not path.exists():
         return out
-    for raw in MANUAL.read_text().splitlines():
+    for raw in path.read_text().splitlines():
         line = raw.split("#", 1)[0].strip()
         if not line:
             continue
@@ -62,7 +63,7 @@ def manual() -> list[dict]:
         elif re.match(r"^[a-z0-9.\-]+\.[a-z]{2,}$", line.lower()):
             out.append({"h": host_of(line), "why": "manual"})
         else:
-            print(f"  ! closed.txt: couldn't read line: {raw!r}", file=sys.stderr)
+            print(f"  ! {path.name}: couldn't read line: {raw!r}", file=sys.stderr)
     return out
 
 
@@ -307,7 +308,7 @@ def main() -> int:
     extra = load_json(EXTRA, {})
     listed = listed_places(extra)
     automatic = chain_closed(listed) + foursquare_closed(extra, listed) + website_closed(listed)
-    out = build(extra, manual(), reports_all(), automatic, site_trouble, confirmed=confirmed_open() or [])
+    out = build(extra, manual(), reports_all(), automatic, site_trouble, confirmed=(confirmed_open() or []) + manual(OPEN_LIST))
     for part in ("shops", "maybe"):
         counts: dict[str, int] = {}
         for e in out[part]:

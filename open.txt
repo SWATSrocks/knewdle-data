@@ -1,0 +1,4 @@
+# Shops the developer knows are still open: no "may be closed" warning or automatic hiding, whatever the
+# website checks say. Same formats as closed.txt (website.com, or Name | latitude, longitude).
+# Knewdle Pulse's "Still open" button does the same thing without editing this file.
+ramen-champ.com    # Ramen Champ, 6229 Santa Teresa Blvd, San Jose, CA: open (talked with the owners, Nov 2026)

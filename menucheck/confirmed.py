@@ -8,13 +8,12 @@ from __future__ import annotations
 import json
 import sys
 
-from .closed import EXTRA, OUT, Confirmed, Listed, apply_confirmed, confirmed_open, listed_places, load_json
+from .closed import EXTRA, OPEN_LIST, OUT, manual, Confirmed, Listed, apply_confirmed, confirmed_open, listed_places, load_json
 
 
 def main() -> int:
     confirmed = confirmed_open()
-    if confirmed is None:
-        return 0
+    confirmed = (confirmed or []) + manual(OPEN_LIST)
     out = load_json(OUT, None)
     if not out:
         print("no closed.json yet")
