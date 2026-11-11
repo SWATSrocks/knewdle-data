@@ -98,3 +98,10 @@ CREATE TABLE IF NOT EXISTS shop_bowls (
   n     INTEGER NOT NULL DEFAULT 0,
   PRIMARY KEY (shop, month, style)
 );
+-- Shops the developer confirmed are still open (from Knewdle Pulse); they beat automatic "may be closed" warnings.
+CREATE TABLE IF NOT EXISTS dev_open (
+  id    TEXT PRIMARY KEY,
+  entry TEXT NOT NULL,
+  label TEXT,
+  at    TEXT NOT NULL
+);

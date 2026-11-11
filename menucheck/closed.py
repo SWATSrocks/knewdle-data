@@ -17,6 +17,10 @@ Failsafe the other way ("open"): a visitor who found it open in person (the app'
 stamp) in the last OPEN_TRUST_DAYS days beats every automatic signal above (not closed.txt or people's reports,
 which the Worker already weighs against later "open" visits).
 
+Developer override ("confirmed"): shops Sean marked "still open" in Knewdle Pulse (the Worker's dev_open list) lose
+every automatic signal and single-visitor warning, until he undoes it. menucheck.confirmed applies new ones to the
+published list every 30 minutes, so they don't wait for the daily run.
+
 Each entry carries whatever the app needs to match it to a listing: a name and map point, a website, and/or the
 app's shop key ("website-or-name@lat,lon").
 """
@@ -82,6 +86,17 @@ def reports_all() -> tuple[list[dict], list[dict], dict[str, str]]:
             warn.append({**e, "why": "report", "t": "A visitor said it has closed"})
     opens = {o["k"]: o["last"] for o in data.get("open", []) if o.get("k") and o.get("last")}
     return hide, warn, opens
+
+
+def confirmed_open() -> list[dict] | None:
+    """Shops the developer confirmed are still open (None if the Worker couldn't be reached)."""
+    try:
+        req = urllib.request.Request(REPORTS_URL + "?all=1", headers={"User-Agent": "knewdle-data"})
+        with urllib.request.urlopen(req, timeout=30) as r:
+            return [c for c in json.load(r).get("confirmed", []) if isinstance(c, dict)]
+    except Exception as e:  # noqa: BLE001
+        print(f"  ! couldn't read confirmed-open shops: {type(e).__name__}", file=sys.stderr)
+        return None
 
 
 def listed_places(extra: dict) -> list[dict]:
@@ -202,8 +217,48 @@ def entry_keys(e: dict, listed: Listed) -> set[str]:
     return keys
 
 
+class Confirmed:
+    """The developer's "still open" list, matched the same ways as closure entries."""
+
+    def __init__(self, entries: list[dict], listed: Listed):
+        self.listed = listed
+        self.keys = {c["k"] for c in entries if c.get("k")}
+        self.hosts = {c["h"] for c in entries if c.get("h")}
+        self.all_keys: set[str] = set()
+        for c in entries:
+            self.all_keys |= entry_keys(c, listed)
+
+    def __bool__(self) -> bool:
+        return bool(self.keys or self.hosts or self.all_keys)
+
+    def has(self, e: dict) -> bool:
+        if not self:
+            return False
+        if (e.get("k") and e["k"] in self.keys) or (e.get("h") and e["h"] in self.hosts):
+            return True
+        return bool(entry_keys(e, self.listed) & self.all_keys)
+
+
+def label(e: dict, listed: Listed) -> None:
+    """A readable name for website-only entries (for Knewdle Pulse; the app ignores it)."""
+    if not e.get("n") and not e.get("label"):
+        names = sorted({p["name"] for p in listed.matching(e)})
+        if names:
+            e["label"] = " / ".join(names[:3])[:100]
+
+
+def apply_confirmed(out: dict, confirmed: Confirmed) -> int:
+    """Drops warnings and automatic hides about confirmed-open shops from a closed.json; returns how many."""
+    if not confirmed:
+        return 0
+    before = len(out["shops"]) + len(out["maybe"])
+    out["shops"] = [e for e in out["shops"] if e.get("why") in ("manual", "reports") or not confirmed.has(e)]
+    out["maybe"] = [e for e in out["maybe"] if not confirmed.has(e)]
+    return before - len(out["shops"]) - len(out["maybe"])
+
+
 def build(extra: dict, manual_entries: list[dict], reported: tuple, automatic: list[dict],
-          site_entries_fn=None, today: dt.date | None = None) -> dict:
+          site_entries_fn=None, today: dt.date | None = None, confirmed: list[dict] | None = None) -> dict:
     """The published closed.json: "shops" (hidden), "maybe" (shown with a warning), "open" (found open)."""
     today = today or dt.date.today()
     listed = Listed(listed_places(extra))
@@ -238,15 +293,21 @@ def build(extra: dict, manual_entries: list[dict], reported: tuple, automatic: l
         if len(kinds) >= 2:
             p = by_id[pid]
             hide.append({"n": p["name"], "la": p["lat"], "lo": p["lon"], "w": p.get("website"), "why": "signals"})
-    return {"v": 2, "generated": today.isoformat(), "shops": hide, "maybe": kept_warn,
-            "open": [{"k": k, "last": d} for k, d in sorted(recent_open.items())]}
+    for e in kept_warn:
+        label(e, listed)
+    out = {"v": 2, "generated": today.isoformat(), "shops": hide, "maybe": kept_warn,
+           "open": [{"k": k, "last": d} for k, d in sorted(recent_open.items())]}
+    n = apply_confirmed(out, Confirmed(confirmed or [], listed))
+    if n:
+        print(f"  ✓ {n} warning(s) dropped: the developer confirmed those shops are open")
+    return out
 
 
 def main() -> int:
     extra = load_json(EXTRA, {})
     listed = listed_places(extra)
     automatic = chain_closed(listed) + foursquare_closed(extra, listed) + website_closed(listed)
-    out = build(extra, manual(), reports_all(), automatic, site_trouble)
+    out = build(extra, manual(), reports_all(), automatic, site_trouble, confirmed=confirmed_open() or [])
     for part in ("shops", "maybe"):
         counts: dict[str, int] = {}
         for e in out[part]:

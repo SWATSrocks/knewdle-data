@@ -16,11 +16,12 @@ EXTRA = {"app_known": [
 ]}
 
 
-def _run(automatic=(), reported=([], [], {}), site=()):
+def _run(automatic=(), reported=([], [], {}), site=(), confirmed=None, manual=()):
     old = closed.MENU_STATE
     closed.MENU_STATE = pathlib.Path(tempfile.mkdtemp()) / "none.json"
     try:
-        return closed.build(EXTRA, [], reported, list(automatic), lambda places, per_host: list(site), today=TODAY)
+        return closed.build(EXTRA, list(manual), reported, list(automatic), lambda places, per_host: list(site),
+                            today=TODAY, confirmed=confirmed)
     finally:
         closed.MENU_STATE = old
 
@@ -72,3 +73,28 @@ def test_for_sale_pages():
     assert SITE_GONE.search("This domain is for sale! Buy this domain today")
     assert SITE_GONE.search("Account Suspended. This account has been suspended.")
     assert not SITE_GONE.search("Tonkotsu ramen, open daily 11-9. Order online!")
+
+
+def test_developer_confirmed_open_drops_warnings():
+    dns = {"h": "goneramen.com", "why": "site-dns", "t": "Its website's domain no longer exists"}
+    out = _run(site=[dns])
+    assert out["maybe"][0]["label"] == "Gone Ramen"                       # readable name for Pulse
+    # Confirmed by website, by shop key, or by name + spot: the warning goes either way.
+    for c in ({"h": "goneramen.com"}, {"k": "goneramen.com@35.10,-80.10"}, {"n": "Gone Ramen", "la": 35.1, "lo": -80.1}):
+        assert _run(site=[dns], confirmed=[c])["maybe"] == []
+    # Automatic hides and single-visitor warnings go too; hand-kept closed.txt entries and 2+ phone reports don't.
+    fsq = {"n": "Busy Ramen", "la": 35.20, "lo": -80.20, "why": "foursquare"}
+    rep = {"k": "busyramen.com@35.20,-80.20", "n": "Busy Ramen", "count": 1, "why": "report", "t": "A visitor said"}
+    man = {"n": "Busy Ramen", "la": 35.20, "lo": -80.20, "why": "manual"}
+    out = _run([fsq], ([], [rep], {}), manual=[man], confirmed=[{"h": "busyramen.com"}])
+    assert [e["why"] for e in out["shops"]] == ["manual"] and out["maybe"] == []
+    # Other shops keep theirs.
+    assert len(_run(site=[dns], confirmed=[{"h": "busyramen.com"}])["maybe"]) == 1
+
+
+def test_apply_confirmed_to_published_file():
+    out = {"shops": [{"h": "goneramen.com", "why": "website"}], "maybe": [{"h": "goneramen.com", "why": "site-dns"}]}
+    listed = closed.Listed(closed.listed_places(EXTRA))
+    assert closed.apply_confirmed(out, closed.Confirmed([], listed)) == 0
+    assert closed.apply_confirmed(out, closed.Confirmed([{"h": "goneramen.com"}], listed)) == 2
+    assert out == {"shops": [], "maybe": []}

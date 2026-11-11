@@ -32,6 +32,9 @@
  *                   in_range / unplaced: all installs in the range, and how many had no city (unplaced_by_country);
  *                   earlier: phones from before city tracking, placed at the first shop they rated or reported
  *                   (rounded to ~10 km). Developer-only: 404 without the key.
+ *   GET  /pulse/open?key=PULSE_KEY -> {"shops": [{id, entry, label, at}]}: shops the developer confirmed are still open.
+ *   POST /pulse/open?key=PULSE_KEY {"entry": {k?, h?, n?, la?, lo?}, "label", "open": true|false} -> adds/removes one.
+ *                   A confirmed shop loses any automatic "may be closed" warning (closed.json, rebuilt within ~30 min).
  *   A new install is also pushed to the private ntfy.sh topic derived from PULSE_KEY, which only the widget knows.
  *   GET  /          -> short description
  *
@@ -168,8 +171,55 @@ async function closed(env, all) {
     }
   }
   const body = { generated: new Date().toISOString(), min: MIN_CLOSED_REPORTS, min_here: MIN_HERE_REPORTS, shops };
-  if (all) body.open = open;
+  if (all) {
+    body.open = open;
+    body.confirmed = await confirmedOpen(env);
+  }
   return json(body, 200, { "cache-control": "public, max-age=900" });
+}
+
+// The developer's "still open" confirmations (from Knewdle Pulse): they beat automatic "may be closed" warnings.
+async function confirmedOpen(env) {
+  const { results } = await env.DB.prepare("SELECT entry, at FROM dev_open ORDER BY at DESC").all();
+  return results.map((r) => { try { return { ...JSON.parse(r.entry), at: r.at }; } catch { return null; } }).filter(Boolean);
+}
+
+function cleanEntry(e) {
+  if (!e || typeof e !== "object") return null;
+  const out = {};
+  if (typeof e.k === "string" && e.k.length <= 140) out.k = e.k.toLowerCase();
+  if (typeof e.h === "string" && /^[a-z0-9.-]{3,120}$/i.test(e.h)) out.h = e.h.toLowerCase();
+  if (typeof e.n === "string" && e.n.trim()) out.n = e.n.trim().slice(0, 100);
+  const la = Number(e.la), lo = Number(e.lo);
+  if (Number.isFinite(la) && Number.isFinite(lo) && Math.abs(la) <= 90 && Math.abs(lo) <= 180) { out.la = la; out.lo = lo; }
+  if (!out.k && !out.h && !(out.n && out.la !== undefined)) return null;
+  return out;
+}
+
+function entryId(e) {
+  return e.k ? "k:" + e.k : e.h ? "h:" + e.h : "p:" + e.n.toLowerCase() + "@" + e.la.toFixed(4) + "," + e.lo.toFixed(4);
+}
+
+async function pulseOpen(request, env) {
+  if (request.method === "GET") {
+    const { results } = await env.DB.prepare("SELECT id, entry, label, at FROM dev_open ORDER BY at DESC").all();
+    return { shops: results.map((r) => ({ id: r.id, entry: JSON.parse(r.entry), label: r.label, at: r.at })) };
+  }
+  let body;
+  try { body = await request.json(); } catch { return null; }
+  const e = cleanEntry(body.entry);
+  if (!e) return null;
+  const id = entryId(e);
+  if (body.open === false) {
+    await env.DB.prepare("DELETE FROM dev_open WHERE id = ?").bind(id).run();
+  } else {
+    const label = String(body.label || e.n || e.h || e.k).slice(0, 120);
+    await env.DB.prepare(
+      "INSERT INTO dev_open (id, entry, label, at) VALUES (?, ?, ?, ?) " +
+        "ON CONFLICT(id) DO UPDATE SET entry = excluded.entry, label = excluded.label, at = excluded.at"
+    ).bind(id, JSON.stringify(e), label, new Date().toISOString().slice(0, 10)).run();
+  }
+  return { id };
 }
 
 async function averages(env) {
@@ -662,6 +712,12 @@ export default {
       if (url.pathname === "/pulse/origin" && request.method === "GET") {
         if (!env.PULSE_KEY || !sameKey(String(url.searchParams.get("key") || ""), env.PULSE_KEY)) return json({ ok: false, error: "not found" }, 404);
         return json({ ok: true, ...(await originStats(env)) }, 200, { "cache-control": "no-store" });
+      }
+      if (url.pathname === "/pulse/open" && (request.method === "GET" || request.method === "POST")) {
+        if (!env.PULSE_KEY || !sameKey(String(url.searchParams.get("key") || ""), env.PULSE_KEY)) return json({ ok: false, error: "not found" }, 404);
+        const out = await pulseOpen(request, env);
+        if (!out) return json({ ok: false, error: "bad request" }, 400);
+        return json({ ok: true, ...out }, 200, { "cache-control": "no-store" });
       }
       if (url.pathname === "/pulse" && request.method === "GET") {
         if (!env.PULSE_KEY || !sameKey(String(url.searchParams.get("key") || ""), env.PULSE_KEY)) return json({ ok: false, error: "not found" }, 404);
