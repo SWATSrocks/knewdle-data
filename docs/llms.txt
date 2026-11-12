@@ -1,6 +1,6 @@
 # Knewdle NOW
 
-> Knewdle NOW (pronounced "noodle now") is a free Android app that finds ramen open right now near you, anywhere in the US. It covers 7,802 ramen spots, including restaurants that only have ramen on their menu (sushi bars, fusion spots, noodle houses), found by reading each restaurant's own menu.
+> Knewdle NOW (pronounced "noodle now") is a free Android app that finds ramen open right now near you, anywhere in the US. It covers 7,806 ramen spots, including restaurants that only have ramen on their menu (sushi bars, fusion spots, noodle houses), found by reading each restaurant's own menu.
 
 Key facts:
 - Free on Google Play (Android, United States). No in-app purchases; supported by a banner ad. No iPhone version yet.
