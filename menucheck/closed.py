@@ -90,15 +90,34 @@ def reports_all() -> tuple[list[dict], list[dict], dict[str, str]]:
     return hide, warn, opens
 
 
-def confirmed_open() -> list[dict] | None:
-    """Shops the developer confirmed are still open (None if the Worker couldn't be reached)."""
+def developer_lists() -> tuple[list[dict], list[dict]] | None:
+    """The developer's Knewdle Pulse lists: (confirmed open, pulled down). None if the Worker couldn't be reached."""
     try:
         req = urllib.request.Request(REPORTS_URL + "?all=1", headers={"User-Agent": "knewdle-data"})
         with urllib.request.urlopen(req, timeout=30) as r:
-            return [c for c in json.load(r).get("confirmed", []) if isinstance(c, dict)]
+            d = json.load(r)
+        ok = lambda l: [{k: v for k, v in c.items() if k != "at"} for c in l if isinstance(c, dict)]  # noqa: E731
+        return ok(d.get("confirmed", [])), ok(d.get("hidden", []))
     except Exception as e:  # noqa: BLE001
-        print(f"  ! couldn't read confirmed-open shops: {type(e).__name__}", file=sys.stderr)
+        print(f"  ! couldn't read the developer's lists: {type(e).__name__}", file=sys.stderr)
         return None
+
+
+def confirmed_open() -> list[dict] | None:
+    """Shops the developer confirmed are still open (None if the Worker couldn't be reached)."""
+    lists = developer_lists()
+    return None if lists is None else lists[0]
+
+
+def apply_pulled(out: dict, pulled: list[dict], listed: "Listed") -> int:
+    """Shops the developer pulled down (Knewdle Pulse) are hidden ("why": "dev"); undone ones come back. Returns changes."""
+    before = json.dumps([out["shops"], out["maybe"]], sort_keys=True)
+    out["shops"] = [e for e in out["shops"] if e.get("why") != "dev"]
+    if pulled:
+        gone = Confirmed(pulled, listed)
+        out["maybe"] = [e for e in out["maybe"] if not gone.has(e)]
+        out["shops"] += [{**e, "why": "dev"} for e in pulled]
+    return int(before != json.dumps([out["shops"], out["maybe"]], sort_keys=True))
 
 
 def listed_places(extra: dict) -> list[dict]:
@@ -260,7 +279,8 @@ def apply_confirmed(out: dict, confirmed: Confirmed) -> int:
 
 
 def build(extra: dict, manual_entries: list[dict], reported: tuple, automatic: list[dict],
-          site_entries_fn=None, today: dt.date | None = None, confirmed: list[dict] | None = None) -> dict:
+          site_entries_fn=None, today: dt.date | None = None, confirmed: list[dict] | None = None,
+          pulled: list[dict] | None = None) -> dict:
     """The published closed.json: "shops" (hidden), "maybe" (shown with a warning), "open" (found open)."""
     today = today or dt.date.today()
     listed = Listed(listed_places(extra))
@@ -302,6 +322,9 @@ def build(extra: dict, manual_entries: list[dict], reported: tuple, automatic: l
     n = apply_confirmed(out, Confirmed(confirmed or [], listed))
     if n:
         print(f"  ✓ {n} warning(s) dropped: the developer confirmed those shops are open")
+    if pulled:
+        apply_pulled(out, pulled, listed)
+        print(f"  ✓ {len(pulled)} shop(s) pulled down by the developer")
     return out
 
 
@@ -309,7 +332,9 @@ def main() -> int:
     extra = load_json(EXTRA, {})
     listed = listed_places(extra)
     automatic = chain_closed(listed) + foursquare_closed(extra, listed) + website_closed(listed)
-    out = build(extra, manual(), reports_all(), automatic, site_trouble, confirmed=(confirmed_open() or []) + manual(OPEN_LIST))
+    dev_open, pulled = developer_lists() or ([], [])
+    out = build(extra, manual(), reports_all(), automatic, site_trouble,
+                confirmed=dev_open + manual(OPEN_LIST), pulled=pulled)
     for part in ("shops", "maybe"):
         counts: dict[str, int] = {}
         for e in out[part]:

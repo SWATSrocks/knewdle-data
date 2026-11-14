@@ -105,3 +105,10 @@ CREATE TABLE IF NOT EXISTS dev_open (
   label TEXT,
   at    TEXT NOT NULL
 );
+-- Shops the developer pulled down from Knewdle Pulse (not a ramen spot, or gone). Applied live by the app via /overrides.
+CREATE TABLE IF NOT EXISTS dev_hide (
+  id    TEXT PRIMARY KEY,
+  entry TEXT NOT NULL,
+  label TEXT,
+  at    TEXT NOT NULL
+);

@@ -35,6 +35,8 @@
  *   GET  /pulse/open?key=PULSE_KEY -> {"shops": [{id, entry, label, at}]}: shops the developer confirmed are still open.
  *   POST /pulse/open?key=PULSE_KEY {"entry": {k?, h?, n?, la?, lo?}, "label", "open": true|false} -> adds/removes one.
  *                   A confirmed shop loses any automatic "may be closed" warning (closed.json, rebuilt within ~30 min).
+ *   GET/POST /pulse/hide?key=PULSE_KEY  same shape as /pulse/open with "hide": true|false: pull a shop down (not ramen, or gone).
+ *   GET  /overrides -> {"open": [...], "hide": [...]}: public, cached 60 s; the app applies it on top of closed.json.
  *   A new install is also pushed to the private ntfy.sh topic derived from PULSE_KEY, which only the widget knows.
  *   GET  /          -> short description
  *
@@ -174,14 +176,14 @@ async function closed(env, all) {
   if (all) {
     body.open = open;
     body.confirmed = await confirmedOpen(env);
+    body.hidden = await devEntries(env, "dev_hide");
   }
   return json(body, 200, { "cache-control": "public, max-age=900" });
 }
 
 // The developer's "still open" confirmations (from Knewdle Pulse): they beat automatic "may be closed" warnings.
 async function confirmedOpen(env) {
-  const { results } = await env.DB.prepare("SELECT entry, at FROM dev_open ORDER BY at DESC").all();
-  return results.map((r) => { try { return { ...JSON.parse(r.entry), at: r.at }; } catch { return null; } }).filter(Boolean);
+  return devEntries(env, "dev_open");
 }
 
 function cleanEntry(e) {
@@ -200,9 +202,19 @@ function entryId(e) {
   return e.k ? "k:" + e.k : e.h ? "h:" + e.h : "p:" + e.n.toLowerCase() + "@" + e.la.toFixed(4) + "," + e.lo.toFixed(4);
 }
 
-async function pulseOpen(request, env) {
+// The developer's two override lists (from Knewdle Pulse): dev_open ("still open": drops "may be closed" warnings)
+// and dev_hide ("pull it down": not a ramen spot, or gone). Phones read both live from /overrides.
+const DEV_TABLES = { open: "dev_open", hide: "dev_hide" };
+
+async function devEntries(env, table) {
+  const { results } = await env.DB.prepare(`SELECT entry, at FROM ${table} ORDER BY at DESC`).all();
+  return results.map((r) => { try { return { ...JSON.parse(r.entry), at: r.at }; } catch { return null; } }).filter(Boolean);
+}
+
+async function pulseDevList(request, env, kind) {
+  const table = DEV_TABLES[kind];
   if (request.method === "GET") {
-    const { results } = await env.DB.prepare("SELECT id, entry, label, at FROM dev_open ORDER BY at DESC").all();
+    const { results } = await env.DB.prepare(`SELECT id, entry, label, at FROM ${table} ORDER BY at DESC`).all();
     return { shops: results.map((r) => ({ id: r.id, entry: JSON.parse(r.entry), label: r.label, at: r.at })) };
   }
   let body;
@@ -210,16 +222,24 @@ async function pulseOpen(request, env) {
   const e = cleanEntry(body.entry);
   if (!e) return null;
   const id = entryId(e);
-  if (body.open === false) {
-    await env.DB.prepare("DELETE FROM dev_open WHERE id = ?").bind(id).run();
+  if (body[kind] === false) {
+    await env.DB.prepare(`DELETE FROM ${table} WHERE id = ?`).bind(id).run();
   } else {
     const label = String(body.label || e.n || e.h || e.k).slice(0, 120);
     await env.DB.prepare(
-      "INSERT INTO dev_open (id, entry, label, at) VALUES (?, ?, ?, ?) " +
+      `INSERT INTO ${table} (id, entry, label, at) VALUES (?, ?, ?, ?) ` +
         "ON CONFLICT(id) DO UPDATE SET entry = excluded.entry, label = excluded.label, at = excluded.at"
     ).bind(id, JSON.stringify(e), label, new Date().toISOString().slice(0, 10)).run();
   }
   return { id };
+}
+
+// Public and tiny: what the app applies on top of closed.json, so a Pulse tap reaches phones within minutes.
+async function overrides(env) {
+  const [open, hide] = await Promise.all([devEntries(env, "dev_open"), devEntries(env, "dev_hide")]);
+  const strip = (l) => l.map(({ at, ...e }) => e);
+  return json({ v: 1, generated: new Date().toISOString(), open: strip(open), hide: strip(hide) },
+    200, { "cache-control": "public, max-age=60" });
 }
 
 async function averages(env) {
@@ -713,9 +733,10 @@ export default {
         if (!env.PULSE_KEY || !sameKey(String(url.searchParams.get("key") || ""), env.PULSE_KEY)) return json({ ok: false, error: "not found" }, 404);
         return json({ ok: true, ...(await originStats(env)) }, 200, { "cache-control": "no-store" });
       }
-      if (url.pathname === "/pulse/open" && (request.method === "GET" || request.method === "POST")) {
+      if (url.pathname === "/overrides" && request.method === "GET") return await overrides(env);
+      if ((url.pathname === "/pulse/open" || url.pathname === "/pulse/hide") && (request.method === "GET" || request.method === "POST")) {
         if (!env.PULSE_KEY || !sameKey(String(url.searchParams.get("key") || ""), env.PULSE_KEY)) return json({ ok: false, error: "not found" }, 404);
-        const out = await pulseOpen(request, env);
+        const out = await pulseDevList(request, env, url.pathname.endsWith("/hide") ? "hide" : "open");
         if (!out) return json({ ok: false, error: "bad request" }, 400);
         return json({ ok: true, ...out }, 200, { "cache-control": "no-store" });
       }

@@ -16,12 +16,12 @@ EXTRA = {"app_known": [
 ]}
 
 
-def _run(automatic=(), reported=([], [], {}), site=(), confirmed=None, manual=()):
+def _run(automatic=(), reported=([], [], {}), site=(), confirmed=None, manual=(), pulled=None):
     old = closed.MENU_STATE
     closed.MENU_STATE = pathlib.Path(tempfile.mkdtemp()) / "none.json"
     try:
         return closed.build(EXTRA, list(manual), reported, list(automatic), lambda places, per_host: list(site),
-                            today=TODAY, confirmed=confirmed)
+                            today=TODAY, confirmed=confirmed, pulled=pulled)
     finally:
         closed.MENU_STATE = old
 
@@ -98,3 +98,13 @@ def test_apply_confirmed_to_published_file():
     assert closed.apply_confirmed(out, closed.Confirmed([], listed)) == 0
     assert closed.apply_confirmed(out, closed.Confirmed([{"h": "goneramen.com"}], listed)) == 2
     assert out == {"shops": [], "maybe": []}
+
+
+def test_developer_pulled_down_shops_are_hidden_and_come_back():
+    pulled = [{"n": "Snack Shack", "la": 37.386964, "lo": -122.109505}]
+    out = _run(site=[{"h": "goneramen.com", "why": "site-dns", "t": "x"}], pulled=pulled)
+    assert {"n": "Snack Shack", "la": 37.386964, "lo": -122.109505, "why": "dev"} in out["shops"]
+    listed = closed.Listed(closed.listed_places(EXTRA))
+    assert closed.apply_pulled(out, [], listed) == 1                       # undone: it comes back
+    assert not [e for e in out["shops"] if e["why"] == "dev"]
+    assert closed.apply_pulled(out, [], listed) == 0                       # nothing more to change

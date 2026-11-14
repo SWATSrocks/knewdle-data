@@ -1,27 +1,37 @@
-"""Applies the developer's "still open" confirmations (Knewdle Pulse) to the published docs/closed.json right away,
-without the rest of the daily closed-shops run. Run every 30 minutes by .github/workflows/confirmed-open.yml.
+"""Applies the developer's Knewdle Pulse lists to the published docs/closed.json right away, without the rest of the
+daily closed-shops run: "still open" drops a shop's warnings, "pull down" hides it (and undoing a pull brings it back).
+Run every 30 minutes by .github/workflows/confirmed-open.yml. (Phones apply both lists live from the Worker's
+/overrides; this keeps closed.json, the city pages and older app versions in step.)
 
-Undoing a confirmation can't bring a warning back here (it isn't in the file any more); the next daily run does.
+Undoing a "still open" can't bring a warning back here (it isn't in the file any more); the next daily run does.
 """
 from __future__ import annotations
 
 import json
 import sys
 
-from .closed import EXTRA, OPEN_LIST, OUT, manual, Confirmed, Listed, apply_confirmed, confirmed_open, listed_places, load_json
+from .closed import (EXTRA, OPEN_LIST, OUT, Confirmed, Listed, apply_confirmed, apply_pulled, developer_lists,
+                     listed_places, load_json, manual)
 
 
 def main() -> int:
-    confirmed = confirmed_open()
-    confirmed = (confirmed or []) + manual(OPEN_LIST)
+    lists = developer_lists()
+    if lists is None:
+        return 0
+    dev_open, pulled = lists
+    confirmed = dev_open + manual(OPEN_LIST)
     out = load_json(OUT, None)
     if not out:
         print("no closed.json yet")
         return 0
-    n = apply_confirmed(out, Confirmed(confirmed, Listed(listed_places(load_json(EXTRA, {})))))
-    print(f"{len(confirmed)} confirmed open; {n} warning(s) dropped now")
-    if n:
+    listed = Listed(listed_places(load_json(EXTRA, {})))
+    n = apply_confirmed(out, Confirmed(confirmed, listed))
+    m = apply_pulled(out, pulled, listed)
+    print(f"{len(confirmed)} confirmed open, {len(pulled)} pulled down; {n} warning(s) dropped; pulled list changed: {bool(m)}")
+    if n or m:
         OUT.write_text(json.dumps(out, separators=(",", ":"), ensure_ascii=False))
+        from . import citypages
+        citypages.build()
     return 0
 
 
