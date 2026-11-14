@@ -2,3 +2,4 @@
 #   Place name | City, ST        (or just the place name to hide it everywhere)
 # Removed from the app and the city pages on the next run. Delete a line to bring a place back.
 Rakkan Equestrian Center | Bend, OR
+Snack Shack | Los Altos, CA    # a school snack bar (201 Almond Ave), not a restaurant
