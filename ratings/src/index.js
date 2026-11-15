@@ -850,6 +850,7 @@ export default {
       const push = (m) => pushPulse(env, m);
       if (url.pathname === "/featured/offer" && request.method === "GET") return await featured.offer(env);
       if (url.pathname === "/featured/start" && request.method === "POST") return await featured.start(request, env, push);
+      if (url.pathname === "/featured/problem" && request.method === "POST") return await featured.pageProblem(request, env, push);
       if (url.pathname === "/paypal/webhook" && request.method === "POST") return await featured.webhook(request, env, push);
       if (url.pathname.startsWith("/pulse/subs") || url.pathname === "/pulse/paypal/setup") {
         if (!env.PULSE_KEY || !sameKey(String(url.searchParams.get("key") || ""), env.PULSE_KEY)) return json({ ok: false, error: "not found" }, 404);

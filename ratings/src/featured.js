@@ -172,6 +172,7 @@ async function sync(env, subId, shop) {
   try { s = await paypal(env, "GET", "/v1/billing/subscriptions/" + subId); } catch (e) { if (e.status === 404) return null; throw e; }
   const info = planInfo(cfg, s.plan_id);
   if (!info) return null;   // not one of our plans
+  if (!shop) shop = await pendingShop(env, subId);
   const key = String(s.custom_id || shop?.k || "");
   if (!SHOP_KEY.test(key)) return null;
   const status = String(s.status || "");
@@ -243,8 +244,18 @@ export async function start(request, env, push) {
   const subId = String(body.subscription_id || "");
   const shop = body.shop || {};
   if (!SUB_ID.test(subId) || !SHOP_KEY.test(String(shop.k || ""))) return out({ ok: false, error: "bad request" }, 400);
-  const r = await sync(env, subId, shop);
-  if (!r) return out({ ok: false, error: "We couldn't find that subscription at PayPal" }, 404);
+  // Save who this is for first, so a hiccup below never loses a paying shop (the hourly check finishes the job).
+  await env.DB.prepare("INSERT OR REPLACE INTO paypal_config (k, v) VALUES (?, ?)")
+    .bind("pending:" + subId, JSON.stringify({ k: shop.k, n: shop.n, la: shop.la, lo: shop.lo, a: shop.a, at: Date.now() })).run();
+  let r;
+  try { r = await sync(env, subId, shop); } catch (e) {
+    await problem(env, push, `Signup not confirmed yet: ${shop.n || shop.k}`, `PayPal ${subId}: ${String(e.message || e).slice(0, 120)}. Retrying hourly.`);
+    return out({ ok: false, error: "PayPal is slow to confirm. Your subscription activates automatically within the hour." }, 502);
+  }
+  if (!r) {
+    await problem(env, push, `Signup didn't match: ${shop.n || shop.k}`, `PayPal ${subId} isn't one of our plans or has no shop. Check it in PayPal.`);
+    return out({ ok: false, error: "We couldn't find that subscription at PayPal" }, 404);
+  }
   if (r.change) await tell(env, push, r.row, r.change);
   return out({ ok: true, featured: isLive(r.row), status: r.row.status, tier: r.row.tier, founding: !!r.row.founding });
 }
@@ -274,7 +285,9 @@ export async function resync(env, push) {
     "SELECT sub_id FROM featured_subs WHERE mode = ? AND (status IN ('APPROVAL_PENDING', 'APPROVED', 'ACTIVE', 'SUSPENDED') " +
     "OR (status = 'CANCELLED' AND paid_through > ?)) ORDER BY updated_at LIMIT 40"
   ).bind(mode, Date.now() - 3 * 86400000).all();
-  for (const { sub_id } of results) {
+  const pend = await env.DB.prepare(
+    "SELECT substr(k, 9) AS sub_id FROM paypal_config WHERE k LIKE 'pending:%' AND substr(k, 9) NOT IN (SELECT sub_id FROM featured_subs) LIMIT 20").all();
+  for (const { sub_id } of [...results, ...pend.results]) {
     try {
       const r = await sync(env, sub_id, null);
       if (r && r.change) await tell(env, push, r.row, r.change);
@@ -333,4 +346,32 @@ export async function pulseSubAction(request, env) {
     return out({ ok: true });
   }
   return out({ ok: false, error: "bad action" }, 400);
+}
+
+async function pendingShop(env, subId) {
+  const r = await env.DB.prepare("SELECT v FROM paypal_config WHERE k = ?").bind("pending:" + subId).first();
+  try { return r ? JSON.parse(r.v) : null; } catch { return null; }
+}
+
+// A ⚠️ alert to Knewdle Pulse (subscriber channel) when a signup goes wrong. At most 30 a day.
+export async function problem(env, push, title, text) {
+  if (!push) return;
+  const day = "problems:" + new Date().toISOString().slice(0, 10);
+  const r = await env.DB.prepare("SELECT v FROM paypal_config WHERE k = ?").bind(day).first();
+  const n = Number(r?.v || 0);
+  if (n >= 30) return;
+  await env.DB.prepare("INSERT OR REPLACE INTO paypal_config (k, v) VALUES (?, ?)").bind(day, String(n + 1)).run();
+  await push({ kind: "sub", change: "problem", title: "⚠️ " + title, text, ts: Date.now() });
+}
+
+// Public: the Get Featured page reports what went wrong for a visitor (PayPal error, couldn't load, etc.).
+export async function pageProblem(request, env, push) {
+  let b;
+  try { b = await request.json(); } catch { return out({ ok: false }, 400); }
+  const what = String(b.what || "").replace(/[\u0000-\u001f]/g, " ").slice(0, 160);
+  const shop = String(b.shop || "a shop").replace(/[\u0000-\u001f]/g, " ").slice(0, 80);
+  const tier = String(b.tier || "").slice(0, 20);
+  if (!what) return out({ ok: false }, 400);
+  await problem(env, push, `Signup problem: ${shop}`, (tier ? tier + " · " : "") + what);
+  return out({ ok: true });
 }

@@ -200,6 +200,12 @@ footer{padding:30px 0 50px;text-align:center;color:var(--muted);font-size:14px}
     return sdkReady;
   }
 
+  // Tell the developer's phone (Knewdle Pulse) when something goes wrong, so it gets fixed fast.
+  function report(what) {
+    try { fetch(API + '/featured/problem', { method: 'POST', headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ what: String(what).slice(0, 160), shop: shop && shop.n, tier: chosen && chosen.name }), keepalive: true }); } catch (e) {}
+  }
+
   async function choose(key) {
     chosen = offer.tiers.find((t) => t.key === key);
     document.querySelectorAll('.tier').forEach((b) => b.classList.toggle('sel', b.dataset.k === key));
@@ -209,7 +215,7 @@ footer{padding:30px 0 50px;text-align:center;color:var(--muted);font-size:14px}
     $('paySum').textContent = (shop.n || 'Your shop') + ' · ' + money(founding ? chosen.founding_price : chosen.price) + ' a month' + (founding ? ' (founding price, kept while you stay subscribed)' : '');
     $('pay').scrollIntoView({ behavior: 'smooth', block: 'start' });
     showErr('');
-    try { await loadSdk(); } catch (e) { showErr('PayPal could not load. Check your connection and try again.'); return; }
+    try { await loadSdk(); } catch (e) { report('PayPal checkout could not load'); showErr('PayPal could not load. Check your connection and try again.'); return; }
     $('paypal').innerHTML = '';
     window.paypal.Buttons({
       style: { shape: 'pill', color: 'gold', layout: 'vertical', label: 'subscribe' },
@@ -219,16 +225,18 @@ footer{padding:30px 0 50px;text-align:center;color:var(--muted);font-size:14px}
           const r = await fetch(API + '/featured/start', { method: 'POST', headers: { 'content-type': 'application/json' },
             body: JSON.stringify({ subscription_id: data.subscriptionID, shop }) });
           const d = await r.json();
+          if (!d.ok) report('Paid, but confirm failed: ' + (d.error || r.status) + ' (' + data.subscriptionID + ')');
           $('plans').hidden = true; $('done').classList.add('show');
           $('doneTxt').textContent = d.featured
             ? (shop.n || 'Your shop') + ' is now Featured (' + chosen.name + '). It shows in green in Knewdle NOW within a couple of minutes.'
             : 'Thanks! PayPal is finishing your subscription. ' + (shop.n || 'Your shop') + ' turns green in the app as soon as it does, usually within minutes.';
           window.scrollTo({ top: 0, behavior: 'smooth' });
         } catch (e) {
+          report('Paid, but the page could not reach the server (' + data.subscriptionID + ')');
           showErr('Your PayPal subscription went through, but we couldn\'t confirm it here. Don\'t worry: it activates automatically within the hour. Questions: info@swats.rocks');
         }
       },
-      onError: () => showErr('PayPal had a problem. Nothing was charged. Please try again.'),
+      onError: (err) => { report('PayPal error: ' + ((err && err.message) || err)); showErr('PayPal had a problem. Nothing was charged. Please try again.'); },
     }).render('#paypal');
   }
 
