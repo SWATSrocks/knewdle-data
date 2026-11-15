@@ -260,12 +260,29 @@ class Confirmed:
         return bool(entry_keys(e, self.listed) & self.all_keys)
 
 
+def _city(address: str | None) -> str | None:
+    """"220 Castro St, Mountain View, CA 94040" -> "Mountain View, CA"."""
+    parts = [p.strip() for p in (address or "").split(",") if p.strip()]
+    if len(parts) < 2:
+        return None
+    state = parts[-1].split()[0] if parts[-1].split() else ""
+    return f"{parts[-2]}, {state}" if len(state) == 2 and state.isalpha() else None
+
+
 def label(e: dict, listed: Listed) -> None:
-    """A readable name for website-only entries (for Knewdle Pulse; the app ignores it)."""
+    """A readable name for website-only entries, and the city of every entry (for Knewdle Pulse's "Check on
+    Google"; the app ignores both)."""
+    found = None
     if not e.get("n") and not e.get("label"):
-        names = sorted({p["name"] for p in listed.matching(e)})
+        found = listed.matching(e)
+        names = sorted({p["name"] for p in found})
         if names:
             e["label"] = " / ".join(names[:3])[:100]
+    if not e.get("where"):
+        found = found if found is not None else listed.matching(e)
+        cities = sorted({c for c in (_city(p.get("address")) for p in found) if c})
+        if len(cities) == 1:
+            e["where"] = cities[0]
 
 
 def apply_confirmed(out: dict, confirmed: Confirmed) -> int:
