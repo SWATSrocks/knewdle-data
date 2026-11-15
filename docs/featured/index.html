@@ -264,6 +264,12 @@ footer{padding:30px 0 50px;text-align:center;color:var(--muted);font-size:14px}
   fetch(API + '/featured/offer').then((r) => r.json()).then((d) => {
     $('pick').hidden = false;
     if (!d.ok) { $('plans').hidden = false; showErr('Featured is opening soon. Email info@swats.rocks to be first in line.'); return; }
+    // While PayPal is still in test mode, real visitors never see the test checkout. Only the developer (?test=1) does.
+    if (d.mode === 'sandbox' && P.get('test') !== '1') {
+      $('plans').hidden = false;
+      showErr('Featured spots open soon. Email info@swats.rocks to grab one of the 15 half-price founding spots first.');
+      return;
+    }
     offer = d;
     $('sandbox').hidden = d.mode !== 'sandbox';
     renderTiers();

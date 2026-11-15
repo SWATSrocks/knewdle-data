@@ -246,9 +246,9 @@ async function pulseDevList(request, env, kind) {
 }
 
 // Public and tiny: what the app applies on top of closed.json, so a Pulse tap reaches phones within minutes.
-async function overrides(env) {
+async function overrides(env, test = false) {
   const [open, hide, fix, feat] = await Promise.all([devEntries(env, "dev_open"), devEntries(env, "dev_hide"), devEntries(env, "dev_fix"),
-    featured.featuredList(env).catch(() => [])]);
+    featured.featuredList(env, test).catch(() => [])]);
   const strip = (l) => l.map(({ at, ...e }) => e);
   return json({ v: 1, generated: new Date().toISOString(), open: strip(open), hide: strip(hide), fix: strip(fix), featured: feat },
     200, { "cache-control": "public, max-age=60" });
@@ -845,7 +845,7 @@ export default {
         if (!env.PULSE_KEY || !sameKey(String(url.searchParams.get("key") || ""), env.PULSE_KEY)) return json({ ok: false, error: "not found" }, 404);
         return json({ ok: true, ...(await originStats(env)) }, 200, { "cache-control": "no-store" });
       }
-      if (url.pathname === "/overrides" && request.method === "GET") return await overrides(env);
+      if (url.pathname === "/overrides" && request.method === "GET") return await overrides(env, url.searchParams.get("test") === "1");
       // Knewdle NOW Featured (shop subscriptions through PayPal), see featured.js.
       const push = (m) => pushPulse(env, m);
       if (url.pathname === "/featured/offer" && request.method === "GET") return await featured.offer(env);

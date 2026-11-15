@@ -283,11 +283,11 @@ export async function resync(env, push) {
 }
 
 // For /overrides: the shops featured right now.
-export async function featuredList(env) {
-  const mode = paypalMode(env);
-  if (!mode) return [];
-  const { results } = await env.DB.prepare("SELECT shop, name, la, lo, tier, status, paid_through, paused FROM featured_subs WHERE mode = ?")
-    .bind(mode).all();
+// Everyone sees only real (live) subscriptions. Sandbox test ones show only to a phone in developer test mode (?test=1).
+export async function featuredList(env, test = false) {
+  const { results } = await env.DB.prepare(
+    "SELECT shop, name, la, lo, tier, status, paid_through, paused FROM featured_subs WHERE mode = 'live'" + (test ? " OR mode = 'sandbox'" : ""))
+    .all();
   const now = Date.now();
   const best = new Map();
   for (const r of results) {
