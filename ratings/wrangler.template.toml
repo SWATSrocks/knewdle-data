@@ -7,3 +7,6 @@ workers_dev = true
 binding = "DB"
 database_name = "knewdle-ratings"
 database_id = "__DATABASE_ID__"
+
+[triggers]
+crons = ["23 * * * *"]

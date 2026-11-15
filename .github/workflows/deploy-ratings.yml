@@ -62,6 +62,33 @@ jobs:
           PULSE_KEY: ${{ secrets.PULSE_KEY }}
         run: |
           if [ -n "$PULSE_KEY" ]; then printf '%s' "$PULSE_KEY" | npx -y wrangler@4 secret put PULSE_KEY; else echo "No PULSE_KEY secret yet: install alerts are counted but not pushed"; fi
+      - name: PayPal keys for Knewdle NOW Featured (sandbox now; live once PAYPAL_CLIENT_ID / PAYPAL_SECRET exist)
+        env:
+          PAYPAL_SANDBOX_CLIENT_ID: ${{ secrets.PAYPAL_SANDBOX_CLIENT_ID }}
+          PAYPAL_SANDBOX_SECRET: ${{ secrets.PAYPAL_SANDBOX_SECRET }}
+          PAYPAL_CLIENT_ID: ${{ secrets.PAYPAL_CLIENT_ID }}
+          PAYPAL_SECRET: ${{ secrets.PAYPAL_SECRET }}
+        run: |
+          for n in PAYPAL_SANDBOX_CLIENT_ID PAYPAL_SANDBOX_SECRET PAYPAL_CLIENT_ID PAYPAL_SECRET; do
+            v="${!n}"
+            if [ -n "$v" ]; then printf '%s' "$v" | npx -y wrangler@4 secret put "$n" >/dev/null && echo "set $n"; else echo "no $n yet"; fi
+          done
+      - name: PayPal plans and webhook (once per mode; safe to re-run)
+        env:
+          PULSE_KEY: ${{ secrets.PULSE_KEY }}
+        run: |
+          sleep 8
+          [ -n "$PULSE_KEY" ] || { echo "No PULSE_KEY: skipping"; exit 0; }
+          curl -sS -X POST "https://knewdle-ratings.swatsrocks.workers.dev/pulse/paypal/setup?key=$PULSE_KEY" | python3 -c "
+          import sys, json
+          d = json.load(sys.stdin)
+          print({k: v for k, v in d.items() if k != 'detail'})
+          if not d.get('ok') and d.get('error') != 'No PayPal keys yet':
+              print(json.dumps(d.get('detail'))[:800]); sys.exit(1)"
+          curl -fsS "https://knewdle-ratings.swatsrocks.workers.dev/featured/offer" | python3 -c "
+          import sys, json
+          d = json.load(sys.stdin)
+          print('offer:', d.get('mode'), 'founding left', d.get('founding_left'), [(t['key'], bool(t['plan'])) for t in d.get('tiers', [])])"
       - name: Smoke test
         run: |
           sleep 10

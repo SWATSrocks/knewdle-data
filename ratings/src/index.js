@@ -1,3 +1,4 @@
+import * as featured from "./featured.js";
 /**
  * Knewdle NOW ratings: a tiny free Cloudflare Worker.
  *
@@ -40,6 +41,11 @@
  *                   its pin: the Census geocoder looks the address up unless la/lo are given); "fix": false undoes it.
  *   POST /shopclick {"device", "item", "link"} -> counts a tap on an Instant-tab shopping link and alerts Pulse ("kind": "shop").
  *   GET  /pulse/shop-clicks?key=PULSE_KEY -> {total, today, people, items: [{item, n}], recent: [{ts, item}]}.
+ *   GET  /featured/offer -> tiers, prices, PayPal plan IDs, founding spots left (Featured shops, see featured.js).
+ *   POST /featured/start {"subscription_id", "shop": {k, n, la, lo, a}} -> records a new PayPal subscription.
+ *   POST /paypal/webhook  -> PayPal's subscription events (each one is re-checked with PayPal before acting).
+ *   GET  /pulse/subs?key=PULSE_KEY, POST /pulse/subs/action?key=... {id, action: pause|unpause|cancel},
+ *   POST /pulse/paypal/setup?key=...  -> creates the PayPal product, plans and webhook once.
  *   GET  /overrides -> {"open": [...], "hide": [...], "fix": [...]}: public, cached 60 s; the app applies it on top of closed.json.
  *   A new install is also pushed to the private ntfy.sh topic derived from PULSE_KEY, which only the widget knows.
  *   GET  /          -> short description
@@ -241,9 +247,10 @@ async function pulseDevList(request, env, kind) {
 
 // Public and tiny: what the app applies on top of closed.json, so a Pulse tap reaches phones within minutes.
 async function overrides(env) {
-  const [open, hide, fix] = await Promise.all([devEntries(env, "dev_open"), devEntries(env, "dev_hide"), devEntries(env, "dev_fix")]);
+  const [open, hide, fix, feat] = await Promise.all([devEntries(env, "dev_open"), devEntries(env, "dev_hide"), devEntries(env, "dev_fix"),
+    featured.featuredList(env).catch(() => [])]);
   const strip = (l) => l.map(({ at, ...e }) => e);
-  return json({ v: 1, generated: new Date().toISOString(), open: strip(open), hide: strip(hide), fix: strip(fix) },
+  return json({ v: 1, generated: new Date().toISOString(), open: strip(open), hide: strip(hide), fix: strip(fix), featured: feat },
     200, { "cache-control": "public, max-age=60" });
 }
 
@@ -723,6 +730,12 @@ async function pulseShopClicks(env) {
   return { total: tot.total || 0, today: tot.today || 0, people: tot.people || 0, items: items.results, recent: recent.results };
 }
 
+// Pushes one message to the private Knewdle Pulse topic (ntfy.sh). Never throws.
+async function pushPulse(env, msg) {
+  if (!env.PULSE_KEY) return;
+  try { await fetch("https://ntfy.sh/" + await pulseTopic(env.PULSE_KEY), { method: "POST", body: JSON.stringify(msg) }); } catch (e) { /* Pulse re-reads on open */ }
+}
+
 // Where installs come from, for the private Pulse map.
 function shopPoint(shop) {
   const m = /@(-?\d+(?:\.\d+)?),(-?\d+(?:\.\d+)?)$/.exec(String(shop || ""));
@@ -783,6 +796,10 @@ async function pulseMap(env, days) {
 
 
 export default {
+  // Hourly: re-checks open Featured subscriptions with PayPal (a missed webhook never matters).
+  async scheduled(event, env, ctx) {
+    ctx.waitUntil(featured.resync(env, (m) => pushPulse(env, m)).catch(() => {}));
+  },
   async fetch(request, env) {
     const url = new URL(request.url);
     if (request.method === "OPTIONS") {
@@ -829,6 +846,20 @@ export default {
         return json({ ok: true, ...(await originStats(env)) }, 200, { "cache-control": "no-store" });
       }
       if (url.pathname === "/overrides" && request.method === "GET") return await overrides(env);
+      // Knewdle NOW Featured (shop subscriptions through PayPal), see featured.js.
+      const push = (m) => pushPulse(env, m);
+      if (url.pathname === "/featured/offer" && request.method === "GET") return await featured.offer(env);
+      if (url.pathname === "/featured/start" && request.method === "POST") return await featured.start(request, env, push);
+      if (url.pathname === "/paypal/webhook" && request.method === "POST") return await featured.webhook(request, env, push);
+      if (url.pathname.startsWith("/pulse/subs") || url.pathname === "/pulse/paypal/setup") {
+        if (!env.PULSE_KEY || !sameKey(String(url.searchParams.get("key") || ""), env.PULSE_KEY)) return json({ ok: false, error: "not found" }, 404);
+        if (url.pathname === "/pulse/paypal/setup" && request.method === "POST") {
+          try { return json(await featured.setup(env, url.origin)); }
+          catch (e) { return json({ ok: false, error: String(e.message || e), detail: e.data || null }, 502); }
+        }
+        if (url.pathname === "/pulse/subs" && request.method === "GET") return json({ ok: true, ...(await featured.pulseSubs(env)) }, 200, { "cache-control": "no-store" });
+        if (url.pathname === "/pulse/subs/action" && request.method === "POST") return await featured.pulseSubAction(request, env);
+      }
       if (url.pathname === "/pulse/fix" && (request.method === "GET" || request.method === "POST")) {
         if (!env.PULSE_KEY || !sameKey(String(url.searchParams.get("key") || ""), env.PULSE_KEY)) return json({ ok: false, error: "not found" }, 404);
         const out = await pulseFix(request, env);

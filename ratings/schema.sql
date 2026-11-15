@@ -128,3 +128,27 @@ CREATE TABLE IF NOT EXISTS shop_clicks (
   who  TEXT NOT NULL
 );
 CREATE INDEX IF NOT EXISTS shop_clicks_who_day ON shop_clicks (who, day);
+-- Knewdle NOW Featured: PayPal plan/webhook IDs per mode (sandbox/live), and every shop subscription.
+CREATE TABLE IF NOT EXISTS paypal_config (
+  k TEXT PRIMARY KEY,
+  v TEXT NOT NULL
+);
+CREATE TABLE IF NOT EXISTS featured_subs (
+  sub_id       TEXT PRIMARY KEY,
+  mode         TEXT NOT NULL,
+  shop         TEXT NOT NULL,
+  name         TEXT,
+  la           REAL,
+  lo           REAL,
+  address      TEXT,
+  tier         TEXT NOT NULL,
+  founding     INTEGER NOT NULL DEFAULT 0,
+  status       TEXT NOT NULL,
+  paid_through INTEGER,
+  activated_at INTEGER,
+  payer        TEXT,
+  paused       INTEGER NOT NULL DEFAULT 0,
+  updated_at   INTEGER,
+  last_payment INTEGER
+);
+CREATE INDEX IF NOT EXISTS featured_subs_mode ON featured_subs (mode, status);
