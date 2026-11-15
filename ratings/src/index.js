@@ -38,6 +38,8 @@
  *   GET/POST /pulse/hide?key=PULSE_KEY  same shape as /pulse/open with "hide": true|false: pull a shop down (not ramen, or gone).
  *   GET/POST /pulse/fix?key=PULSE_KEY {"entry": {n, la, lo}, "address", la?, lo?} -> fixes a listing's address (and moves
  *                   its pin: the Census geocoder looks the address up unless la/lo are given); "fix": false undoes it.
+ *   POST /shopclick {"device", "item", "link"} -> counts a tap on an Instant-tab shopping link and alerts Pulse ("kind": "shop").
+ *   GET  /pulse/shop-clicks?key=PULSE_KEY -> {total, today, people, items: [{item, n}], recent: [{ts, item}]}.
  *   GET  /overrides -> {"open": [...], "hide": [...], "fix": [...]}: public, cached 60 s; the app applies it on top of closed.json.
  *   A new install is also pushed to the private ntfy.sh topic derived from PULSE_KEY, which only the widget knows.
  *   GET  /          -> short description
@@ -680,6 +682,47 @@ async function install(request, env) {
   return json({ ok: true });
 }
 
+// Taps on the shopping links in the app's Instant tab (immi affiliate links). Counted per tap, pushed to Pulse with
+// its own alert. Phones are kept as a monthly-salted hash (only to cap spam), never the raw device ID.
+const SHOP_HOSTS = ["collabs.shop", "shop.immieats.com", "immieats.com"];
+const MAX_SHOP_TAPS_PER_DAY = 40;
+
+async function shopClick(request, env) {
+  let body;
+  try { body = await request.json(); } catch { return json({ ok: false, error: "bad json" }, 400); }
+  const device = String(body.device || "");
+  const item = String(body.item || "").replace(/\s+/g, " ").trim().slice(0, 60);
+  let host = "";
+  try { host = new URL(String(body.link || "")).hostname.replace(/^www\./, ""); } catch { host = ""; }
+  if (device.length < 8 || !item || !SHOP_HOSTS.includes(host)) return json({ ok: false, error: "bad request" }, 400);
+  const now = new Date();
+  const day = now.toISOString().slice(0, 10);
+  const who = (await sha256("shop:" + day.slice(0, 7) + ":" + device)).slice(0, 24);
+  const { n } = await env.DB.prepare("SELECT COUNT(*) AS n FROM shop_clicks WHERE who = ? AND day = ?").bind(who, day).first();
+  if (n >= MAX_SHOP_TAPS_PER_DAY) return json({ ok: false, error: "slow down" }, 429);
+  await env.DB.prepare("INSERT INTO shop_clicks (ts, day, item, host, who) VALUES (?, ?, ?, ?, ?)")
+    .bind(now.getTime(), day, item, host, who).run();
+  if (env.PULSE_KEY && !device.startsWith("smoke-test-device")) {
+    try {
+      const t = await env.DB.prepare("SELECT COUNT(*) AS today, (SELECT COUNT(*) FROM shop_clicks) AS total FROM shop_clicks WHERE day = ?")
+        .bind(day).first();
+      const msg = JSON.stringify({ kind: "shop", item, today: t.today, total: t.total, ts: now.getTime() });
+      await fetch("https://ntfy.sh/" + await pulseTopic(env.PULSE_KEY), { method: "POST", body: msg });
+    } catch (e) { /* Pulse also reads /pulse/shop-clicks when opened */ }
+  }
+  return json({ ok: true });
+}
+
+async function pulseShopClicks(env) {
+  const day = new Date().toISOString().slice(0, 10);
+  const [tot, items, recent] = await Promise.all([
+    env.DB.prepare("SELECT COUNT(*) AS total, SUM(day = ?) AS today, COUNT(DISTINCT who) AS people FROM shop_clicks").bind(day).first(),
+    env.DB.prepare("SELECT item, COUNT(*) AS n FROM shop_clicks GROUP BY item ORDER BY n DESC").all(),
+    env.DB.prepare("SELECT ts, item FROM shop_clicks ORDER BY ts DESC LIMIT 25").all(),
+  ]);
+  return { total: tot.total || 0, today: tot.today || 0, people: tot.people || 0, items: items.results, recent: recent.results };
+}
+
 // Where installs come from, for the private Pulse map.
 function shopPoint(shop) {
   const m = /@(-?\d+(?:\.\d+)?),(-?\d+(?:\.\d+)?)$/.exec(String(shop || ""));
@@ -762,6 +805,11 @@ export default {
       if (url.pathname === "/lb/sync" && request.method === "POST") return await lbSync(request, env);
       if (url.pathname === "/lb/leave" && request.method === "POST") return await lbLeave(request, env);
       if (url.pathname === "/install" && request.method === "POST") return await install(request, env);
+      if (url.pathname === "/shopclick" && request.method === "POST") return await shopClick(request, env);
+      if (url.pathname === "/pulse/shop-clicks" && request.method === "GET") {
+        if (!env.PULSE_KEY || !sameKey(String(url.searchParams.get("key") || ""), env.PULSE_KEY)) return json({ ok: false, error: "not found" }, 404);
+        return json({ ok: true, ...(await pulseShopClicks(env)) }, 200, { "cache-control": "no-store" });
+      }
       if (url.pathname === "/events" && request.method === "POST") return await events(request, env);
       if ((url.pathname === "/pulse/shops" || url.pathname === "/pulse/shop") && request.method === "GET") {
         if (!env.PULSE_KEY || !sameKey(String(url.searchParams.get("key") || ""), env.PULSE_KEY)) return json({ ok: false, error: "not found" }, 404);

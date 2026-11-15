@@ -119,3 +119,12 @@ CREATE TABLE IF NOT EXISTS dev_fix (
   label TEXT,
   at    TEXT NOT NULL
 );
+-- Taps on the Instant tab's shopping links (immi). who = monthly-salted hash of the phone, only to cap spam.
+CREATE TABLE IF NOT EXISTS shop_clicks (
+  ts   INTEGER NOT NULL,
+  day  TEXT NOT NULL,
+  item TEXT NOT NULL,
+  host TEXT NOT NULL,
+  who  TEXT NOT NULL
+);
+CREATE INDEX IF NOT EXISTS shop_clicks_who_day ON shop_clicks (who, day);
