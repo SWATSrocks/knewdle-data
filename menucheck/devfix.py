@@ -3,9 +3,16 @@ older app versions and the city pages show the right address and spot. (Phones o
 from __future__ import annotations
 
 import json
+import re
+import sys
+import urllib.parse
+import urllib.request
 from pathlib import Path
 
-MENU = Path(__file__).resolve().parent.parent / "docs" / "menu_ramen.json"
+ROOT = Path(__file__).resolve().parent.parent
+MENU = ROOT / "docs" / "menu_ramen.json"
+FIX_LIST = ROOT / "address_fixes.txt"          # hand-kept fixes (same thing as Pulse's "Fix address")
+GEO_CACHE = ROOT / "state" / "geocoded.json"   # address -> [lat, lon], so each address is looked up once
 NEAR = 2e-4   # ~20 m: the published spot the fix was made against
 
 
@@ -43,3 +50,51 @@ def apply_file(fixes: list[dict]) -> int:
         MENU.write_text(json.dumps(data, ensure_ascii=False, separators=(",", ":")) if compact
                         else json.dumps(data, ensure_ascii=False, indent=1))
     return n
+
+
+_SUITE = re.compile(r"\s*(,\s*)?(ste|suite|unit|apt|#)\b[\s.#-]*[a-z0-9-]+", re.I)
+
+
+def geocode(address: str) -> tuple[float, float] | None:
+    """US address -> (lat, lon) with the Census Bureau's free geocoder (suite/unit dropped first). Cached."""
+    cache = json.loads(GEO_CACHE.read_text()) if GEO_CACHE.exists() else {}
+    if address in cache:
+        return tuple(cache[address]) if cache[address] else None
+    q = re.sub(r"\s+", " ", _SUITE.sub("", address)).strip()
+    url = ("https://geocoding.geo.census.gov/geocoder/locations/onelineaddress?benchmark=Public_AR_Current&format=json&address="
+           + urllib.parse.quote(q))
+    try:
+        with urllib.request.urlopen(urllib.request.Request(url, headers={"User-Agent": "knewdle-data (info@swats.rocks)"}),
+                                    timeout=30) as r:
+            m = (json.load(r).get("result") or {}).get("addressMatches") or []
+    except Exception as e:  # noqa: BLE001
+        print(f"  ! geocoder: {type(e).__name__}", file=sys.stderr)
+        return None
+    spot = (round(float(m[0]["coordinates"]["y"]), 6), round(float(m[0]["coordinates"]["x"]), 6)) if m else None
+    cache[address] = list(spot) if spot else None
+    GEO_CACHE.parent.mkdir(exist_ok=True)
+    GEO_CACHE.write_text(json.dumps(cache, indent=1, sort_keys=True))
+    return spot
+
+
+def hand_fixes() -> list[dict]:
+    """address_fixes.txt: "Name | lat, lon (as listed now) | right address [| lat, lon]" per line."""
+    out = []
+    if not FIX_LIST.exists():
+        return out
+    for raw in FIX_LIST.read_text().splitlines():
+        line = raw.split("#", 1)[0].strip()
+        if not line:
+            continue
+        parts = [p.strip() for p in line.split("|")]
+        try:
+            name, (la, lo), addr = parts[0], [float(x) for x in parts[1].split(",")], parts[2]
+            spot = tuple(float(x) for x in parts[3].split(",")) if len(parts) > 3 else geocode(addr)
+        except (IndexError, ValueError):
+            print(f"  ! address_fixes.txt: couldn't read: {raw!r}", file=sys.stderr)
+            continue
+        if not spot:
+            print(f"  ! address_fixes.txt: couldn't find {addr!r} on the map", file=sys.stderr)
+            continue
+        out.append({"n": name, "la": la, "lo": lo, "a": addr, "nla": spot[0], "nlo": spot[1]})
+    return out

@@ -32,6 +32,7 @@ def main() -> int:
     if n or m:
         OUT.write_text(json.dumps(out, separators=(",", ":"), ensure_ascii=False))
     from . import devfix
+    fixes = fixes + devfix.hand_fixes()
     f = devfix.apply_file(fixes)
     print(f"{len(fixes)} address fix(es); {f} listing(s) updated now")
     if n or m or f:

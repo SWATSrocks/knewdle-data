@@ -1,0 +1,4 @@
+# Wrong addresses, fixed by hand (Knewdle Pulse's "Fix address" does the same thing). One per line:
+#   Name as listed | lat, lon as listed now | the right address  [| lat, lon, if you know the exact spot]
+# The map pin moves to the right address (looked up with the US Census geocoder). Applied within ~30 minutes.
+Pho Anh | 37.393497, -122.079094 | 175 E El Camino Real Ste-C, Mountain View, CA 94040
