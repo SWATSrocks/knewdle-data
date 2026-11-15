@@ -1,0 +1,275 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Get Featured on Knewdle NOW</title>
+<meta name="description" content="Put your ramen shop at the top of Knewdle NOW, in green, for ramen lovers nearby. Month to month, cancel anytime.">
+<link rel="icon" href="../ramen/assets/icon.svg">
+<style>
+:root{--ink:#2B2118;--yolk:#FFC93C;--chili:#E63946;--naruto:#FF5E9C;--scallion:#3DAA5C;--green:#2E8B4A;--broth:#FFF4DC;--cream:#FFFBF1;--muted:#6B5A45;--purple:#7B2FF7}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--broth);color:var(--ink);font:16px/1.55 Inter,system-ui,-apple-system,"Segoe UI",sans-serif}
+a{color:inherit}
+.wrap{max-width:1040px;margin:0 auto;padding:0 20px}
+h1,h2,h3{margin:0;font-weight:900;letter-spacing:-.02em}
+p{margin:0}
+.hero{background:var(--yolk);border-bottom:4px solid var(--ink);position:relative;overflow:hidden}
+.hero::before{content:"";position:absolute;inset:-60%;background:repeating-conic-gradient(from 0deg at 75% 40%,rgba(255,255,255,.3) 0 4deg,transparent 4deg 12deg)}
+.hero .wrap{position:relative;padding-top:34px;padding-bottom:40px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:900;font-size:22px;text-decoration:none}
+.brand img{width:44px;height:44px}
+.brand .now{background:var(--chili);color:var(--cream);border:2.5px solid var(--ink);border-radius:8px;padding:2px 8px;font-size:13px;transform:rotate(-8deg)}
+.kick{display:inline-block;background:var(--ink);color:var(--yolk);font-weight:900;font-size:13px;letter-spacing:.06em;text-transform:uppercase;padding:5px 12px;border-radius:8px;margin-top:22px}
+.hero h1{font-size:clamp(32px,6vw,54px);line-height:1.04;margin-top:10px}
+.hero .shop{color:var(--cream);-webkit-text-stroke:2px var(--ink);paint-order:stroke fill;text-shadow:4px 4px 0 var(--chili)}
+.hero p.lede{margin-top:12px;font-size:18px;max-width:640px;font-weight:600}
+.addr{margin-top:8px;font-weight:700;opacity:.8}
+.banner{background:var(--purple);color:#fff;text-align:center;font-weight:800;padding:8px 12px;font-size:14px}
+section{padding:40px 0}
+.found{display:flex;gap:14px;align-items:center;background:var(--cream);border:3px solid var(--ink);border-radius:18px;padding:14px 18px;box-shadow:4px 4px 0 var(--ink);margin-bottom:26px}
+.found b{font-size:28px;line-height:1}
+.found .bar{flex:1;height:14px;border:2.5px solid var(--ink);border-radius:99px;background:#fff;overflow:hidden}
+.found .bar i{display:block;height:100%;background:var(--chili)}
+.tiers{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.tier{background:var(--cream);border:3px solid var(--ink);border-radius:22px;padding:22px 20px;box-shadow:5px 5px 0 var(--ink);cursor:pointer;display:flex;flex-direction:column;gap:10px;transition:transform .12s;text-align:left;font:inherit;color:inherit}
+.tier:hover{transform:translate(-2px,-2px)}
+.tier.sel{outline:5px solid var(--green);outline-offset:3px}
+.tier .pill{align-self:flex-start;font-weight:900;font-size:12px;color:#fff;border:2px solid var(--ink);border-radius:99px;padding:3px 10px}
+.tier h3{font-size:26px}
+.price{font-weight:900;font-size:40px;line-height:1}
+.price small{font-size:15px;font-weight:700}
+.was{color:var(--muted);text-decoration:line-through;font-weight:700;margin-left:6px;font-size:18px}
+.tier ul{list-style:none;padding:0;margin:4px 0 0}
+.tier li{padding:4px 0 4px 26px;position:relative;font-weight:600;font-size:15px}
+.tier li::before{content:"✓";position:absolute;left:0;top:3px;width:19px;height:19px;border-radius:50%;background:var(--scallion);color:#fff;font-size:12px;display:grid;place-items:center;font-weight:900}
+.tier .pick{margin-top:auto;text-align:center;font-weight:900;border:3px solid var(--ink);border-radius:99px;padding:10px;background:var(--yolk)}
+.tier.sel .pick{background:var(--green);color:#fff}
+.pay{margin-top:28px;background:var(--cream);border:3px solid var(--ink);border-radius:22px;padding:22px;box-shadow:5px 5px 0 var(--ink);display:none}
+.pay.show{display:block}
+.pay h3{font-size:22px}
+.pay .sum{margin:6px 0 16px;color:var(--muted);font-weight:600}
+#paypal{max-width:420px}
+.fine{font-size:13px;color:var(--muted);margin-top:12px}
+.done{display:none;text-align:center;padding:30px 20px}
+.done.show{display:block}
+.done .big{font-size:64px}
+.done h2{font-size:34px;margin:6px 0}
+.how{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:18px}
+.how div{background:var(--cream);border:2.5px solid var(--ink);border-radius:16px;padding:16px}
+.how b{display:block;font-size:17px;margin-bottom:4px}
+details{background:var(--cream);border:2.5px solid var(--ink);border-radius:14px;margin-top:10px}
+summary{cursor:pointer;padding:14px 16px;font-weight:800}
+details p{padding:0 16px 14px;color:var(--muted)}
+.err{background:#FFE1E1;border:2.5px solid var(--chili);border-radius:14px;padding:14px;font-weight:700;margin-top:14px;display:none}
+.err.show{display:block}
+.search input{width:100%;font:inherit;padding:14px;border:3px solid var(--ink);border-radius:14px;background:#fff;margin-top:10px}
+.results button{display:block;width:100%;text-align:left;font:inherit;background:#fff;border:2px solid var(--ink);border-radius:12px;padding:10px 12px;margin-top:8px;cursor:pointer}
+.results small{display:block;color:var(--muted)}
+footer{padding:30px 0 50px;text-align:center;color:var(--muted);font-size:14px}
+[hidden]{display:none!important}
+@media (max-width:800px){.tiers,.how{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="banner" id="sandbox" hidden>TEST MODE · PayPal sandbox: no real money is charged</div>
+<header class="hero"><div class="wrap">
+  <a class="brand" href="../app/"><img src="../ramen/assets/icon.svg" alt="">Knewdle <span class="now">NOW!</span></a>
+  <span class="kick">For ramen shops</span>
+  <h1>Put <span class="shop" id="shopName">your shop</span> at the top.</h1>
+  <p class="addr" id="shopAddr" hidden></p>
+  <p class="lede">Ramen lovers open Knewdle NOW to find a bowl that's open right now. Featured shops are pinned at the top, in green, and always listed in the app's Featured view. Month to month. Cancel anytime.</p>
+</div></header>
+
+<main class="wrap">
+  <section id="pick" hidden>
+    <div class="search" id="search" hidden>
+      <h2>Which shop is yours?</h2>
+      <p class="fine" style="font-size:15px">Search by name, street or city. (Tip: in the Knewdle NOW app, tap “Get featured” on your shop's page to skip this.)</p>
+      <input type="search" id="q" placeholder="e.g. Ramen Champ San Jose" autocomplete="off">
+      <div class="results" id="results"></div>
+    </div>
+
+    <div id="plans" hidden>
+      <div class="found" id="found" hidden>
+        <div><b id="foundLeft">15</b></div>
+        <div style="flex:1"><strong>Founding shop price: half off, for as long as you stay subscribed.</strong>
+          <div class="fine" style="margin:2px 0 6px" id="foundTxt">Only for the first 15 shops.</div>
+          <div class="bar"><i id="foundBar" style="width:0%"></i></div></div>
+      </div>
+      <div class="tiers" id="tiers"></div>
+      <div class="pay" id="pay">
+        <h3 id="payTitle">Subscribe</h3>
+        <p class="sum" id="paySum"></p>
+        <div id="paypal"></div>
+        <p class="fine">Billed monthly by PayPal to SWATS Rocks. Cancel anytime in your PayPal account; you stay Featured until the month you paid for ends. By subscribing you agree to the <a href="#terms">Featured terms</a>.</p>
+      </div>
+      <div class="err" id="err"></div>
+    </div>
+
+    <div class="done" id="done">
+      <div class="big">🎉</div>
+      <h2>You're Featured!</h2>
+      <p id="doneTxt">Your shop shows in green in Knewdle NOW within a couple of minutes.</p>
+      <p class="fine">PayPal emails your receipt. Questions? <a href="mailto:info@swats.rocks">info@swats.rocks</a></p>
+    </div>
+  </section>
+
+  <section style="padding-top:0">
+    <h2>How Featured works</h2>
+    <div class="how">
+      <div><b>Top of the list, in green</b>Up to three Featured shops are pinned above the regular list in each area, clearly labeled “Featured”. When there are more, the top spots rotate fairly, and higher plans get first pick.</div>
+      <div><b>Always in the Featured view</b>Ramen hunters can switch to “Featured” to see every Featured shop near them, on the list and the map. No cap.</div>
+      <div><b>Your reach</b>People choose how far to look: 3, 10 or 25 miles. Your plan decides which of those searches pin you at the top.</div>
+    </div>
+  </section>
+
+  <section id="terms" style="padding-top:0">
+    <h2>Featured terms, in plain words</h2>
+    <details><summary>Billing and canceling</summary><p>Plans are month to month and billed by PayPal on the same day each month. Cancel anytime from your PayPal account (Settings → Payments → Automatic payments) or by emailing info@swats.rocks. You stay Featured until the month you paid for ends. We don't refund partial months.</p></details>
+    <details><summary>Founding shop price</summary><p>The first 15 shops to subscribe pay half price for as long as they stay subscribed without a break. If you cancel and come back later, regular prices apply.</p></details>
+    <details><summary>What we can't promise</summary><p>Featured makes your shop more visible in Knewdle NOW; we can't promise a number of customers or sales. Numbers in your monthly report are counted anonymously from the app.</p></details>
+    <details><summary>Which shops qualify</summary><p>Featured is for places that serve ramen. If a listing isn't a ramen spot, we'll remove it from Featured and refund the current month.</p></details>
+    <details><summary>Labels and fairness</summary><p>Featured shops are always marked “Featured”, as advertising rules and Google Play require. People can still see every shop in the regular list.</p></details>
+  </section>
+</main>
+<footer>Knewdle NOW by SWATS Rocks · <a href="mailto:info@swats.rocks">info@swats.rocks</a> · <a href="../app/">About the app</a></footer>
+
+<script>
+(function(){
+  const API = 'https://knewdle-ratings.swatsrocks.workers.dev';
+  const DATA = '../';
+  const P = new URLSearchParams(location.search);
+  let shop = P.get('k') ? { k: P.get('k'), n: P.get('n') || '', la: parseFloat(P.get('la')), lo: parseFloat(P.get('lo')), a: P.get('a') || '' } : null;
+  let offer = null, chosen = null, sdkReady = null;
+  const $ = (id) => document.getElementById(id);
+  const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  const money = (n) => '$' + (Number.isInteger(n) ? n : n.toFixed(2));
+  const PERKS = {
+    neighborhood: ['Green spot at the top for 10-mile searches', 'Always in the Featured view + green map pin', 'Monthly customer activity report', 'Printable “Proudly featured” counter sign'],
+    citywide: ['Top spot for 10- and 25-mile searches', 'Always in the Featured view + green map pin', 'Monthly customer activity report', '1 featured Instagram post every month'],
+    everywhere: ['Top spot on every search: 3, 10 and 25 miles', 'First pick of the top spots', 'Monthly report + counter sign', '1 featured Instagram post every month'],
+  };
+  const COLORS = { neighborhood: '#3DAA5C', citywide: '#E63946', everywhere: '#7B2FF7' };
+
+  function showErr(t) { $('err').textContent = t; $('err').classList.toggle('show', !!t); }
+
+  // Same shop key as the app: website host (or name slug) @ lat,lon to 2 decimals.
+  function hostOf(w) { if (!w) return null; try { return new URL(/^https?:/i.test(w) ? w : 'https://' + w).hostname.toLowerCase().replace(/^www\./, '') || null; } catch (e) { return null; } }
+  function keyOf(n, w, la, lo) {
+    const id = hostOf(w) || n.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 60);
+    return id.slice(0, 80) + '@' + la.toFixed(2) + ',' + lo.toFixed(2);
+  }
+
+  function setShop(s) {
+    shop = s;
+    $('shopName').textContent = s.n || 'your shop';
+    if (s.a) { $('shopAddr').textContent = s.a; $('shopAddr').hidden = false; }
+    $('search').hidden = true; $('plans').hidden = false;
+    document.title = 'Get ' + (s.n || 'your shop') + ' Featured on Knewdle NOW';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function renderTiers() {
+    const left = offer.founding_left, founding = left > 0;
+    $('found').hidden = !founding;
+    if (founding) {
+      $('foundLeft').textContent = left;
+      $('foundTxt').textContent = left + ' of ' + offer.founding_spots + ' founding spots left.';
+      $('foundBar').style.width = (100 * (offer.founding_spots - left) / offer.founding_spots) + '%';
+    }
+    $('tiers').innerHTML = offer.tiers.map((t) => `
+      <button class="tier" data-k="${t.key}" type="button">
+        <span class="pill" style="background:${COLORS[t.key]}">${esc(t.radii.join(' · '))} mi</span>
+        <h3>${esc(t.name)}</h3>
+        <div class="price">${money(founding ? t.founding_price : t.price)}<small>/month</small>${founding ? `<span class="was">${money(t.price)}</span>` : ''}</div>
+        <ul>${PERKS[t.key].map((p) => '<li>' + esc(p) + '</li>').join('')}</ul>
+        <span class="pick">Choose ${esc(t.name)}</span>
+      </button>`).join('');
+    document.querySelectorAll('.tier').forEach((b) => b.addEventListener('click', () => choose(b.dataset.k)));
+  }
+
+  function loadSdk() {
+    if (sdkReady) return sdkReady;
+    sdkReady = new Promise((ok, bad) => {
+      const s = document.createElement('script');
+      s.src = 'https://www.paypal.com/sdk/js?client-id=' + encodeURIComponent(offer.client_id) + '&vault=true&intent=subscription&currency=USD';
+      s.onload = ok; s.onerror = () => bad(new Error('PayPal could not load'));
+      document.head.appendChild(s);
+    });
+    return sdkReady;
+  }
+
+  async function choose(key) {
+    chosen = offer.tiers.find((t) => t.key === key);
+    document.querySelectorAll('.tier').forEach((b) => b.classList.toggle('sel', b.dataset.k === key));
+    const founding = offer.founding_left > 0;
+    $('pay').classList.add('show');
+    $('payTitle').textContent = 'Subscribe: ' + chosen.name;
+    $('paySum').textContent = (shop.n || 'Your shop') + ' · ' + money(founding ? chosen.founding_price : chosen.price) + ' a month' + (founding ? ' (founding price, kept while you stay subscribed)' : '');
+    $('pay').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    showErr('');
+    try { await loadSdk(); } catch (e) { showErr('PayPal could not load. Check your connection and try again.'); return; }
+    $('paypal').innerHTML = '';
+    window.paypal.Buttons({
+      style: { shape: 'pill', color: 'gold', layout: 'vertical', label: 'subscribe' },
+      createSubscription: (data, actions) => actions.subscription.create({ plan_id: chosen.plan, custom_id: shop.k }),
+      onApprove: async (data) => {
+        try {
+          const r = await fetch(API + '/featured/start', { method: 'POST', headers: { 'content-type': 'application/json' },
+            body: JSON.stringify({ subscription_id: data.subscriptionID, shop }) });
+          const d = await r.json();
+          $('plans').hidden = true; $('done').classList.add('show');
+          $('doneTxt').textContent = d.featured
+            ? (shop.n || 'Your shop') + ' is now Featured (' + chosen.name + '). It shows in green in Knewdle NOW within a couple of minutes.'
+            : 'Thanks! PayPal is finishing your subscription. ' + (shop.n || 'Your shop') + ' turns green in the app as soon as it does, usually within minutes.';
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        } catch (e) {
+          showErr('Your PayPal subscription went through, but we couldn\'t confirm it here. Don\'t worry: it activates automatically within the hour. Questions: info@swats.rocks');
+        }
+      },
+      onError: () => showErr('PayPal had a problem. Nothing was charged. Please try again.'),
+    }).render('#paypal');
+  }
+
+  // Search fallback (page opened without a shop): the app's published lists.
+  let all = null;
+  async function loadAll() {
+    if (all) return all;
+    const [m, o] = await Promise.all([fetch(DATA + 'menu_ramen.json').then((r) => r.json()), fetch(DATA + 'osm_ramen.json').then((r) => r.json())]);
+    all = [];
+    for (const part of ['places', 'more']) for (const p of (m[part] || [])) if (p.n && p.la != null) all.push({ n: p.n, la: p.la, lo: p.lo, a: p.a || '', w: p.w });
+    for (const e of (o.elements || [])) {
+      const t = e.tags || {}; const la = e.lat ?? e.center?.lat, lo = e.lon ?? e.center?.lon;
+      if (!t.name || la == null) continue;
+      const a = [[t['addr:housenumber'], t['addr:street']].filter(Boolean).join(' '), t['addr:city'], t['addr:state']].filter(Boolean).join(', ');
+      all.push({ n: t.name, la, lo, a, w: t.website || t['contact:website'] });
+    }
+    return all;
+  }
+  async function search() {
+    const words = $('q').value.toLowerCase().split(/\s+/).filter(Boolean);
+    if (!words.length) { $('results').innerHTML = ''; return; }
+    const list = (await loadAll()).filter((s) => words.every((w) => (s.n + ' ' + s.a).toLowerCase().includes(w))).slice(0, 25);
+    $('results').innerHTML = list.length ? list.map((s, i) => `<button type="button" data-i="${i}"><b>${esc(s.n)}</b><small>${esc(s.a || '')}</small></button>`).join('')
+      : '<p class="fine">No match. Try fewer words, or email info@swats.rocks and we\'ll set you up.</p>';
+    $('results').querySelectorAll('button').forEach((b) => b.addEventListener('click', () => {
+      const s = list[+b.dataset.i];
+      setShop({ k: keyOf(s.n, s.w, s.la, s.lo), n: s.n, la: s.la, lo: s.lo, a: s.a });
+    }));
+  }
+  let t = null;
+  $('q').addEventListener('input', () => { clearTimeout(t); t = setTimeout(search, 200); });
+
+  fetch(API + '/featured/offer').then((r) => r.json()).then((d) => {
+    $('pick').hidden = false;
+    if (!d.ok) { $('plans').hidden = false; showErr('Featured is opening soon. Email info@swats.rocks to be first in line.'); return; }
+    offer = d;
+    $('sandbox').hidden = d.mode !== 'sandbox';
+    renderTiers();
+    if (shop && /^[a-z0-9.\-]{1,80}@-?\d{1,3}\.\d{2},-?\d{1,3}\.\d{2}$/.test(shop.k)) setShop(shop); else { $('search').hidden = false; }
+  }).catch(() => { $('pick').hidden = false; $('plans').hidden = false; showErr('Couldn\'t load plans. Check your connection and refresh.'); });
+})();
+</script>
+</body>
+</html>
