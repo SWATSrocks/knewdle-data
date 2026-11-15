@@ -36,7 +36,9 @@
  *   POST /pulse/open?key=PULSE_KEY {"entry": {k?, h?, n?, la?, lo?}, "label", "open": true|false} -> adds/removes one.
  *                   A confirmed shop loses any automatic "may be closed" warning (closed.json, rebuilt within ~30 min).
  *   GET/POST /pulse/hide?key=PULSE_KEY  same shape as /pulse/open with "hide": true|false: pull a shop down (not ramen, or gone).
- *   GET  /overrides -> {"open": [...], "hide": [...]}: public, cached 60 s; the app applies it on top of closed.json.
+ *   GET/POST /pulse/fix?key=PULSE_KEY {"entry": {n, la, lo}, "address", la?, lo?} -> fixes a listing's address (and moves
+ *                   its pin: the Census geocoder looks the address up unless la/lo are given); "fix": false undoes it.
+ *   GET  /overrides -> {"open": [...], "hide": [...], "fix": [...]}: public, cached 60 s; the app applies it on top of closed.json.
  *   A new install is also pushed to the private ntfy.sh topic derived from PULSE_KEY, which only the widget knows.
  *   GET  /          -> short description
  *
@@ -177,6 +179,7 @@ async function closed(env, all) {
     body.open = open;
     body.confirmed = await confirmedOpen(env);
     body.hidden = await devEntries(env, "dev_hide");
+    body.fixes = await devEntries(env, "dev_fix");
   }
   return json(body, 200, { "cache-control": "public, max-age=900" });
 }
@@ -236,10 +239,54 @@ async function pulseDevList(request, env, kind) {
 
 // Public and tiny: what the app applies on top of closed.json, so a Pulse tap reaches phones within minutes.
 async function overrides(env) {
-  const [open, hide] = await Promise.all([devEntries(env, "dev_open"), devEntries(env, "dev_hide")]);
+  const [open, hide, fix] = await Promise.all([devEntries(env, "dev_open"), devEntries(env, "dev_hide"), devEntries(env, "dev_fix")]);
   const strip = (l) => l.map(({ at, ...e }) => e);
-  return json({ v: 1, generated: new Date().toISOString(), open: strip(open), hide: strip(hide) },
+  return json({ v: 1, generated: new Date().toISOString(), open: strip(open), hide: strip(hide), fix: strip(fix) },
     200, { "cache-control": "public, max-age=60" });
+}
+
+// US address -> coordinates with the Census Bureau's free geocoder (no key). Suite/unit parts are dropped first.
+async function geocode(address) {
+  const q = address.replace(/\s*(,\s*)?(ste|suite|unit|apt|#)\b[\s.#-]*[a-z0-9-]+/ig, "").replace(/\s+/g, " ").trim();
+  const url = "https://geocoding.geo.census.gov/geocoder/locations/onelineaddress?benchmark=Public_AR_Current&format=json&address=" +
+    encodeURIComponent(q);
+  const r = await fetch(url, { headers: { "user-agent": "knewdle-ratings (info@swats.rocks)" } });
+  if (!r.ok) return null;
+  const m = (await r.json())?.result?.addressMatches?.[0];
+  const la = Number(m?.coordinates?.y), lo = Number(m?.coordinates?.x);
+  return Number.isFinite(la) && Number.isFinite(lo) ? { la: +la.toFixed(6), lo: +lo.toFixed(6), matched: m.matchedAddress } : null;
+}
+
+// Pulse "fix the address": {entry: {n, la, lo, k?}, address, la?, lo?} -> stored with the new spot (looked up when not given).
+async function pulseFix(request, env) {
+  if (request.method === "GET") {
+    const { results } = await env.DB.prepare("SELECT id, entry, label, at FROM dev_fix ORDER BY at DESC").all();
+    return { shops: results.map((r) => ({ id: r.id, entry: JSON.parse(r.entry), label: r.label, at: r.at })) };
+  }
+  let body;
+  try { body = await request.json(); } catch { return null; }
+  const e = cleanEntry(body.entry);
+  if (!e || !e.n || e.la === undefined) return null;
+  const id = entryId({ n: e.n, la: e.la, lo: e.lo });
+  if (body.fix === false) {
+    await env.DB.prepare("DELETE FROM dev_fix WHERE id = ?").bind(id).run();
+    return { id };
+  }
+  const address = String(body.address || "").replace(/\s+/g, " ").trim().slice(0, 160);
+  if (address.length < 8) return { error: "address" };
+  let spot = Number.isFinite(Number(body.la)) && Number.isFinite(Number(body.lo)) ? { la: Number(body.la), lo: Number(body.lo) } : null;
+  let matched = null;
+  if (!spot) {
+    const g = await geocode(address).catch(() => null);
+    if (!g) return { error: "not_found" };
+    spot = { la: g.la, lo: g.lo }; matched = g.matched;
+  }
+  const fix = { n: e.n, la: e.la, lo: e.lo, ...(e.k ? { k: e.k } : {}), a: address, nla: spot.la, nlo: spot.lo };
+  await env.DB.prepare(
+    "INSERT INTO dev_fix (id, entry, label, at) VALUES (?, ?, ?, ?) " +
+      "ON CONFLICT(id) DO UPDATE SET entry = excluded.entry, label = excluded.label, at = excluded.at"
+  ).bind(id, JSON.stringify(fix), e.n + " · " + address, new Date().toISOString().slice(0, 10)).run();
+  return { id, fix, matched };
 }
 
 async function averages(env) {
@@ -734,6 +781,13 @@ export default {
         return json({ ok: true, ...(await originStats(env)) }, 200, { "cache-control": "no-store" });
       }
       if (url.pathname === "/overrides" && request.method === "GET") return await overrides(env);
+      if (url.pathname === "/pulse/fix" && (request.method === "GET" || request.method === "POST")) {
+        if (!env.PULSE_KEY || !sameKey(String(url.searchParams.get("key") || ""), env.PULSE_KEY)) return json({ ok: false, error: "not found" }, 404);
+        const out = await pulseFix(request, env);
+        if (!out) return json({ ok: false, error: "bad request" }, 400);
+        if (out.error) return json({ ok: false, error: out.error }, 422);
+        return json({ ok: true, ...out }, 200, { "cache-control": "no-store" });
+      }
       if ((url.pathname === "/pulse/open" || url.pathname === "/pulse/hide") && (request.method === "GET" || request.method === "POST")) {
         if (!env.PULSE_KEY || !sameKey(String(url.searchParams.get("key") || ""), env.PULSE_KEY)) return json({ ok: false, error: "not found" }, 404);
         const out = await pulseDevList(request, env, url.pathname.endsWith("/hide") ? "hide" : "open");

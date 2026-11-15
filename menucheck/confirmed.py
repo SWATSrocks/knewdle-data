@@ -1,5 +1,6 @@
 """Applies the developer's Knewdle Pulse lists to the published docs/closed.json right away, without the rest of the
-daily closed-shops run: "still open" drops a shop's warnings, "pull down" hides it (and undoing a pull brings it back).
+daily closed-shops run: "still open" drops a shop's warnings, "pull down" hides it (and undoing a pull brings it back), address fixes
+rewrite the listing in menu_ramen.json.
 Run every 30 minutes by .github/workflows/confirmed-open.yml. (Phones apply both lists live from the Worker's
 /overrides; this keeps closed.json, the city pages and older app versions in step.)
 
@@ -18,7 +19,7 @@ def main() -> int:
     lists = developer_lists()
     if lists is None:
         return 0
-    dev_open, pulled = lists
+    dev_open, pulled, fixes = lists
     confirmed = dev_open + manual(OPEN_LIST)
     out = load_json(OUT, None)
     if not out:
@@ -30,6 +31,10 @@ def main() -> int:
     print(f"{len(confirmed)} confirmed open, {len(pulled)} pulled down; {n} warning(s) dropped; pulled list changed: {bool(m)}")
     if n or m:
         OUT.write_text(json.dumps(out, separators=(",", ":"), ensure_ascii=False))
+    from . import devfix
+    f = devfix.apply_file(fixes)
+    print(f"{len(fixes)} address fix(es); {f} listing(s) updated now")
+    if n or m or f:
         from . import citypages
         citypages.build()
     return 0

@@ -112,3 +112,10 @@ CREATE TABLE IF NOT EXISTS dev_hide (
   label TEXT,
   at    TEXT NOT NULL
 );
+-- Address fixes from Knewdle Pulse: {n, la, lo (the listing as published), a, nla, nlo (the right address and spot)}.
+CREATE TABLE IF NOT EXISTS dev_fix (
+  id    TEXT PRIMARY KEY,
+  entry TEXT NOT NULL,
+  label TEXT,
+  at    TEXT NOT NULL
+);

@@ -90,14 +90,14 @@ def reports_all() -> tuple[list[dict], list[dict], dict[str, str]]:
     return hide, warn, opens
 
 
-def developer_lists() -> tuple[list[dict], list[dict]] | None:
-    """The developer's Knewdle Pulse lists: (confirmed open, pulled down). None if the Worker couldn't be reached."""
+def developer_lists() -> tuple[list[dict], list[dict], list[dict]] | None:
+    """The developer's Knewdle Pulse lists: (confirmed open, pulled down, address fixes). None if unreachable."""
     try:
         req = urllib.request.Request(REPORTS_URL + "?all=1", headers={"User-Agent": "knewdle-data"})
         with urllib.request.urlopen(req, timeout=30) as r:
             d = json.load(r)
         ok = lambda l: [{k: v for k, v in c.items() if k != "at"} for c in l if isinstance(c, dict)]  # noqa: E731
-        return ok(d.get("confirmed", [])), ok(d.get("hidden", []))
+        return ok(d.get("confirmed", [])), ok(d.get("hidden", [])), ok(d.get("fixes", []))
     except Exception as e:  # noqa: BLE001
         print(f"  ! couldn't read the developer's lists: {type(e).__name__}", file=sys.stderr)
         return None
@@ -332,7 +332,7 @@ def main() -> int:
     extra = load_json(EXTRA, {})
     listed = listed_places(extra)
     automatic = chain_closed(listed) + foursquare_closed(extra, listed) + website_closed(listed)
-    dev_open, pulled = developer_lists() or ([], [])
+    dev_open, pulled, _fixes = developer_lists() or ([], [], [])
     out = build(extra, manual(), reports_all(), automatic, site_trouble,
                 confirmed=dev_open + manual(OPEN_LIST), pulled=pulled)
     for part in ("shops", "maybe"):
