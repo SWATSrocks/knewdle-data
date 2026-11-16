@@ -703,7 +703,7 @@ async function shopClick(request, env) {
   try { host = new URL(String(body.link || "")).hostname.replace(/^www\./, ""); } catch { host = ""; }
   if (device.length < 8 || !item || !SHOP_HOSTS.includes(host)) return json({ ok: false, error: "bad request" }, 400);
   const now = new Date();
-  const day = now.toISOString().slice(0, 10);
+  const day = etDay();   // Eastern, same "today" as installs
   const who = (await sha256("shop:" + day.slice(0, 7) + ":" + device)).slice(0, 24);
   const { n } = await env.DB.prepare("SELECT COUNT(*) AS n FROM shop_clicks WHERE who = ? AND day = ?").bind(who, day).first();
   if (n >= MAX_SHOP_TAPS_PER_DAY) return json({ ok: false, error: "slow down" }, 429);
@@ -721,7 +721,7 @@ async function shopClick(request, env) {
 }
 
 async function pulseShopClicks(env) {
-  const day = new Date().toISOString().slice(0, 10);
+  const day = etDay();   // Eastern, same "today" as installs
   const [tot, items, recent] = await Promise.all([
     env.DB.prepare("SELECT COUNT(*) AS total, SUM(day = ?) AS today, COUNT(DISTINCT who) AS people FROM shop_clicks").bind(day).first(),
     env.DB.prepare("SELECT item, COUNT(*) AS n FROM shop_clicks GROUP BY item ORDER BY n DESC").all(),
