@@ -1,38 +1,35 @@
 {
-  "generated": "2026-11-09",
+  "generated": "2026-11-16",
   "overture_release": "2026-10-21.0",
   "candidates": 47231,
-  "checked_this_run": 14622,
+  "checked_this_run": 17,
   "results_this_run": {
-    "error": 11104,
-    "serves": 1341,
-    "none": 1710,
-    "platform": 380,
-    "shop": 15,
-    "robots": 72
+    "error": 6,
+    "serves": 11
   },
   "all_known": {
     "none": 29417,
     "platform": 1927,
-    "serves": 2329,
+    "serves": 2323,
     "shop": 135,
     "robots": 2159,
-    "error": 11264
+    "error": 11270
   },
-  "published": 2464,
-  "more_published": 1285,
+  "published": 2458,
+  "more_published": 1283,
   "more": {
-    "generated": "2026-11-09",
-    "published": 1285,
+    "generated": "2026-11-16",
+    "published": 1283,
     "by_way_found": {
       "web": 4,
       "chain": 59,
       "hall": 11,
       "noodle": 82,
-      "site": 53,
-      "name": 16,
+      "site": 52,
+      "name": 15,
       "brand": 2,
-      "fsq": 1058
+      "fsq": 1058,
+      "not ramen (hidden)": 2
     },
     "vouched": {
       "published": 1
@@ -87,15 +84,10 @@
       "Time Out Market New York": 1,
       "Halidom Eatery": 1,
       "Chattahoochee Food Works": 1,
-      "Japan Center Malls": 29
+      "Japan Center Malls": 5
     },
     "web": {
-      "no US address": 16,
-      "unreachable": 148,
-      "ok": 1,
-      "empty": 2,
-      "elsewhere": 3,
-      "not ramen": 2
+      "unreachable": 6
     }
   }
 }
