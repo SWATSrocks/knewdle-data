@@ -326,7 +326,8 @@ export async function pulseSubs(env) {
     return { id: r.sub_id, shop: r.name, key: r.shop, address: r.address, tier: r.tier, founding: !!r.founding, status: r.status,
       featured: live, paused: !!r.paused, price, paid_through: r.paid_through, payer: r.payer, last_payment: r.last_payment };
   });
-  return { mode, subs, active, mrr: Math.round(mrr * 100) / 100, founding_left: Math.max(0, FOUNDING_SPOTS - await foundingUsed(env, mode)) };
+  return { mode, subs, active, mrr: Math.round(mrr * 100) / 100, founding_left: Math.max(0, FOUNDING_SPOTS - await foundingUsed(env, mode)),
+           funnel: await funnel(env).catch(() => null) };
 }
 
 // Pulse: pause (hide) or unpause a subscription, or cancel it at PayPal (stops billing).
@@ -374,4 +375,44 @@ export async function pageProblem(request, env, push) {
   if (!what) return out({ ok: false }, 400);
   await problem(env, push, `Signup problem: ${shop}`, (tier ? tier + " · " : "") + what);
   return out({ ok: true });
+}
+
+// Public: the Get Featured page reports interest so Pulse can tell you which shop is looking.
+// e = "open" (sign-up page opened for a shop) or "tier" (a plan was picked, checkout showing).
+const EVENTS = { open: 1, tier: 1 };
+export async function pageEvent(request, env, push) {
+  let b;
+  try { b = await request.json(); } catch { return out({ ok: false }, 400); }
+  const clean = (v, n) => String(v || "").replace(/[\u0000-\u001f]/g, " ").trim().slice(0, n);
+  const e = clean(b.e, 10), shop = clean(b.k, 100), name = clean(b.n, 80) || "a shop", tier = clean(b.tier, 20).toLowerCase();
+  const src = clean(b.src, 30).toLowerCase(), v = clean(b.v, 40);
+  if (!EVENTS[e] || !shop || !v || (e === "tier" && !TIERS[tier])) return out({ ok: false }, 400);
+  const now = Date.now(), day = new Intl.DateTimeFormat("en-CA", { timeZone: "America/New_York" }).format(new Date(now));
+  // Same visitor, same shop, same step within 30 minutes: already told you.
+  const dup = await env.DB.prepare("SELECT 1 FROM featured_events WHERE v = ? AND e = ? AND shop = ? AND COALESCE(tier,'') = ? AND ts > ? LIMIT 1")
+    .bind(v, e, shop, tier, now - 30 * 60000).first();
+  if (dup) return out({ ok: true, dup: true });
+  const { n } = await env.DB.prepare("SELECT COUNT(*) AS n FROM featured_events WHERE day = ?").bind(day).first();
+  if (n >= 300) return out({ ok: true, capped: true });
+  await env.DB.prepare("INSERT INTO featured_events (ts, day, e, shop, name, tier, src, v) VALUES (?, ?, ?, ?, ?, ?, ?, ?)")
+    .bind(now, day, e, shop, name, tier || null, src || null, v).run();
+  if (push) {
+    const from = src === "app" ? "from the shop's page in Knewdle NOW" : src ? "from " + src : "from the web";
+    const founding = (await foundingUsed(env, paypalMode(env) || "live")) < FOUNDING_SPOTS;
+    const msg = e === "open"
+      ? { title: `👀 ${name}: Get featured opened`, text: `Someone opened the sign-up page ${from}.` }
+      : { title: `🛒 ${name} picked ${TIERS[tier].name}`, text: `At the PayPal checkout now${founding ? " (founding price)" : ""}. A 💰 alert follows if they subscribe.` };
+    await push({ kind: "sub", change: "lead", ...msg, ts: now });
+  }
+  return out({ ok: true });
+}
+
+export async function funnel(env) {
+  const since = Date.now() - 30 * 86400000;
+  const [c, recent] = await Promise.all([
+    env.DB.prepare("SELECT e, COUNT(*) AS n FROM featured_events WHERE ts > ? GROUP BY e").bind(since).all(),
+    env.DB.prepare("SELECT ts, e, name, tier, src FROM featured_events ORDER BY ts DESC LIMIT 15").all(),
+  ]);
+  const by = Object.fromEntries((c.results || []).map((r) => [r.e, r.n]));
+  return { opens: by.open || 0, picks: by.tier || 0, recent: recent.results || [] };
 }

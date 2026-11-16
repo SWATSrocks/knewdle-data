@@ -161,8 +161,19 @@ footer{padding:30px 0 50px;text-align:center;color:var(--muted);font-size:14px}
     return id.slice(0, 80) + '@' + la.toFixed(2) + ',' + lo.toFixed(2);
   }
 
+  // Lets the developer's phone (Knewdle Pulse) know which shop is looking. No personal data is sent.
+  const VID = (() => { try { let v = sessionStorage.getItem('kn_v'); if (!v) { v = Math.random().toString(36).slice(2) + Date.now().toString(36); sessionStorage.setItem('kn_v', v); } return v; }
+    catch (e) { return Math.random().toString(36).slice(2); } })();
+  const SRC = (P.get('utm_source') || '').slice(0, 30);
+  function track(e, tier) {
+    if (!shop || !shop.k) return;
+    try { fetch(API + '/featured/event', { method: 'POST', headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ e, k: shop.k, n: shop.n, tier: tier || '', src: SRC, v: VID }), keepalive: true }); } catch (err) {}
+  }
+
   function setShop(s) {
     shop = s;
+    track('open');
     $('shopName').textContent = s.n || 'your shop';
     if (s.a) { $('shopAddr').textContent = s.a; $('shopAddr').hidden = false; }
     $('search').hidden = true; $('plans').hidden = false;
@@ -208,6 +219,7 @@ footer{padding:30px 0 50px;text-align:center;color:var(--muted);font-size:14px}
 
   async function choose(key) {
     chosen = offer.tiers.find((t) => t.key === key);
+    track('tier', key);
     document.querySelectorAll('.tier').forEach((b) => b.classList.toggle('sel', b.dataset.k === key));
     const founding = offer.founding_left > 0;
     $('pay').classList.add('show');

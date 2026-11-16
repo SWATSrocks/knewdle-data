@@ -152,3 +152,17 @@ CREATE TABLE IF NOT EXISTS featured_subs (
   last_payment INTEGER
 );
 CREATE INDEX IF NOT EXISTS featured_subs_mode ON featured_subs (mode, status);
+
+-- Get Featured funnel: who opened the sign-up page for which shop, and which plan they picked (no personal data;
+-- v is a random id made by the page for that browser tab, only used to avoid repeat alerts).
+CREATE TABLE IF NOT EXISTS featured_events (
+  ts    INTEGER NOT NULL,
+  day   TEXT NOT NULL,
+  e     TEXT NOT NULL,
+  shop  TEXT,
+  name  TEXT,
+  tier  TEXT,
+  src   TEXT,
+  v     TEXT
+);
+CREATE INDEX IF NOT EXISTS featured_events_ts ON featured_events (ts);
