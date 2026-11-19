@@ -1,0 +1,5 @@
+# Opening hours for shops whose own website can't be read (Instagram-only pop-ups, say). One per line:
+#   website or page (exactly as the shop is listed) | hours
+# Hours: days then times, ";" between groups, e.g.  Fri-Sat 5pm-9pm   or   Mon-Thu 11am-9pm; Fri-Sat 11am-1am; Sun noon-8pm
+# Applied to the app's hours list within ~30 minutes (and kept by the daily hours rebuild).
+instagram.com/last_run_ramen | Fri-Sat 5pm-9pm

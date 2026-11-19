@@ -38,6 +38,8 @@ def main() -> int:
     d = devfix.apply_details_file()
     print(f"name/website fixes: {d} change(s) now")
     f += d
+    hh = devfix.apply_hand_hours_file()
+    print(f"hand-kept hours: {hh} change(s) now")
     if n or m or f:
         from . import citypages
         citypages.build()

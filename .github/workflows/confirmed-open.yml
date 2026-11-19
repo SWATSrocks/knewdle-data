@@ -7,7 +7,7 @@ on:
     - cron: "7,37 * * * *"
   push:
     branches: [main]
-    paths: [address_fixes.txt, shop_details.txt]
+    paths: [address_fixes.txt, shop_details.txt, hours_by_hand.txt]
   workflow_dispatch:
 
 permissions:
@@ -34,7 +34,7 @@ jobs:
         run: |
           git config user.name "knewdle-bot"
           git config user.email "knewdle-bot@users.noreply.github.com"
-          git add -f state/geocoded.json 2>/dev/null; git add docs/closed.json docs/menu_ramen.json docs/ramen docs/app docs/llms.txt docs/sitemap.xml
+          git add -f state/geocoded.json 2>/dev/null; git add docs/closed.json docs/menu_ramen.json docs/hours.json docs/ramen docs/app docs/llms.txt docs/sitemap.xml
           git diff --cached --quiet && { echo "nothing to change"; exit 0; }
           git commit -m "Confirmed-open shops"
           git pull --rebase origin main

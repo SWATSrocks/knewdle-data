@@ -37,3 +37,24 @@ def test_details_file(tmp_path, monkeypatch):
     monkeypatch.setattr(devfix, "DETAILS_LIST", f)
     assert devfix.details() == [{"n": "The Bowl", "la": 32.746185, "lo": -117.246445, "name": "The Bowl Ocean Beach",
                                  "w": "https://thebowlob.com"}]
+
+
+def test_parse_hand_hours():
+    w = devfix.parse_hand_hours("Fri-Sat 5pm-9pm")
+    assert w == [[], [], [], [], [[1020, 1260]], [[1020, 1260]], []]
+    w = devfix.parse_hand_hours("Mon, Wed & Fri 11:30am-2pm, 5pm-1am; Sun noon-8pm")
+    assert w[0] == [[690, 840], [1020, 1500]] and w[2] == w[0] and w[4] == w[0] and w[1] == [] and w[6] == [[720, 1200]]
+    assert devfix.parse_hand_hours("Fri-Mon 6pm-10pm")[0] == [[1080, 1320]]          # wraps past Sunday
+    assert devfix.parse_hand_hours("sometimes") is None
+    assert devfix.parse_hand_hours("Fri 5pm") is None
+
+
+def test_hand_hours_go_to_pages_or_shops(tmp_path, monkeypatch):
+    f = tmp_path / "hours_by_hand.txt"
+    f.write_text("# note\nhttps://www.instagram.com/last_run_ramen/ | Fri-Sat 5pm-9pm\nmyshop.com | Mon-Sun 11am-9pm\nbad | ?\n")
+    monkeypatch.setattr(devfix, "HOURS_LIST", f)
+    shops, pages = {}, {}
+    assert devfix.merge_hand_hours(shops, pages) == 2
+    assert pages == {"instagram.com/last_run_ramen": [[], [], [], [], [[1020, 1260]], [[1020, 1260]], []]}
+    assert list(shops) == ["myshop.com"]
+    assert devfix.merge_hand_hours(shops, pages) == 0

@@ -536,6 +536,8 @@ def main() -> int:
     STATE.write_text(json.dumps(state, indent=1, ensure_ascii=False))
     CLAIMED.write_text(json.dumps({"v": 1, "generated": today().isoformat(), "shops": published},
                                   separators=(",", ":"), ensure_ascii=False))
+    from . import devfix
+    devfix.merge_hand_hours(hours_pub, pages_pub)      # hand-kept hours (shops whose site can't be read)
     HOURS.write_text(json.dumps({"v": 1, "generated": today().isoformat(),
                                  "about": "Opening hours as shown on each shop's own website, read weekly by Knewdle NOW.",
                                  "license": "Open Database License (ODbL 1.0); includes shop websites listed in OpenStreetMap "
