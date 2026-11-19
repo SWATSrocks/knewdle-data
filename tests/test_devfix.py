@@ -19,3 +19,21 @@ def test_hand_fixes_file(tmp_path, monkeypatch):
     monkeypatch.setattr(devfix, "FIX_LIST", f)
     assert devfix.hand_fixes() == [{"n": "Pho Anh", "la": 37.393497, "lo": -122.079094,
                                     "a": "175 E El Camino Real Ste-C, Mountain View, CA 94040", "nla": 37.38, "nlo": -122.08}]
+
+
+def test_details_fix_sets_name_and_website_once():
+    data = {"more": [{"n": "The Bowl", "la": 32.746185, "lo": -117.246445, "a": "4953 Newport Ave, San Diego, CA", "w": None},
+                     {"n": "The Bowl", "la": 40.0, "lo": -75.0, "a": "elsewhere", "w": None}]}
+    fix = {"n": "The Bowl", "la": 32.746185, "lo": -117.246445, "name": "The Bowl Ocean Beach", "w": "https://thebowlob.com"}
+    assert devfix.apply_details(data, [fix]) == 2
+    assert (data["more"][0]["n"], data["more"][0]["w"]) == ("The Bowl Ocean Beach", "https://thebowlob.com")
+    assert data["more"][1]["n"] == "The Bowl"                  # same name, different place: untouched
+    assert devfix.apply_details(data, [fix]) == 0              # already fixed (matches by the new name too)
+
+
+def test_details_file(tmp_path, monkeypatch):
+    f = tmp_path / "shop_details.txt"
+    f.write_text("# note\nThe Bowl | 32.746185, -117.246445 | The Bowl Ocean Beach | thebowlob.com\nbad\n")
+    monkeypatch.setattr(devfix, "DETAILS_LIST", f)
+    assert devfix.details() == [{"n": "The Bowl", "la": 32.746185, "lo": -117.246445, "name": "The Bowl Ocean Beach",
+                                 "w": "https://thebowlob.com"}]

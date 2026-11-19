@@ -35,6 +35,9 @@ def main() -> int:
     fixes = fixes + devfix.hand_fixes()
     f = devfix.apply_file(fixes)
     print(f"{len(fixes)} address fix(es); {f} listing(s) updated now")
+    d = devfix.apply_details_file()
+    print(f"name/website fixes: {d} change(s) now")
+    f += d
     if n or m or f:
         from . import citypages
         citypages.build()

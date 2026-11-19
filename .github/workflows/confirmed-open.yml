@@ -7,7 +7,7 @@ on:
     - cron: "7,37 * * * *"
   push:
     branches: [main]
-    paths: [address_fixes.txt]
+    paths: [address_fixes.txt, shop_details.txt]
   workflow_dispatch:
 
 permissions:

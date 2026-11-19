@@ -1,0 +1,4 @@
+# Better names and missing websites, fixed by hand. One per line:
+#   Name as listed | lat, lon as listed | better name (or blank) | website (or blank)
+# Applied to the published shop list within ~30 minutes. A website also links the shop's opening hours.
+The Bowl | 32.746185, -117.246445 | The Bowl Ocean Beach | thebowlob.com

@@ -12,6 +12,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 MENU = ROOT / "docs" / "menu_ramen.json"
 FIX_LIST = ROOT / "address_fixes.txt"          # hand-kept fixes (same thing as Pulse's "Fix address")
+DETAILS_LIST = ROOT / "shop_details.txt"       # hand-kept name / website fixes
 GEO_CACHE = ROOT / "state" / "geocoded.json"   # address -> [lat, lon], so each address is looked up once
 NEAR = 2e-4   # ~20 m: the published spot the fix was made against
 
@@ -98,3 +99,59 @@ def hand_fixes() -> list[dict]:
             continue
         out.append({"n": name, "la": la, "lo": lo, "a": addr, "nla": spot[0], "nlo": spot[1]})
     return out
+
+
+def details() -> list[dict]:
+    """shop_details.txt: "Name as listed | lat, lon | better name | website" per line (name or website may be blank)."""
+    out = []
+    if not DETAILS_LIST.exists():
+        return out
+    for raw in DETAILS_LIST.read_text().splitlines():
+        line = raw.split("#", 1)[0].strip()
+        if not line:
+            continue
+        parts = [p.strip() for p in line.split("|")] + ["", ""]
+        try:
+            la, lo = (float(x) for x in parts[1].split(","))
+        except ValueError:
+            print(f"  ! shop_details.txt: couldn't read: {raw!r}", file=sys.stderr)
+            continue
+        site = parts[3]
+        if site and not site.startswith("http"):
+            site = "https://" + site
+        out.append({"n": parts[0], "la": la, "lo": lo, "name": parts[2], "w": site})
+    return out
+
+
+def apply_details(data: dict, fixes: list[dict]) -> int:
+    """Sets a better name and/or the website on matching listings (matched by listed or new name + spot)."""
+    changed = 0
+    for part in ("places", "more"):
+        for p in data.get(part, []):
+            for f in fixes:
+                names = {(f.get("n") or "").strip().lower(), (f.get("name") or "").strip().lower()} - {""}
+                try:
+                    near = abs(float(p["la"]) - f["la"]) < NEAR and abs(float(p["lo"]) - f["lo"]) < NEAR
+                except (KeyError, TypeError, ValueError):
+                    near = False
+                if not near or (p.get("n") or "").strip().lower() not in names:
+                    continue
+                if f.get("name") and p.get("n") != f["name"]:
+                    p["n"] = f["name"]; changed += 1
+                if f.get("w") and p.get("w") != f["w"]:
+                    p["w"] = f["w"]; changed += 1
+    return changed
+
+
+def apply_details_file() -> int:
+    fixes = details()
+    if not fixes or not MENU.exists():
+        return 0
+    raw = MENU.read_text()
+    data = json.loads(raw)
+    n = apply_details(data, fixes)
+    if n:
+        compact = "\n" not in raw.strip()
+        MENU.write_text(json.dumps(data, ensure_ascii=False, separators=(",", ":")) if compact
+                        else json.dumps(data, ensure_ascii=False, indent=1))
+    return n
