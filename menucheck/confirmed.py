@@ -40,6 +40,8 @@ def main() -> int:
     f += d
     hh = devfix.apply_hand_hours_file()
     print(f"hand-kept hours: {hh} change(s) now")
+    oh = devfix.apply_osm_hours_file()
+    print(f"hand-kept OpenStreetMap hours: {oh} change(s) now")
     if n or m or f:
         from . import citypages
         citypages.build()

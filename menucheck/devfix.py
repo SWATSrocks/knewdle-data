@@ -15,6 +15,8 @@ FIX_LIST = ROOT / "address_fixes.txt"          # hand-kept fixes (same thing as 
 DETAILS_LIST = ROOT / "shop_details.txt"       # hand-kept name / website fixes
 HOURS_LIST = ROOT / "hours_by_hand.txt"        # hand-kept opening hours (shops whose site can't be read)
 HOURS_JSON = ROOT / "docs" / "hours.json"
+OSM_HOURS_LIST = ROOT / "osm_hours.txt"        # hand-kept hours for OpenStreetMap shops, per location
+OSM_JSON = ROOT / "docs" / "osm_ramen.json"
 GEO_CACHE = ROOT / "state" / "geocoded.json"   # address -> [lat, lon], so each address is looked up once
 NEAR = 2e-4   # ~20 m: the published spot the fix was made against
 
@@ -256,4 +258,54 @@ def apply_hand_hours_file() -> int:
     n = merge_hand_hours(data.setdefault("shops", {}), data.setdefault("pages", {}), hand)
     if n:
         HOURS_JSON.write_text(json.dumps(data, separators=(",", ":")))
+    return n
+
+
+def osm_hours() -> list[dict]:
+    """osm_hours.txt: "Name | lat, lon | opening_hours (OpenStreetMap style)" per line."""
+    out = []
+    if not OSM_HOURS_LIST.exists():
+        return out
+    for raw in OSM_HOURS_LIST.read_text().splitlines():
+        line = raw.split("#", 1)[0].strip()
+        if not line:
+            continue
+        parts = [p.strip() for p in line.split("|")]
+        try:
+            la, lo = (float(x) for x in parts[1].split(","))
+            oh = parts[2]
+        except (ValueError, IndexError):
+            print(f"  ! osm_hours.txt: couldn't read: {raw!r}", file=sys.stderr)
+            continue
+        if not re.fullmatch(r"[A-Za-z0-9 :;,\-+]+", oh):
+            print(f"  ! osm_hours.txt: odd hours text: {raw!r}", file=sys.stderr)
+            continue
+        out.append({"n": parts[0].lower(), "la": la, "lo": lo, "oh": oh})
+    return out
+
+
+def apply_osm_hours(data: dict, fixes: list[dict]) -> int:
+    """Sets tags.opening_hours on the matching OpenStreetMap places (same name, same spot)."""
+    changed = 0
+    for e in data.get("elements", []):
+        t = e.get("tags") or {}
+        la = e.get("lat", (e.get("center") or {}).get("lat"))
+        lo = e.get("lon", (e.get("center") or {}).get("lon"))
+        if la is None or lo is None:
+            continue
+        for f in fixes:
+            if abs(la - f["la"]) < NEAR and abs(lo - f["lo"]) < NEAR and (t.get("name") or "").strip().lower() == f["n"]:
+                if t.get("opening_hours") != f["oh"]:
+                    t["opening_hours"] = f["oh"]; e["tags"] = t; changed += 1
+    return changed
+
+
+def apply_osm_hours_file() -> int:
+    fixes = osm_hours()
+    if not fixes or not OSM_JSON.exists():
+        return 0
+    data = json.loads(OSM_JSON.read_text())
+    n = apply_osm_hours(data, fixes)
+    if n:
+        OSM_JSON.write_text(json.dumps(data, separators=(",", ":"), ensure_ascii=False))
     return n

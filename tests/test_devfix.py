@@ -58,3 +58,19 @@ def test_hand_hours_go_to_pages_or_shops(tmp_path, monkeypatch):
     assert pages == {"instagram.com/last_run_ramen": [[], [], [], [], [[1020, 1260]], [[1020, 1260]], []]}
     assert list(shops) == ["myshop.com"]
     assert devfix.merge_hand_hours(shops, pages) == 0
+
+
+def test_osm_hours_per_location(tmp_path, monkeypatch):
+    f = tmp_path / "osm_hours.txt"
+    f.write_text("RAMEN-SAN | 41.889856, -87.630411 | Su-We 11:00-23:00; Th 11:00-24:00; Fr,Sa 11:00-01:00\nx | 1,2 | <script>\n")
+    monkeypatch.setattr(devfix, "OSM_HOURS_LIST", f)
+    fixes = devfix.osm_hours()
+    assert len(fixes) == 1
+    data = {"elements": [
+        {"type": "node", "id": 1, "lat": 41.889856, "lon": -87.630411, "tags": {"name": "RAMEN-SAN"}},
+        {"type": "node", "id": 2, "lat": 41.8948, "lon": -87.623018, "tags": {"name": "RAMEN-SAN"}},   # other location
+    ]}
+    assert devfix.apply_osm_hours(data, fixes) == 1
+    assert data["elements"][0]["tags"]["opening_hours"].startswith("Su-We")
+    assert "opening_hours" not in data["elements"][1]["tags"]
+    assert devfix.apply_osm_hours(data, fixes) == 0

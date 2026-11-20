@@ -105,6 +105,8 @@ def main(argv: list[str]) -> int:
     if prev and len(els) < MIN_SHARE * prev:
         print("Looks broken (too few); keeping the last list")
         return 1
+    from . import devfix
+    devfix.apply_osm_hours({"elements": els}, devfix.osm_hours())   # hand-kept hours, per location
     OUT.write_text(json.dumps({
         "v": 1, "generated": dt.date.today().isoformat(),
         "about": "Ramen places in the US from OpenStreetMap (via Geofabrik extracts), refreshed twice a week for the Knewdle NOW app.",

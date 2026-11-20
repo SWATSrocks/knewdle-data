@@ -1,0 +1,9 @@
+# Opening hours for OpenStreetMap shops, one location at a time (chains that share one website). One per line:
+#   Name exactly as listed | lat, lon as listed | hours in OpenStreetMap style, e.g. Mo-Th 11:00-22:00; Fr,Sa 11:00-23:00
+# Applied within ~30 minutes and kept by the twice-weekly OpenStreetMap refresh.
+# Ramen-San, Chicago (lettuce.com/restaurants/ramen-san, Nov 2026; Sunday for Lincoln Park from OpenTable.
+# River North and Fulton Market list no Sunday line, so Sunday is set like their Monday hours.)
+RAMEN-SAN | 41.889856, -87.630411 | Su-We 11:00-23:00; Th 11:00-24:00; Fr,Sa 11:00-01:00
+Ramen-San | 41.886309, -87.648504 | Su-Th 11:00-22:00; Fr,Sa 11:00-24:00
+RAMEN-SAN | 41.8948, -87.623018 | Mo-Th 11:00-21:00; Fr 11:00-22:00; Sa 12:00-22:00; Su 12:00-21:00
+Ramen-San | 41.91778, -87.648737 | Su-Th 11:00-22:00; Fr,Sa 11:00-23:00
