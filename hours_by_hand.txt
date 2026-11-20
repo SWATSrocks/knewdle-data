@@ -3,3 +3,5 @@
 # Hours: days then times, ";" between groups, e.g.  Fri-Sat 5pm-9pm   or   Mon-Thu 11am-9pm; Fri-Sat 11am-1am; Sun noon-8pm
 # Applied to the app's hours list within ~30 minutes (and kept by the daily hours rebuild).
 instagram.com/last_run_ramen | Fri-Sat 5pm-9pm
+# Kobe House (Terrytown, LA): their Instagram bio lists "Sun-Thur 11:30am-9:30pm, Sat & Sun 11:30am-10:30pm"; read as Fri & Sat late
+kobehouseterrytown.wixsite.com/my-site-1 | Sun-Thu 11:30am-9:30pm; Fri-Sat 11:30am-10:30pm
