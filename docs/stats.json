@@ -16,12 +16,12 @@
     "error": 11270
   },
   "published": 2458,
-  "more_published": 1284,
+  "more_published": 1285,
   "more": {
-    "generated": "2026-11-19",
-    "published": 1284,
+    "generated": "2026-11-20",
+    "published": 1285,
     "by_way_found": {
-      "web": 5,
+      "web": 6,
       "chain": 59,
       "hall": 11,
       "noodle": 82,
@@ -32,10 +32,8 @@
       "not ramen (hidden)": 2
     },
     "vouched": {
-      "published": 2
+      "published": 3
     },
-    "web": {
-      "ok": 1
-    }
+    "web": {}
   }
 }

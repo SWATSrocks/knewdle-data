@@ -1,10 +1,10 @@
-Vouched shops: 2
+Vouched shops: 3
   (vouched: 0s)
 {
-  "generated": "2026-11-19",
-  "published": 1284,
+  "generated": "2026-11-20",
+  "published": 1285,
   "by_way_found": {
-    "web": 5,
+    "web": 6,
     "chain": 59,
     "hall": 11,
     "noodle": 82,
@@ -15,18 +15,17 @@ Vouched shops: 2
     "not ramen (hidden)": 2
   },
   "vouched": {
-    "published": 2
+    "published": 3
   }
 }
 Added by hand: 1 website(s)
-  reading 1 of them this run
-  🍜 mrtokyopremium.com: Mr. Tokyo Premium: Endless Sushi • Ramen • Hibachi • Sake (1 location(s))
-  (web: 1s)
+  reading 0 of them this run
+  (web: 0s)
 {
-  "generated": "2026-11-19",
-  "published": 1284,
+  "generated": "2026-11-20",
+  "published": 1285,
   "by_way_found": {
-    "web": 5,
+    "web": 6,
     "chain": 59,
     "hall": 11,
     "noodle": 82,
@@ -37,9 +36,7 @@ Added by hand: 1 website(s)
     "not ramen (hidden)": 2
   },
   "vouched": {
-    "published": 2
+    "published": 3
   },
-  "web": {
-    "ok": 1
-  }
+  "web": {}
 }
