@@ -4,7 +4,7 @@
   "bentenramen.com": "2026-11-14",
   "moonskoreankitchen.com": "2026-10-21",
   "ninjaramen.com": "2026-11-18",
-  "eastwest-connection.com": "2026-11-13",
+  "eastwest-connection.com": "2026-11-20",
   "jingyanrestaurant.com": "2026-11-09"
  },
  "site_health": {
@@ -2465,8 +2465,8 @@
   "sumoramenkaneohe.com": {
    "bad": "down",
    "first": "2026-10-20",
-   "last": "2026-11-13",
-   "n": 6
+   "last": "2026-11-20",
+   "n": 7
   },
   "chefsramenhawaii.com": {
    "bad": "dns",
@@ -2477,8 +2477,8 @@
   "kpwestside.com": {
    "bad": "dns",
    "first": "2026-10-20",
-   "last": "2026-11-13",
-   "n": 6
+   "last": "2026-11-20",
+   "n": 7
   },
   "dragonwarriorrs.com": {
    "bad": "down",
@@ -2495,8 +2495,8 @@
   "thejaramen.com": {
    "bad": "down",
    "first": "2026-10-20",
-   "last": "2026-11-13",
-   "n": 6
+   "last": "2026-11-20",
+   "n": 7
   },
   "order.hanabifl.com": {
    "bad": "dns",
@@ -2507,8 +2507,8 @@
   "jaramenutc.com": {
    "bad": "dns",
    "first": "2026-10-20",
-   "last": "2026-11-13",
-   "n": 6
+   "last": "2026-11-20",
+   "n": 7
   },
   "oksumiramenbar.com": {
    "bad": "down",
@@ -2549,8 +2549,8 @@
   "ikkyuramenandboba.com": {
    "bad": "dns",
    "first": "2026-10-20",
-   "last": "2026-11-13",
-   "n": 6
+   "last": "2026-11-20",
+   "n": 7
   },
   "teriyakibowl.me": {
    "bad": "dns",
@@ -2585,8 +2585,8 @@
   "showaramen.com": {
    "bad": "parked",
    "first": "2026-10-20",
-   "last": "2026-11-13",
-   "n": 6
+   "last": "2026-11-20",
+   "n": 7
   },
   "bolsasandiego.com": {
    "bad": "dns",
@@ -2597,8 +2597,8 @@
   "thewhetnoodle.com": {
    "bad": "down",
    "first": "2026-10-20",
-   "last": "2026-11-13",
-   "n": 6
+   "last": "2026-11-20",
+   "n": 7
   },
   "gogosushisd.com": {
    "bad": "down",
@@ -2621,8 +2621,8 @@
   "orientalhouseyumaaz.com": {
    "bad": "down",
    "first": "2026-10-20",
-   "last": "2026-11-13",
-   "n": 6
+   "last": "2026-11-20",
+   "n": 7
   },
   "jy-ramen.com": {
    "bad": "dns",
@@ -2723,8 +2723,8 @@
   "tensecondorlando.com": {
    "bad": "down",
    "first": "2026-10-20",
-   "last": "2026-11-13",
-   "n": 6
+   "last": "2026-11-20",
+   "n": 7
   },
   "asahiramen.com": {
    "bad": "down",
@@ -2735,8 +2735,8 @@
   "nishipokeramen.com": {
    "bad": "down",
    "first": "2026-10-20",
-   "last": "2026-11-13",
-   "n": 6
+   "last": "2026-11-20",
+   "n": 7
   },
   "junsramensushi.com": {
    "bad": "down",
@@ -2753,8 +2753,8 @@
   "qinwestnoodleca.com": {
    "bad": "down",
    "first": "2026-10-20",
-   "last": "2026-11-13",
-   "n": 6
+   "last": "2026-11-20",
+   "n": 7
   },
   "leesluckywok.com": {
    "bad": "dns",
@@ -2783,8 +2783,8 @@
   "thebrokenrice.com": {
    "bad": "dns",
    "first": "2026-10-20",
-   "last": "2026-11-13",
-   "n": 6
+   "last": "2026-11-20",
+   "n": 7
   },
   "shanxidatangtogo.com": {
    "bad": "dns",
@@ -2819,26 +2819,26 @@
   "woksdelinorwalk.com": {
    "bad": "down",
    "first": "2026-10-20",
-   "last": "2026-11-13",
-   "n": 6
+   "last": "2026-11-20",
+   "n": 7
   },
   "ramenbyomae.com": {
    "bad": "dns",
    "first": "2026-10-20",
-   "last": "2026-11-13",
-   "n": 6
+   "last": "2026-11-20",
+   "n": 7
   },
   "sunramen.net": {
    "bad": "dns",
    "first": "2026-10-20",
-   "last": "2026-11-13",
-   "n": 6
+   "last": "2026-11-20",
+   "n": 7
   },
   "curryandnoodlehouse.com": {
    "bad": "dns",
    "first": "2026-10-20",
-   "last": "2026-11-13",
-   "n": 6
+   "last": "2026-11-20",
+   "n": 7
   },
   "ordertareramenya.com": {
    "bad": "dns",
@@ -2861,14 +2861,14 @@
   "okawasushiandramen.com": {
    "bad": "dns",
    "first": "2026-10-20",
-   "last": "2026-11-13",
-   "n": 6
+   "last": "2026-11-20",
+   "n": 7
   },
   "umaichiramen.com": {
    "bad": "dns",
    "first": "2026-10-20",
-   "last": "2026-11-13",
-   "n": 6
+   "last": "2026-11-20",
+   "n": 7
   },
   "masaramenrestaurant.com": {
    "bad": "dns",
@@ -2921,8 +2921,8 @@
   "mrricela.com": {
    "bad": "parked",
    "first": "2026-10-20",
-   "last": "2026-11-13",
-   "n": 6
+   "last": "2026-11-20",
+   "n": 7
   },
   "harujapanesebaldwinpark.com": {
    "bad": "down",
@@ -2933,8 +2933,8 @@
   "theoriginalthai.com": {
    "bad": "parked",
    "first": "2026-10-20",
-   "last": "2026-11-13",
-   "n": 6
+   "last": "2026-11-20",
+   "n": 7
   },
   "sapporo-la.com": {
    "bad": "dns",
@@ -2945,20 +2945,20 @@
   "crispyporkgangexpress.com": {
    "bad": "down",
    "first": "2026-10-20",
-   "last": "2026-11-13",
-   "n": 6
+   "last": "2026-11-20",
+   "n": 7
   },
   "mackysnoodle.com": {
    "bad": "dns",
    "first": "2026-10-20",
-   "last": "2026-11-13",
-   "n": 6
+   "last": "2026-11-20",
+   "n": 7
   },
   "againcafe.com": {
    "bad": "dns",
    "first": "2026-10-20",
-   "last": "2026-11-13",
-   "n": 6
+   "last": "2026-11-20",
+   "n": 7
   },
   "modanramen.com": {
    "bad": "down",
@@ -2981,8 +2981,8 @@
   "daisukiramen.com": {
    "bad": "down",
    "first": "2026-10-20",
-   "last": "2026-11-13",
-   "n": 6
+   "last": "2026-11-20",
+   "n": 7
   },
   "temecula.phoakaushiseafoodnoodle.com": {
    "bad": "down",
@@ -3005,8 +3005,8 @@
   "orderhunanexpressaz.com": {
    "bad": "dns",
    "first": "2026-10-20",
-   "last": "2026-11-13",
-   "n": 6
+   "last": "2026-11-20",
+   "n": 7
   },
   "origamiramenbar.com": {
    "bad": "down",
@@ -3023,14 +3023,14 @@
   "dorihandrollandramen.com": {
    "bad": "dns",
    "first": "2026-10-20",
-   "last": "2026-11-13",
-   "n": 6
+   "last": "2026-11-20",
+   "n": 7
   },
   "noodleandriceaz.com": {
    "bad": "dns",
    "first": "2026-10-20",
-   "last": "2026-11-13",
-   "n": 6
+   "last": "2026-11-20",
+   "n": 7
   },
   "sushiramengo.com": {
    "bad": "down",
@@ -3065,20 +3065,20 @@
   "phoso1irvine.com": {
    "bad": "dns",
    "first": "2026-10-20",
-   "last": "2026-11-13",
-   "n": 6
+   "last": "2026-11-20",
+   "n": 7
   },
   "101noodleexpresstogo.com": {
    "bad": "dns",
    "first": "2026-10-20",
-   "last": "2026-11-13",
-   "n": 6
+   "last": "2026-11-20",
+   "n": 7
   },
   "noodologyus.com": {
    "bad": "dns",
    "first": "2026-10-20",
-   "last": "2026-11-13",
-   "n": 6
+   "last": "2026-11-20",
+   "n": 7
   },
   "ludingjiricenoodle.com": {
    "bad": "dns",
@@ -3119,8 +3119,8 @@
   "naoramen.com": {
    "bad": "dns",
    "first": "2026-10-20",
-   "last": "2026-11-13",
-   "n": 6
+   "last": "2026-11-20",
+   "n": 7
   },
   "sakuragastonia.com": {
    "bad": "down",
@@ -3155,8 +3155,8 @@
   "yongkangstreet.com": {
    "bad": "down",
    "first": "2026-10-20",
-   "last": "2026-11-13",
-   "n": 6
+   "last": "2026-11-20",
+   "n": 7
   },
   "onenoodlesandgrill.com": {
    "bad": "dns",
@@ -3167,8 +3167,8 @@
   "ducchuong529.com": {
    "bad": "down",
    "first": "2026-10-20",
-   "last": "2026-11-13",
-   "n": 6
+   "last": "2026-11-20",
+   "n": 7
   },
   "izarobata.com": {
    "bad": "dns",
@@ -3299,8 +3299,8 @@
   "hiroramenteabarga.com": {
    "bad": "dns",
    "first": "2026-10-20",
-   "last": "2026-11-13",
-   "n": 6
+   "last": "2026-11-20",
+   "n": 7
   },
   "qingmunoodles.com": {
    "bad": "down",
@@ -3395,8 +3395,8 @@
   "kanjisushiandramen.com": {
    "bad": "dns",
    "first": "2026-10-20",
-   "last": "2026-11-13",
-   "n": 6
+   "last": "2026-11-20",
+   "n": 7
   },
   "genkiramen.com": {
    "bad": "dns",
@@ -3413,8 +3413,8 @@
   "ramenkobowaraku.com": {
    "bad": "dns",
    "first": "2026-10-20",
-   "last": "2026-11-13",
-   "n": 6
+   "last": "2026-11-20",
+   "n": 7
   },
   "nudoru.net": {
    "bad": "dns",
@@ -3431,8 +3431,8 @@
   "sanfranciscojapaneserestaurant.com": {
    "bad": "dns",
    "first": "2026-10-20",
-   "last": "2026-11-13",
-   "n": 6
+   "last": "2026-11-20",
+   "n": 7
   },
   "oaklandfoodtogo.com": {
    "bad": "dns",
@@ -3455,8 +3455,8 @@
   "restaurant.bestfood.today": {
    "bad": "dns",
    "first": "2026-10-20",
-   "last": "2026-11-13",
-   "n": 6
+   "last": "2026-11-20",
+   "n": 7
   },
   "noodlemesf.com": {
    "bad": "dns",
@@ -3521,8 +3521,8 @@
   "porcoramensanjose.com": {
    "bad": "dns",
    "first": "2026-10-20",
-   "last": "2026-11-13",
-   "n": 6
+   "last": "2026-11-20",
+   "n": 7
   },
   "pleasantontaiwanesebeefnoodles.com": {
    "bad": "dns",
@@ -3539,8 +3539,8 @@
   "newtungkeenoodle.com": {
    "bad": "dns",
    "first": "2026-10-20",
-   "last": "2026-11-13",
-   "n": 6
+   "last": "2026-11-20",
+   "n": 7
   },
   "momdumplingsca.com": {
    "bad": "dns",
@@ -3593,8 +3593,8 @@
   "asahiramenandizakaya.com": {
    "bad": "dns",
    "first": "2026-10-20",
-   "last": "2026-11-13",
-   "n": 6
+   "last": "2026-11-20",
+   "n": 7
   },
   "maruramenbars.com": {
    "bad": "down",
@@ -3659,8 +3659,8 @@
   "honramen.com": {
    "bad": "dns",
    "first": "2026-10-20",
-   "last": "2026-11-13",
-   "n": 6
+   "last": "2026-11-20",
+   "n": 7
   },
   "pho88lv.com": {
    "bad": "dns",
@@ -3671,8 +3671,8 @@
   "enzaramen.com": {
    "bad": "dns",
    "first": "2026-10-20",
-   "last": "2026-11-13",
-   "n": 6
+   "last": "2026-11-20",
+   "n": 7
   },
   "enzaramenlasvegas.com": {
    "bad": "dns",
@@ -3713,8 +3713,8 @@
   "kungfunoodlenv.com": {
    "bad": "down",
    "first": "2026-10-20",
-   "last": "2026-11-13",
-   "n": 6
+   "last": "2026-11-20",
+   "n": 7
   },
   "kaishosushiramenlasvegas.myrestaurantpage.website": {
    "bad": "dns",
@@ -3725,14 +3725,14 @@
   "menyamusashi205.com": {
    "bad": "dns",
    "first": "2026-10-20",
-   "last": "2026-11-13",
-   "n": 6
+   "last": "2026-11-20",
+   "n": 7
   },
   "thaiontapfolsom.com": {
    "bad": "dns",
    "first": "2026-10-20",
-   "last": "2026-11-13",
-   "n": 6
+   "last": "2026-11-20",
+   "n": 7
   },
   "phonmorfolsom.com": {
    "bad": "dns",
@@ -3749,8 +3749,8 @@
   "bambu.restaurant": {
    "bad": "down",
    "first": "2026-10-20",
-   "last": "2026-11-13",
-   "n": 6
+   "last": "2026-11-20",
+   "n": 7
   },
   "orderkoiramenprovo.com": {
    "bad": "dns",
@@ -3773,8 +3773,8 @@
   "samurainoodleutah.com": {
    "bad": "down",
    "first": "2026-10-20",
-   "last": "2026-11-13",
-   "n": 6
+   "last": "2026-11-20",
+   "n": 7
   },
   "tonkotsu.us": {
    "bad": "down",
@@ -3803,8 +3803,8 @@
   "sawadee1.com": {
    "bad": "down",
    "first": "2026-10-20",
-   "last": "2026-11-13",
-   "n": 6
+   "last": "2026-11-20",
+   "n": 7
   },
   "airamenizakaya.com": {
    "bad": "dns",
@@ -3827,14 +3827,14 @@
   "kirinramenwilsonville.com": {
    "bad": "dns",
    "first": "2026-10-20",
-   "last": "2026-11-13",
-   "n": 6
+   "last": "2026-11-20",
+   "n": 7
   },
   "wew.tampdx.com": {
    "bad": "dns",
    "first": "2026-10-20",
-   "last": "2026-11-13",
-   "n": 6
+   "last": "2026-11-20",
+   "n": 7
   },
   "redrock.sclv.com": {
    "bad": "down",
@@ -3869,8 +3869,8 @@
   "chinacafewa.com": {
    "bad": "dns",
    "first": "2026-10-20",
-   "last": "2026-11-13",
-   "n": 6
+   "last": "2026-11-20",
+   "n": 7
   },
   "krittikas.com": {
    "bad": "dns",
@@ -3905,8 +3905,8 @@
   "kokororamentogo.com": {
    "bad": "dns",
    "first": "2026-10-20",
-   "last": "2026-11-13",
-   "n": 6
+   "last": "2026-11-20",
+   "n": 7
   },
   "umamiramencda.com": {
    "bad": "dns",
@@ -3917,8 +3917,8 @@
   "nisekoramen.com": {
    "bad": "dns",
    "first": "2026-10-20",
-   "last": "2026-11-13",
-   "n": 6
+   "last": "2026-11-20",
+   "n": 7
   },
   "sakurabillingsmt.com": {
    "bad": "dns",
@@ -3956,12 +3956,6 @@
    "last": "2026-10-21",
    "n": 2
   },
-  "michimissoula.com": {
-   "bad": "down",
-   "first": "2026-10-20",
-   "last": "2026-11-13",
-   "n": 6
-  },
   "tatsumakiramen.com": {
    "bad": "down",
    "first": "2026-10-20",
@@ -3989,8 +3983,8 @@
   "okaramenco.com": {
    "bad": "dns",
    "first": "2026-10-20",
-   "last": "2026-11-13",
-   "n": 6
+   "last": "2026-11-20",
+   "n": 7
   },
   "ramengreenwoodvillage.com": {
    "bad": "dns",
@@ -4013,8 +4007,8 @@
   "thenoodlefreshexpress.com": {
    "bad": "dns",
    "first": "2026-10-20",
-   "last": "2026-11-13",
-   "n": 6
+   "last": "2026-11-20",
+   "n": 7
   },
   "tycoonramen.com": {
    "bad": "dns",
@@ -4073,8 +4067,8 @@
   "sushipartyatmissouri.com": {
    "bad": "dns",
    "first": "2026-10-20",
-   "last": "2026-11-13",
-   "n": 6
+   "last": "2026-11-20",
+   "n": 7
   },
   "migiakc.com": {
    "bad": "dns",
@@ -4097,8 +4091,8 @@
   "arvadasasukeramen.com": {
    "bad": "down",
    "first": "2026-10-20",
-   "last": "2026-11-13",
-   "n": 6
+   "last": "2026-11-20",
+   "n": 7
   },
   "ramenstar.com": {
    "bad": "dns",
@@ -4145,14 +4139,14 @@
   "zenramenmadison.com": {
    "bad": "down",
    "first": "2026-10-20",
-   "last": "2026-11-13",
-   "n": 6
+   "last": "2026-11-20",
+   "n": 7
   },
   "namidekalbil.com": {
    "bad": "down",
    "first": "2026-10-20",
-   "last": "2026-11-13",
-   "n": 6
+   "last": "2026-11-20",
+   "n": 7
   },
   "minneapolis.ichiddo.com": {
    "bad": "down",
@@ -4211,8 +4205,8 @@
   "kozuecincinnati.com": {
    "bad": "dns",
    "first": "2026-10-20",
-   "last": "2026-11-13",
-   "n": 6
+   "last": "2026-11-20",
+   "n": 7
   },
   "stonebowloakley.com": {
    "bad": "parked",
@@ -4247,8 +4241,8 @@
   "phonoodledownersreviews.com": {
    "bad": "dns",
    "first": "2026-10-20",
-   "last": "2026-11-13",
-   "n": 6
+   "last": "2026-11-20",
+   "n": 7
   },
   "hotpandumplings.com": {
    "bad": "dns",
@@ -4313,8 +4307,8 @@
   "noodlezone.net": {
    "bad": "dns",
    "first": "2026-10-20",
-   "last": "2026-11-13",
-   "n": 6
+   "last": "2026-11-20",
+   "n": 7
   },
   "phoxeluachicago.com": {
    "bad": "dns",
@@ -4397,8 +4391,8 @@
   "arakiramen.com": {
    "bad": "down",
    "first": "2026-10-20",
-   "last": "2026-11-13",
-   "n": 6
+   "last": "2026-11-20",
+   "n": 7
   },
   "kajikenus.com": {
    "bad": "down",
@@ -4427,8 +4421,8 @@
   "ramenfactory42.com": {
    "bad": "dns",
    "first": "2026-10-20",
-   "last": "2026-11-13",
-   "n": 6
+   "last": "2026-11-20",
+   "n": 7
   },
   "taanramen.com": {
    "bad": "dns",
@@ -4439,8 +4433,8 @@
   "zenhouseberryviile.com": {
    "bad": "dns",
    "first": "2026-10-20",
-   "last": "2026-11-13",
-   "n": 6
+   "last": "2026-11-20",
+   "n": 7
   },
   "handpullnoodle.com": {
    "bad": "down",
@@ -4499,8 +4493,8 @@
   "hokkaidogreece.com": {
    "bad": "dns",
    "first": "2026-10-20",
-   "last": "2026-11-13",
-   "n": 6
+   "last": "2026-11-20",
+   "n": 7
   },
   "ramenherovirginiabeach.com": {
    "bad": "dns",
@@ -4541,8 +4535,8 @@
   "ramenbarphilly.com": {
    "bad": "down",
    "first": "2026-10-20",
-   "last": "2026-11-13",
-   "n": 6
+   "last": "2026-11-20",
+   "n": 7
   },
   "wilhubpa.com": {
    "bad": "dns",
@@ -4559,8 +4553,8 @@
   "likeme.net": {
    "bad": "down",
    "first": "2026-10-20",
-   "last": "2026-11-13",
-   "n": 6
+   "last": "2026-11-20",
+   "n": 7
   },
   "kamiramenpa.com": {
    "bad": "dns",
@@ -4571,8 +4565,8 @@
   "noodlebarnyc.com": {
    "bad": "dns",
    "first": "2026-10-20",
-   "last": "2026-11-13",
-   "n": 6
+   "last": "2026-11-20",
+   "n": 7
   },
   "danielramen.com": {
    "bad": "dns",
@@ -4601,8 +4595,8 @@
   "happychinapa.com": {
    "bad": "down",
    "first": "2026-10-20",
-   "last": "2026-11-13",
-   "n": 6
+   "last": "2026-11-20",
+   "n": 7
   },
   "thenoodlehouse.us": {
    "bad": "dns",
@@ -4613,14 +4607,14 @@
   "orderxianflavor.com": {
    "bad": "dns",
    "first": "2026-10-20",
-   "last": "2026-11-13",
-   "n": 6
+   "last": "2026-11-20",
+   "n": 7
   },
   "orderramenshoppunj.com": {
    "bad": "dns",
    "first": "2026-10-20",
-   "last": "2026-11-13",
-   "n": 6
+   "last": "2026-11-20",
+   "n": 7
   },
   "alohapokebk.com": {
    "bad": "down",
@@ -4667,8 +4661,8 @@
   "dengji2.com": {
    "bad": "dns",
    "first": "2026-10-20",
-   "last": "2026-11-13",
-   "n": 6
+   "last": "2026-11-20",
+   "n": 7
   },
   "yiwanmen-cq.com": {
    "bad": "dns",
@@ -4691,8 +4685,8 @@
   "noodlekingofnewyorktogo.com": {
    "bad": "dns",
    "first": "2026-10-20",
-   "last": "2026-11-13",
-   "n": 6
+   "last": "2026-11-20",
+   "n": 7
   },
   "mnoodleshopnyc.com": {
    "bad": "dns",
@@ -4745,8 +4739,8 @@
   "sanshiricenoodles.com": {
    "bad": "dns",
    "first": "2026-10-20",
-   "last": "2026-11-13",
-   "n": 6
+   "last": "2026-11-20",
+   "n": 7
   },
   "hakatalivingstonnj.com": {
    "bad": "dns",
@@ -4763,14 +4757,14 @@
   "7doorsdown.com": {
    "bad": "down",
    "first": "2026-10-20",
-   "last": "2026-11-13",
-   "n": 6
+   "last": "2026-11-20",
+   "n": 7
   },
   "orderwokitc.com": {
    "bad": "dns",
    "first": "2026-10-20",
-   "last": "2026-11-13",
-   "n": 6
+   "last": "2026-11-20",
+   "n": 7
   },
   "narutoramenexpressnyc.com": {
    "bad": "dns",
@@ -4793,20 +4787,20 @@
   "mtr-ramen.com": {
    "bad": "dns",
    "first": "2026-10-20",
-   "last": "2026-11-13",
-   "n": 6
+   "last": "2026-11-20",
+   "n": 7
   },
   "teriyakibowl.com": {
    "bad": "down",
    "first": "2026-10-20",
-   "last": "2026-11-13",
-   "n": 6
+   "last": "2026-11-20",
+   "n": 7
   },
   "raijinramenhouseny.com": {
    "bad": "dns",
    "first": "2026-10-20",
-   "last": "2026-11-13",
-   "n": 6
+   "last": "2026-11-20",
+   "n": 7
   },
   "riceball-omsb.com": {
    "bad": "dns",
@@ -4877,8 +4871,8 @@
   "amazingmrramen.com": {
    "bad": "down",
    "first": "2026-10-20",
-   "last": "2026-11-13",
-   "n": 6
+   "last": "2026-11-20",
+   "n": 7
   },
   "suirennyc.com": {
    "bad": "dns",
@@ -4889,8 +4883,8 @@
   "momoramenus.com": {
    "bad": "dns",
    "first": "2026-10-20",
-   "last": "2026-11-13",
-   "n": 6
+   "last": "2026-11-20",
+   "n": 7
   },
   "zoujilanzhouramen.com": {
    "bad": "dns",
@@ -4901,8 +4895,8 @@
   "orderhiexpressthai.com": {
    "bad": "dns",
    "first": "2026-10-20",
-   "last": "2026-11-13",
-   "n": 6
+   "last": "2026-11-20",
+   "n": 7
   },
   "kankisushi.com": {
    "bad": "down",
@@ -4961,14 +4955,14 @@
   "onepieceramenny.com": {
    "bad": "dns",
    "first": "2026-10-20",
-   "last": "2026-11-13",
-   "n": 6
+   "last": "2026-11-20",
+   "n": 7
   },
   "redmountainnoodlehouse.com": {
    "bad": "dns",
    "first": "2026-10-20",
-   "last": "2026-11-13",
-   "n": 6
+   "last": "2026-11-20",
+   "n": 7
   },
   "lambnoodlesoup.com": {
    "bad": "dns",
@@ -5009,14 +5003,14 @@
   "thetheothaibistro.com": {
    "bad": "down",
    "first": "2026-10-20",
-   "last": "2026-11-13",
-   "n": 6
+   "last": "2026-11-20",
+   "n": 7
   },
   "misoramenhibachitogo.com": {
    "bad": "down",
    "first": "2026-10-20",
-   "last": "2026-11-13",
-   "n": 6
+   "last": "2026-11-20",
+   "n": 7
   },
   "thaianatogo.com": {
    "bad": "dns",
@@ -5039,8 +5033,8 @@
   "ordertdvietnampalacect.com": {
    "bad": "dns",
    "first": "2026-10-20",
-   "last": "2026-11-13",
-   "n": 6
+   "last": "2026-11-20",
+   "n": 7
   },
   "funjunoodlebar.com": {
    "bad": "down",
@@ -5063,8 +5057,8 @@
   "pandathomaston.com": {
    "bad": "down",
    "first": "2026-10-20",
-   "last": "2026-11-13",
-   "n": 6
+   "last": "2026-11-20",
+   "n": 7
   },
   "yorkstreetnoodlehouse.com": {
    "bad": "down",
@@ -5093,8 +5087,8 @@
   "yokohamanoho.com": {
    "bad": "parked",
    "first": "2026-10-20",
-   "last": "2026-11-13",
-   "n": 6
+   "last": "2026-11-20",
+   "n": 7
   },
   "asiananoodleshop.com": {
    "bad": "down",
@@ -5111,8 +5105,8 @@
   "shinhakataramen.com": {
    "bad": "dns",
    "first": "2026-10-20",
-   "last": "2026-11-13",
-   "n": 6
+   "last": "2026-11-20",
+   "n": 7
   },
   "wensnoodle.com": {
    "bad": "dns",
@@ -5123,8 +5117,8 @@
   "ultraspicyhousemalden.com": {
    "bad": "dns",
    "first": "2026-10-20",
-   "last": "2026-11-13",
-   "n": 6
+   "last": "2026-11-20",
+   "n": 7
   },
   "amateras-ramen.com": {
    "bad": "down",
@@ -5147,8 +5141,8 @@
   "momoyoramenhampton.com": {
    "bad": "down",
    "first": "2026-10-20",
-   "last": "2026-11-13",
-   "n": 6
+   "last": "2026-11-20",
+   "n": 7
   },
   "buyarestaurants.com": {
    "bad": "down",
@@ -5213,8 +5207,8 @@
   "kinarisushiandnoodle.com": {
    "bad": "dns",
    "first": "2026-10-20",
-   "last": "2026-11-13",
-   "n": 6
+   "last": "2026-11-20",
+   "n": 7
   },
   "gardengroveramen.com": {
    "bad": "dns",
@@ -5231,14 +5225,14 @@
   "ajisenasiancuisine.com": {
    "bad": "dns",
    "first": "2026-10-20",
-   "last": "2026-11-13",
-   "n": 6
+   "last": "2026-11-20",
+   "n": 7
   },
   "funbowlramen.com": {
    "bad": "dns",
    "first": "2026-10-20",
-   "last": "2026-11-13",
-   "n": 6
+   "last": "2026-11-20",
+   "n": 7
   },
   "u-ramen.com": {
    "bad": "dns",
@@ -5261,8 +5255,8 @@
   "ichicoroimoto.com": {
    "bad": "dns",
    "first": "2026-10-20",
-   "last": "2026-11-13",
-   "n": 6
+   "last": "2026-11-20",
+   "n": 7
   },
   "ichiyaramen.com": {
    "bad": "dns",
@@ -5273,8 +5267,8 @@
   "setsunainoodles.com": {
    "bad": "dns",
    "first": "2026-10-20",
-   "last": "2026-11-13",
-   "n": 6
+   "last": "2026-11-20",
+   "n": 7
   },
   "nationalcityramen.com": {
    "bad": "down",
@@ -5315,8 +5309,8 @@
   "tigerdentx.com": {
    "bad": "dns",
    "first": "2026-11-06",
-   "last": "2026-11-13",
-   "n": 2
+   "last": "2026-11-20",
+   "n": 3
   },
   "ramenracine.com": {
    "bad": "down",
@@ -5345,8 +5339,8 @@
   "nagoyarestaurantma.com": {
    "bad": "dns",
    "first": "2026-10-20",
-   "last": "2026-11-13",
-   "n": 6
+   "last": "2026-11-20",
+   "n": 7
   },
   "hollywoodsushila.com": {
    "bad": "dns",
@@ -5369,8 +5363,8 @@
   "karakatta.com": {
    "bad": "down",
    "first": "2026-10-20",
-   "last": "2026-11-13",
-   "n": 6
+   "last": "2026-11-20",
+   "n": 7
   },
   "taisho-bistro.com": {
    "bad": "down",
@@ -5387,8 +5381,8 @@
   "ramenkatsu.com": {
    "bad": "dns",
    "first": "2026-10-20",
-   "last": "2026-11-13",
-   "n": 6
+   "last": "2026-11-20",
+   "n": 7
   },
   "brothersnoodlebar.com": {
    "bad": "dns",
@@ -5405,8 +5399,8 @@
   "shokudoramen.com": {
    "bad": "down",
    "first": "2026-10-20",
-   "last": "2026-11-13",
-   "n": 6
+   "last": "2026-11-20",
+   "n": 7
   },
   "wowsushi.net": {
    "bad": "dns",
@@ -5417,14 +5411,14 @@
   "ronincafeandramen.com": {
    "bad": "dns",
    "first": "2026-10-20",
-   "last": "2026-11-13",
-   "n": 6
+   "last": "2026-11-20",
+   "n": 7
   },
   "monarchnoodles.com": {
    "bad": "dns",
    "first": "2026-10-20",
-   "last": "2026-11-13",
-   "n": 6
+   "last": "2026-11-20",
+   "n": 7
   },
   "ishi-ishi.com": {
    "bad": "dns",
@@ -5453,8 +5447,8 @@
   "fireandricebaltimore.com": {
    "bad": "dns",
    "first": "2026-10-20",
-   "last": "2026-11-13",
-   "n": 6
+   "last": "2026-11-20",
+   "n": 7
   },
   "pokemenopelika.com": {
    "bad": "down",
@@ -5465,14 +5459,14 @@
   "tokyohousetb.com": {
    "bad": "dns",
    "first": "2026-10-20",
-   "last": "2026-11-13",
-   "n": 6
+   "last": "2026-11-20",
+   "n": 7
   },
   "orderjjbistrowheaton.com": {
    "bad": "dns",
    "first": "2026-10-20",
-   "last": "2026-11-13",
-   "n": 6
+   "last": "2026-11-20",
+   "n": 7
   },
   "izakayaoyazi.com": {
    "bad": "dns",
@@ -5483,8 +5477,8 @@
   "nomnomthaico.com": {
    "bad": "dns",
    "first": "2026-10-20",
-   "last": "2026-11-13",
-   "n": 6
+   "last": "2026-11-20",
+   "n": 7
   },
   "eurasiasushiaustin.com": {
    "bad": "down",
@@ -5543,14 +5537,14 @@
   "ichiramenil.com": {
    "bad": "down",
    "first": "2026-10-20",
-   "last": "2026-11-13",
-   "n": 6
+   "last": "2026-11-20",
+   "n": 7
   },
   "smokehousebbqandramen.com": {
    "bad": "dns",
    "first": "2026-10-20",
-   "last": "2026-11-13",
-   "n": 6
+   "last": "2026-11-20",
+   "n": 7
   },
   "myramenco.net": {
    "bad": "dns",
@@ -5657,8 +5651,8 @@
   "mrtakaramen.net": {
    "bad": "down",
    "first": "2026-10-21",
-   "last": "2026-11-13",
-   "n": 5
+   "last": "2026-11-20",
+   "n": 6
   },
   "ramentaka.org": {
    "bad": "dns",
@@ -5675,14 +5669,14 @@
   "aikisushiandramenco.com": {
    "bad": "down",
    "first": "2026-10-21",
-   "last": "2026-11-13",
-   "n": 5
+   "last": "2026-11-20",
+   "n": 6
   },
   "tenhoramen.com": {
    "bad": "down",
    "first": "2026-10-21",
-   "last": "2026-11-13",
-   "n": 5
+   "last": "2026-11-20",
+   "n": 6
   },
   "urbowls.com": {
    "bad": "dns",
@@ -5777,8 +5771,8 @@
   "homiyaramennoodle.com": {
    "bad": "down",
    "first": "2026-10-21",
-   "last": "2026-11-13",
-   "n": 5
+   "last": "2026-11-20",
+   "n": 6
   },
   "centerstreetcollective.com": {
    "bad": "dns",
@@ -5807,8 +5801,8 @@
   "fujiyaramensushibartx.com": {
    "bad": "down",
    "first": "2026-10-21",
-   "last": "2026-11-13",
-   "n": 5
+   "last": "2026-11-20",
+   "n": 6
   },
   "kokororamennc.com": {
    "bad": "down",
@@ -5831,20 +5825,20 @@
   "tokyo8hobart.com": {
    "bad": "down",
    "first": "2026-10-21",
-   "last": "2026-11-13",
-   "n": 5
+   "last": "2026-11-20",
+   "n": 6
   },
   "piranhakillersushi.com": {
    "bad": "down",
    "first": "2026-10-21",
-   "last": "2026-11-13",
-   "n": 5
+   "last": "2026-11-20",
+   "n": 6
   },
   "ramentakagi.com": {
    "bad": "down",
    "first": "2026-10-21",
-   "last": "2026-11-13",
-   "n": 5
+   "last": "2026-11-20",
+   "n": 6
   },
   "tokyoya-ramen.com": {
    "bad": "down",
@@ -5855,8 +5849,8 @@
   "koiramenandsushi.com": {
    "bad": "down",
    "first": "2026-10-21",
-   "last": "2026-11-13",
-   "n": 5
+   "last": "2026-11-20",
+   "n": 6
   },
   "narutoramenmonroe.com": {
    "bad": "down",
@@ -5891,14 +5885,14 @@
   "order.rokaruramen.com": {
    "bad": "dns",
    "first": "2026-10-30",
-   "last": "2026-11-13",
-   "n": 3
+   "last": "2026-11-20",
+   "n": 4
   },
   "bennythaiil.com": {
    "bad": "down",
    "first": "2026-10-23",
-   "last": "2026-11-13",
-   "n": 4
+   "last": "2026-11-20",
+   "n": 5
   },
   "ramen-champ.com": {
    "bad": "dns",
@@ -6047,20 +6041,20 @@
   "ramenx2.com": {
    "bad": "dns",
    "first": "2026-10-30",
-   "last": "2026-11-13",
-   "n": 3
+   "last": "2026-11-20",
+   "n": 4
   },
   "chinachen.org": {
    "bad": "down",
    "first": "2026-10-30",
-   "last": "2026-11-13",
-   "n": 3
+   "last": "2026-11-20",
+   "n": 4
   },
   "makiexpress.tripod.com": {
    "bad": "dns",
    "first": "2026-10-30",
-   "last": "2026-11-13",
-   "n": 3
+   "last": "2026-11-20",
+   "n": 4
   },
   "ramennakamura.com": {
    "bad": "down",
@@ -6665,74 +6659,74 @@
   "tanto-hawaii.com": {
    "bad": "down",
    "first": "2026-11-06",
-   "last": "2026-11-13",
-   "n": 2
+   "last": "2026-11-20",
+   "n": 3
   },
   "yamaguchiramen.com": {
    "bad": "down",
    "first": "2026-11-06",
-   "last": "2026-11-13",
-   "n": 2
+   "last": "2026-11-20",
+   "n": 3
   },
   "mingsthing.com": {
    "bad": "down",
    "first": "2026-11-06",
-   "last": "2026-11-13",
-   "n": 2
+   "last": "2026-11-20",
+   "n": 3
   },
   "hinodeyaramen.com": {
    "bad": "down",
    "first": "2026-11-06",
-   "last": "2026-11-13",
-   "n": 2
+   "last": "2026-11-20",
+   "n": 3
   },
   "noodlehouse88.com": {
    "bad": "dns",
    "first": "2026-11-06",
-   "last": "2026-11-13",
-   "n": 2
+   "last": "2026-11-20",
+   "n": 3
   },
   "thephoshack.com": {
    "bad": "down",
    "first": "2026-11-06",
-   "last": "2026-11-13",
-   "n": 2
+   "last": "2026-11-20",
+   "n": 3
   },
   "nokaramen.com": {
    "bad": "down",
    "first": "2026-11-06",
-   "last": "2026-11-13",
-   "n": 2
+   "last": "2026-11-20",
+   "n": 3
   },
   "toshsramen.com": {
    "bad": "down",
    "first": "2026-11-06",
-   "last": "2026-11-13",
-   "n": 2
+   "last": "2026-11-20",
+   "n": 3
   },
   "kayosramen.com": {
    "bad": "down",
    "first": "2026-11-06",
-   "last": "2026-11-13",
-   "n": 2
+   "last": "2026-11-20",
+   "n": 3
   },
   "terakawaramennj.com": {
    "bad": "down",
    "first": "2026-11-06",
-   "last": "2026-11-13",
-   "n": 2
+   "last": "2026-11-20",
+   "n": 3
   },
   "zayaramen.com": {
    "bad": "down",
    "first": "2026-11-06",
-   "last": "2026-11-13",
-   "n": 2
+   "last": "2026-11-20",
+   "n": 3
   },
   "apramen.com": {
    "bad": "down",
    "first": "2026-11-06",
-   "last": "2026-11-13",
-   "n": 2
+   "last": "2026-11-20",
+   "n": 3
   },
   "kazumirestaurant.com": {
    "bad": "down",
@@ -6761,8 +6755,8 @@
   "pot17.com": {
    "bad": "down",
    "first": "2026-11-06",
-   "last": "2026-11-13",
-   "n": 2
+   "last": "2026-11-20",
+   "n": 3
   },
   "surisansf.com": {
    "bad": "down",
@@ -6827,14 +6821,14 @@
   "rocnramen.com": {
    "bad": "down",
    "first": "2026-11-06",
-   "last": "2026-11-13",
-   "n": 2
+   "last": "2026-11-20",
+   "n": 3
   },
   "matsunokiramen.com": {
    "bad": "down",
    "first": "2026-11-06",
-   "last": "2026-11-13",
-   "n": 2
+   "last": "2026-11-20",
+   "n": 3
   },
   "daiichiramenhawaii.com": {
    "bad": "down",
@@ -7529,68 +7523,44 @@
   "tastynoodlehouseirvine.com": {
    "bad": "down",
    "first": "2026-11-13",
-   "last": "2026-11-13",
-   "n": 1
+   "last": "2026-11-20",
+   "n": 2
   },
   "hibachiakron.com": {
    "bad": "down",
    "first": "2026-11-13",
-   "last": "2026-11-13",
-   "n": 1
-  },
-  "njsushi.com": {
-   "bad": "down",
-   "first": "2026-11-13",
-   "last": "2026-11-13",
-   "n": 1
+   "last": "2026-11-20",
+   "n": 2
   },
   "kyotobrooklyn.net": {
    "bad": "down",
    "first": "2026-11-13",
-   "last": "2026-11-13",
-   "n": 1
+   "last": "2026-11-20",
+   "n": 2
   },
   "sushitimeny.com": {
    "bad": "down",
    "first": "2026-11-13",
-   "last": "2026-11-13",
-   "n": 1
+   "last": "2026-11-20",
+   "n": 2
   },
   "asahisushius.com": {
    "bad": "down",
    "first": "2026-11-13",
-   "last": "2026-11-13",
-   "n": 1
-  },
-  "jayeats.com": {
-   "bad": "down",
-   "first": "2026-11-13",
-   "last": "2026-11-13",
-   "n": 1
-  },
-  "rockandrollsushi.com": {
-   "bad": "down",
-   "first": "2026-11-13",
-   "last": "2026-11-13",
-   "n": 1
+   "last": "2026-11-20",
+   "n": 2
   },
   "senzunoodlebar.com": {
    "bad": "down",
    "first": "2026-11-13",
-   "last": "2026-11-13",
-   "n": 1
+   "last": "2026-11-20",
+   "n": 2
   },
   "misostillwater.com": {
    "bad": "down",
    "first": "2026-11-13",
-   "last": "2026-11-13",
-   "n": 1
-  },
-  "maricopayummynoodles.com": {
-   "bad": "down",
-   "first": "2026-11-13",
-   "last": "2026-11-13",
-   "n": 1
+   "last": "2026-11-20",
+   "n": 2
   },
   "fujiramenscranton.kwickmenu.com": {
    "bad": "down",
@@ -7770,6 +7740,54 @@
    "bad": "down",
    "first": "2026-11-19",
    "last": "2026-11-19",
+   "n": 1
+  },
+  "locations.bdsgrill.com": {
+   "bad": "dns",
+   "first": "2026-11-20",
+   "last": "2026-11-20",
+   "n": 1
+  },
+  "xiannoodles.com": {
+   "bad": "down",
+   "first": "2026-11-20",
+   "last": "2026-11-20",
+   "n": 1
+  },
+  "yobapoke.com": {
+   "bad": "down",
+   "first": "2026-11-20",
+   "last": "2026-11-20",
+   "n": 1
+  },
+  "monarchblackhawk.com": {
+   "bad": "down",
+   "first": "2026-11-20",
+   "last": "2026-11-20",
+   "n": 1
+  },
+  "kingsmongolianbbq.com": {
+   "bad": "down",
+   "first": "2026-11-20",
+   "last": "2026-11-20",
+   "n": 1
+  },
+  "tourmaline-banoffee-3536e5.netlify.app": {
+   "bad": "down",
+   "first": "2026-11-20",
+   "last": "2026-11-20",
+   "n": 1
+  },
+  "yumewokatare.org": {
+   "bad": "down",
+   "first": "2026-11-20",
+   "last": "2026-11-20",
+   "n": 1
+  },
+  "kaizendining.com": {
+   "bad": "down",
+   "first": "2026-11-20",
+   "last": "2026-11-20",
    "n": 1
   }
  },
@@ -8116,7 +8134,7 @@
     ]
    ],
    "how": "jsonld",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "seoulvibez.com": {
    "w": [
@@ -8627,32 +8645,32 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "palanishawaiinoodles.com": {
    "w": [
     [
      [
       720,
-      1260
+      1200
      ]
     ],
     [
      [
       660,
-      1260
+      1200
      ]
     ],
     [
      [
       660,
-      1260
+      1200
      ]
     ],
     [
      [
       660,
-      1260
+      1200
      ]
     ],
     [],
@@ -8665,7 +8683,7 @@
     []
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "tastywingsnramen.com": {
    "w": [
@@ -9002,7 +9020,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "sakuramenonline.com": {
    "w": [
@@ -9088,7 +9106,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "misoramen-pokebar.com": {
    "w": [
@@ -9265,7 +9283,7 @@
     ]
    ],
    "how": "jsonld",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "tokio-ramen.netlify.app": {
    "w": [
@@ -9442,7 +9460,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "butasd.com": {
    "w": [
@@ -9922,7 +9940,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "joyeesdumpling.com": {
    "w": [
@@ -11038,25 +11056,25 @@
     [
      [
       600,
-      1320
+      1290
      ]
     ],
     [
      [
       600,
-      1320
+      1290
      ]
     ],
     [
      [
       600,
-      1320
+      1290
      ]
     ],
     [
      [
       600,
-      1320
+      1290
      ]
     ],
     [
@@ -11067,7 +11085,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "guramenlongbeach.com": {
    "w": [
@@ -12234,7 +12252,7 @@
     ]
    ],
    "how": "jsonld",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "isshin.us": {
    "w": [
@@ -12325,7 +12343,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "santabarbaracraftramen.com": {
    "w": [
@@ -13007,7 +13025,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "magurosushi.net": {
    "w": [
@@ -13338,7 +13356,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "yangnoodlehouseca.com": {
    "w": [
@@ -13381,7 +13399,7 @@
     ]
    ],
    "how": "jsonld",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "akisushi.kwickmenu.com": {
    "w": [
@@ -13798,7 +13816,7 @@
     ]
    ],
    "how": "jsonld",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "yoshipearland.com": {
    "w": [
@@ -14018,7 +14036,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "ichiru.kwickmenu.com": {
    "w": [
@@ -14162,7 +14180,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "ajirobata.com": {
    "w": [
@@ -14777,7 +14795,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "sushigardenjax.com": {
    "w": [
@@ -15509,7 +15527,7 @@
     ]
    ],
    "how": "jsonld",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "tsuyoiramenbossier.kwickmenu.com": {
    "w": [
@@ -15624,7 +15642,7 @@
     []
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "tigerramenjapan.com": {
    "w": [
@@ -15854,7 +15872,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "33ramenpickup.com": {
    "w": [
@@ -16466,7 +16484,7 @@
     []
    ],
    "how": "jsonld",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "taiyoramensushi.com": {
    "w": [
@@ -16782,7 +16800,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "serramontecenter.com": {
    "w": [
@@ -17793,7 +17811,7 @@
     ]
    ],
    "how": "jsonld",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "eightyeightsushi.com": {
    "w": [
@@ -18109,7 +18127,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "kyotoramenlivermore.kwickmenu.com": {
    "w": [
@@ -18157,7 +18175,7 @@
     ]
    ],
    "how": "jsonld",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "katanayaca.com": {
    "w": [
@@ -18387,7 +18405,7 @@
     ]
    ],
    "how": "jsonld",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "noodletheory.com": {
    "w": [
@@ -18511,7 +18529,7 @@
     ]
    ],
    "how": "jsonld",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "susukinoramen.com": {
    "w": [
@@ -18785,7 +18803,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "westsacramentopokebowl.com": {
    "w": [
@@ -19452,7 +19470,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "noodlekingnv.com": {
    "w": [
@@ -19778,7 +19796,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "koiramensushi.com": {
    "w": [
@@ -20401,7 +20419,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "ibendoo.com": {
    "w": [
@@ -20449,7 +20467,7 @@
     ]
    ],
    "how": "jsonld",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "kennysnoodleor.com": {
    "w": [
@@ -20631,7 +20649,7 @@
     ]
    ],
    "how": "jsonld",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "thongthairestaurant.com": {
    "w": [
@@ -20755,7 +20773,7 @@
     []
    ],
    "how": "jsonld",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "engimonoramendimsumfederalway.com": {
    "w": [
@@ -21594,7 +21612,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "hotpotramenhouse.com": {
    "w": [
@@ -21642,7 +21660,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "tokyobangkok.com": {
    "w": [
@@ -21718,7 +21736,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "tomisushiramen.com": {
    "w": [
@@ -23944,7 +23962,7 @@
     ]
    ],
    "how": "jsonld",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "ahisushine.com": {
    "w": [
@@ -24443,7 +24461,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "taigunoodles.com": {
    "w": [
@@ -25269,7 +25287,7 @@
     ]
    ],
    "how": "jsonld",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "matsumotoramenhouse.com": {
    "w": [
@@ -25375,7 +25393,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "kyotoramenclarksville.com": {
    "w": [
@@ -25471,7 +25489,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "komugiramen.com": {
    "w": [
@@ -25878,7 +25896,7 @@
     []
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "ramenray.com": {
    "w": [
@@ -27288,7 +27306,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "musashiyaramen.com": {
    "w": [
@@ -27406,25 +27424,10 @@
   },
   "ukaichicago.com": {
    "w": [
-    [
-     [
-      720,
-      1290
-     ]
-    ],
     [],
-    [
-     [
-      720,
-      1290
-     ]
-    ],
-    [
-     [
-      720,
-      1290
-     ]
-    ],
+    [],
+    [],
+    [],
     [
      [
       720,
@@ -27445,7 +27448,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "ramendobotogo.com": {
    "w": [
@@ -27551,7 +27554,7 @@
     ]
    ],
    "how": "jsonld",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "tanpoporamen.com": {
    "w": [
@@ -27978,7 +27981,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "mikamichicago.com": {
    "w": [
@@ -28251,7 +28254,7 @@
     ]
    ],
    "how": "jsonld",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "yobapoke.com": {
    "w": [
@@ -28562,7 +28565,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "zhenrameneastlansing.com": {
    "w": [
@@ -28605,7 +28608,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "edo-lounge.com": {
    "w": [
@@ -28885,7 +28888,7 @@
     ]
    ],
    "how": "jsonld",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "yamenoodles.com": {
    "w": [
@@ -29179,7 +29182,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "ahhanoodles.com": {
    "w": [
@@ -29941,7 +29944,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "oishiiva.com": {
    "w": [
@@ -30171,7 +30174,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "pholiciouswoodbridge.com": {
    "w": [
@@ -30563,7 +30566,7 @@
     ]
    ],
    "how": "jsonld",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "akiradc.com": {
    "w": [
@@ -30975,7 +30978,7 @@
     []
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "akiraramenbaltimore.com": {
    "w": [
@@ -31367,7 +31370,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "harukocraftramen.com": {
    "w": [
@@ -34231,7 +34234,7 @@
     []
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "teppenramen.com": {
    "w": [
@@ -34269,7 +34272,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "mettra.net": {
    "w": [
@@ -34506,7 +34509,7 @@
     ]
    ],
    "how": "jsonld",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "mizu940.com": {
    "w": [
@@ -34704,7 +34707,7 @@
     ]
    ],
    "how": "jsonld",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "hanamarumart.us": {
    "w": [
@@ -34934,7 +34937,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "flavorabowl.com": {
    "w": [
@@ -35020,7 +35023,7 @@
     ]
    ],
    "how": "jsonld",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "ichiddowappingers.com": {
    "w": [
@@ -35309,7 +35312,7 @@
     ]
    ],
    "how": "jsonld",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "takumiramenmonroe.kwickmenu.com": {
    "w": [
@@ -35352,7 +35355,7 @@
     ]
    ],
    "how": "jsonld",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "xramenfairfield.com": {
    "w": [
@@ -37608,7 +37611,7 @@
     ]
    ],
    "how": "jsonld",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "jskoreanfood.com": {
    "w": [
@@ -37966,7 +37969,7 @@
     []
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "esushibar.com": {
    "w": [
@@ -38349,7 +38352,7 @@
     []
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "morimotoasia.com": {
    "w": [
@@ -38541,7 +38544,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "sohosushi.com": {
    "w": [
@@ -38652,7 +38655,7 @@
     []
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "sushichefusa.com": {
    "w": [
@@ -39297,7 +39300,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "koiftl.com": {
    "w": [
@@ -39345,7 +39348,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "senzunoodlebar.com": {
    "w": [
@@ -39507,7 +39510,7 @@
     ]
    ],
    "how": "jsonld",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "umijapaneserestaurant.com": {
    "w": [
@@ -41710,7 +41713,7 @@
     []
    ],
    "how": "jsonld",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "sapporosa.com": {
    "w": [
@@ -42021,7 +42024,7 @@
     ]
    ],
    "how": "jsonld",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "sakesushisa.com": {
    "w": [
@@ -42112,7 +42115,7 @@
     ]
    ],
    "how": "jsonld",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "fujimarblefalls.com": {
    "w": [
@@ -42178,7 +42181,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "sotoaustin.com": {
    "w": [
@@ -42274,7 +42277,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "theyasumihouse.com": {
    "w": [
@@ -42365,7 +42368,7 @@
     ]
    ],
    "how": "jsonld",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "fatdragonatx.com": {
    "w": [
@@ -42682,7 +42685,7 @@
     []
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "pokestopfw.com": {
    "w": [
@@ -43025,7 +43028,7 @@
     []
    ],
    "how": "jsonld",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "theshojin.com": {
    "w": [
@@ -43871,7 +43874,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "nori805.com": {
    "w": [
@@ -43957,7 +43960,7 @@
     ]
    ],
    "how": "jsonld",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "kazuyasushimoorpark.com": {
    "w": [
@@ -44354,7 +44357,7 @@
     ]
    ],
    "how": "jsonld",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "whatthefishsushi.com": {
    "w": [
@@ -44445,7 +44448,7 @@
     ]
    ],
    "how": "jsonld",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "jinsdiningusa.com": {
    "w": [
@@ -44604,7 +44607,7 @@
     ]
    ],
    "how": "jsonld",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "ryusushitemecula.com": {
    "w": [
@@ -45198,7 +45201,7 @@
     ]
    ],
    "how": "text2",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "tokyo-stop.com": {
    "w": [
@@ -45284,7 +45287,7 @@
     ]
    ],
    "how": "jsonld",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "namisushibar.com": {
    "w": [
@@ -45946,7 +45949,7 @@
     []
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "chanchanfoodhouse.com": {
    "w": [
@@ -46731,7 +46734,7 @@
     ]
    ],
    "how": "jsonld",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "umisushi.kwickmenu.com": {
    "w": [
@@ -46847,7 +46850,7 @@
     ]
    ],
    "how": "jsonld",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "katarobata.com": {
    "w": [
@@ -47119,7 +47122,7 @@
     []
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "sushimizunewiberia.com": {
    "w": [
@@ -47484,7 +47487,7 @@
     ]
    ],
    "how": "jsonld",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "origaminola.com": {
    "w": [
@@ -48147,7 +48150,7 @@
     ]
    ],
    "how": "jsonld",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "ukiyosavannah.com": {
    "w": [
@@ -48180,7 +48183,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "sanyakoreanbbq.com": {
    "w": [
@@ -48373,7 +48376,7 @@
     ]
    ],
    "how": "jsonld",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "mizugardencityga.com": {
    "w": [
@@ -48796,7 +48799,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "wickedbao.com": {
    "w": [
@@ -49347,7 +49350,7 @@
     ]
    ],
    "how": "jsonld",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "otsukaramenal.com": {
    "w": [
@@ -49433,7 +49436,7 @@
     []
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "sensusushibar.com": {
    "w": [
@@ -49730,7 +49733,7 @@
     ]
    ],
    "how": "jsonld",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "sushithaiofwarnerrobins.com": {
    "w": [
@@ -50271,7 +50274,7 @@
     ]
    ],
    "how": "jsonld",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "sushiosawa.online": {
    "w": [
@@ -50468,7 +50471,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "enzosushisteak.com": {
    "w": [
@@ -50688,7 +50691,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "zestoncantonstreet.com": {
    "w": [
@@ -50889,7 +50892,7 @@
     ]
    ],
    "how": "jsonld",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "makisushibistro.com": {
    "w": [
@@ -51496,7 +51499,7 @@
     ]
    ],
    "how": "jsonld",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "omasushisf.com": {
    "w": [
@@ -52293,7 +52296,7 @@
     ]
    ],
    "how": "jsonld",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "migatofu.com": {
    "w": [
@@ -52447,7 +52450,7 @@
     ]
    ],
    "how": "jsonld",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "gotkoryosushi.com": {
    "w": [
@@ -53022,7 +53025,7 @@
     []
    ],
    "how": "jsonld",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "visitred88.com": {
    "w": [
@@ -53253,7 +53256,7 @@
     ]
    ],
    "how": "jsonld",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "akirabistro.com": {
    "w": [
@@ -53387,7 +53390,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "izakaya-an.com": {
    "w": [
@@ -54044,7 +54047,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "takumifresno.com": {
    "w": [
@@ -54766,7 +54769,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "koyoteslc.com": {
    "w": [
@@ -55545,7 +55548,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "yamasushiportland.com": {
    "w": [
@@ -56728,7 +56731,7 @@
     ]
    ],
    "how": "jsonld",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "ordermikouteriyaki.com": {
    "w": [
@@ -57790,7 +57793,7 @@
     ]
    ],
    "how": "text2",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "dozosushico.com": {
    "w": [
@@ -57842,7 +57845,7 @@
     ]
    ],
    "how": "jsonld",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "pokeco8.com": {
    "w": [
@@ -58035,7 +58038,7 @@
     ]
    ],
    "how": "jsonld",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "chueyfus.com": {
    "w": [
@@ -58126,7 +58129,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "rockyyamasushi.com": {
    "w": [
@@ -58169,7 +58172,7 @@
     ]
    ],
    "how": "jsonld",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "fujiyamasushi.com": {
    "w": [
@@ -58942,7 +58945,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "kokoromaki.com": {
    "w": [
@@ -59071,7 +59074,7 @@
     []
    ],
    "how": "jsonld",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "jinzenstl.com": {
    "w": [
@@ -59372,7 +59375,7 @@
     ]
    ],
    "how": "jsonld",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "mytokio.com": {
    "w": [
@@ -59468,7 +59471,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "kaiyosushinebraska.com": {
    "w": [
@@ -59993,7 +59996,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "konomigrill.com": {
    "w": [
@@ -60061,7 +60064,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "sakuragrandforks.com": {
    "w": [
@@ -60548,7 +60551,7 @@
     ]
    ],
    "how": "jsonld",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "sequoiamadison.com": {
    "w": [
@@ -61704,7 +61707,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "firebowlhibachiandsushi.com": {
    "w": [
@@ -61747,7 +61750,7 @@
     []
    ],
    "how": "jsonld",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "southahan.com": {
    "w": [
@@ -61900,7 +61903,7 @@
     ]
    ],
    "how": "jsonld",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "bowlinggreen.takeoutwaiter.com": {
    "w": [
@@ -64051,7 +64054,7 @@
     ]
    ],
    "how": "jsonld",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "kimura138.com": {
    "w": [
@@ -64200,7 +64203,7 @@
     ]
    ],
    "how": "jsonld",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "mammothpoke.com": {
    "w": [
@@ -64789,7 +64792,7 @@
     ]
    ],
    "how": "jsonld",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "sushipink.com": {
    "w": [
@@ -64875,7 +64878,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "zaabcornerlg.com": {
    "w": [
@@ -65136,7 +65139,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "hotsakesushibar.com": {
    "w": [
@@ -65212,7 +65215,7 @@
     ]
    ],
    "how": "jsonld",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "sankyusushi.com": {
    "w": [
@@ -65341,7 +65344,7 @@
     ]
    ],
    "how": "jsonld",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "yeowoosai.com": {
    "w": [
@@ -66431,7 +66434,7 @@
     ]
    ],
    "how": "jsonld",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "atosushigr.com": {
    "w": [
@@ -68084,7 +68087,7 @@
     []
    ],
    "how": "jsonld",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "thenoodlesmith.com": {
    "w": [
@@ -68629,7 +68632,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "sushinine.com": {
    "w": [
@@ -68677,7 +68680,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "barrave.com": {
    "w": [
@@ -68777,7 +68780,7 @@
     ]
    ],
    "how": "jsonld",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "bobocafeva.com": {
    "w": [
@@ -68886,7 +68889,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "sakurahibachiwv.com": {
    "w": [
@@ -69143,7 +69146,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "fuseboxlorton.com": {
    "w": [
@@ -69502,7 +69505,7 @@
     ]
    ],
    "how": "jsonld",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "crystalbonsaisushirestaurant.com": {
    "w": [
@@ -69795,7 +69798,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "umayadc.com": {
    "w": [
@@ -70270,7 +70273,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "hwagaejangtuh.com": {
    "w": [
@@ -70404,7 +70407,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "hubktv.peblla.com": {
    "w": [
@@ -70452,7 +70455,7 @@
     ]
    ],
    "how": "jsonld",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "sushijip.com": {
    "w": [
@@ -70586,7 +70589,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "yukisushi.knacfolio.com": {
    "w": [
@@ -70730,7 +70733,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "fujisushioh.com": {
    "w": [
@@ -70821,7 +70824,7 @@
     []
    ],
    "how": "jsonld",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "nanbanpgh.com": {
    "w": [
@@ -71817,7 +71820,7 @@
     []
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "theplatformz.com": {
    "w": [
@@ -72166,7 +72169,7 @@
     ]
    ],
    "how": "jsonld",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "bubblefishpa.com": {
    "w": [
@@ -72214,7 +72217,7 @@
     ]
    ],
    "how": "jsonld",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "emojiroll.com": {
    "w": [
@@ -72687,7 +72690,7 @@
     []
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "wasaibistro.com": {
    "w": [
@@ -73553,7 +73556,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "setagayany.com": {
    "w": [
@@ -75308,7 +75311,7 @@
     ]
    ],
    "how": "text2",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "worldsushiny.com": {
    "w": [
@@ -75351,7 +75354,7 @@
     []
    ],
    "how": "jsonld",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "sushiohayo.com": {
    "w": [
@@ -75488,7 +75491,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "mikugreenwich.com": {
    "w": [
@@ -76150,7 +76153,7 @@
     []
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "sushijinct.com": {
    "w": [
@@ -76300,7 +76303,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "ginbanmamaroneck.com": {
    "w": [
@@ -76372,7 +76375,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "minsushi.net": {
    "w": [
@@ -76847,7 +76850,7 @@
     ]
    ],
    "how": "jsonld",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "kimsyamisushi.com": {
    "w": [
@@ -76943,7 +76946,7 @@
     ]
    ],
    "how": "jsonld",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "fujiwoonsocket.com": {
    "w": [
@@ -77254,7 +77257,7 @@
     ]
    ],
    "how": "jsonld",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "crazystonerestaurant.com": {
    "w": [
@@ -77352,7 +77355,7 @@
     []
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "sagasushima.com": {
    "w": [
@@ -77643,7 +77646,7 @@
     ]
    ],
    "how": "jsonld",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "usushibrookline.com": {
    "w": [
@@ -77759,7 +77762,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "shaburestaurant.com": {
    "w": [
@@ -77913,7 +77916,7 @@
     ]
    ],
    "how": "jsonld",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "yoshis.net": {
    "w": [
@@ -78248,7 +78251,7 @@
     ]
    ],
    "how": "jsonld",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "koungsushimart.com": {
    "w": [
@@ -78372,7 +78375,7 @@
     ]
    ],
    "how": "jsonld",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "arincha.com": {
    "w": [
@@ -78549,7 +78552,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "kurosumikitchen.com": {
    "w": [
@@ -78678,7 +78681,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "noborestaurant.com": {
    "w": [
@@ -78956,7 +78959,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "tensukesushi.com": {
    "w": [
@@ -79133,7 +79136,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "tokisushiramen.com": {
    "w": [
@@ -79799,7 +79802,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "zennoodlehousepittsburgh.com": {
    "w": [
@@ -80014,7 +80017,7 @@
     []
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "masamunejapan.com": {
    "w": [
@@ -80128,7 +80131,7 @@
     []
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "fushimifairbanksak.com": {
    "w": [
@@ -80571,7 +80574,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "musthavemenus.com": {
    "w": [
@@ -81584,7 +81587,7 @@
     []
    ],
    "how": "jsonld",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "cleverramen.com": {
    "w": [
@@ -81632,7 +81635,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "kamukura-waikiki.com": {
    "w": [
@@ -81920,7 +81923,7 @@
     ]
    ],
    "how": "text2",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "surfnoodlebar.com": {
    "w": [
@@ -83392,7 +83395,7 @@
     ]
    ],
    "how": "text2",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "hoyagrillramen.com": {
    "w": [
@@ -83835,7 +83838,7 @@
     ]
    ],
    "how": "text2",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "summerramen.com": {
    "w": [
@@ -84050,7 +84053,7 @@
     ]
    ],
    "how": "text2",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "zururamenhibachi.com": {
    "w": [
@@ -84650,7 +84653,7 @@
     ]
    ],
    "how": "text2",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "agogosushi.com": {
    "w": [
@@ -84746,7 +84749,7 @@
     ]
    ],
    "how": "text2",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "yoichitx.com": {
    "w": [
@@ -84842,7 +84845,7 @@
     ]
    ],
    "how": "text2",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "ramenbistrotx.com": {
    "w": [
@@ -85024,7 +85027,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "mutekiramendfw.com": {
    "w": [
@@ -85139,7 +85142,7 @@
     []
    ],
    "how": "text2",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "88baobaotx.com": {
    "w": [
@@ -85427,7 +85430,7 @@
     ]
    ],
    "how": "text2",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "akumahb.com": {
    "w": [
@@ -85858,7 +85861,7 @@
     ]
    ],
    "how": "text2",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "jinyaweho.com": {
    "w": [
@@ -86050,7 +86053,7 @@
     ]
    ],
    "how": "text2",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "providers.keckmedicine.org": {
    "w": [
@@ -86800,7 +86803,7 @@
     ]
    ],
    "how": "text2",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "kosukeramenonline.com": {
    "w": [
@@ -87260,7 +87263,7 @@
     ]
    ],
    "how": "text2",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "matsukawasushi.com": {
    "w": [
@@ -87475,7 +87478,7 @@
     []
    ],
    "how": "text2",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "journeyramen.com": {
    "w": [
@@ -87529,7 +87532,7 @@
     []
    ],
    "how": "text2",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "boilga.com": {
    "w": [
@@ -87769,7 +87772,7 @@
     ]
    ],
    "how": "text2",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "takumiramenms.com": {
    "w": [
@@ -88158,7 +88161,7 @@
     ]
    ],
    "how": "text2",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "handmadedumplingsnoodles.com": {
    "w": [
@@ -88421,7 +88424,7 @@
     ]
    ],
    "how": "text2",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "cocoramen.com": {
    "w": [
@@ -88545,7 +88548,7 @@
     ]
    ],
    "how": "text2",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "shugetsu-ca.com": {
    "w": [
@@ -88660,7 +88663,7 @@
     ]
    ],
    "how": "text2",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "slurpinramenla.com": {
    "w": [
@@ -88751,7 +88754,7 @@
     ]
    ],
    "how": "text2",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "umairamenhouse.com": {
    "w": [
@@ -90385,7 +90388,7 @@
     []
    ],
    "how": "text2",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "hikariramenwa.com": {
    "w": [
@@ -90519,7 +90522,7 @@
     ]
    ],
    "how": "text2",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "ramenseattle.com": {
    "w": [
@@ -90878,7 +90881,7 @@
     ]
    ],
    "how": "text2",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "bigbiangtheory.com": {
    "w": [
@@ -91233,7 +91236,7 @@
     []
    ],
    "how": "text2",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "ramenbowls.com": {
    "w": [
@@ -91261,7 +91264,7 @@
     ]
    ],
    "how": "text2",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "xenthaiandramen.com": {
    "w": [
@@ -91649,7 +91652,7 @@
     ]
    ],
    "how": "text2",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "bkkthaifoodlafayette.com": {
    "w": [
@@ -92649,7 +92652,7 @@
     ]
    ],
    "how": "text2",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "zen-ramen.com": {
    "w": [
@@ -92993,7 +92996,7 @@
     ]
    ],
    "how": "text2",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "eatfuji.com": {
    "w": [
@@ -93285,7 +93288,7 @@
     []
    ],
    "how": "text2",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "nomurestaurants.com": {
    "w": [
@@ -93977,7 +93980,7 @@
     ]
    ],
    "how": "text2",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "lejeunepokeramen.com": {
    "w": [
@@ -94063,7 +94066,7 @@
     ]
    ],
    "how": "text2",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "yunoodlefairfax.com": {
    "w": [
@@ -94159,7 +94162,7 @@
     ]
    ],
    "how": "text2",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "jibeichuanmd.com": {
    "w": [
@@ -94447,7 +94450,7 @@
     ]
    ],
    "how": "text2",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "chopinnoodle.com": {
    "w": [
@@ -94586,7 +94589,7 @@
     ]
    ],
    "how": "text2",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "antoneskitchen.com": {
    "w": [
@@ -95019,7 +95022,7 @@
     ]
    ],
    "how": "text2",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "hipokeramen.com": {
    "w": [
@@ -95120,7 +95123,7 @@
       900
      ],
      [
-      990,
+      960,
       1260
      ]
     ],
@@ -95130,7 +95133,7 @@
       900
      ],
      [
-      990,
+      960,
       1260
      ]
     ],
@@ -95140,7 +95143,7 @@
       900
      ],
      [
-      990,
+      960,
       1260
      ]
     ],
@@ -95150,20 +95153,20 @@
       900
      ],
      [
-      990,
+      960,
       1260
      ]
     ],
     [
      [
       660,
-      1260
+      1290
      ]
     ],
     [
      [
       660,
-      1260
+      1290
      ]
     ],
     [
@@ -95174,7 +95177,7 @@
     ]
    ],
    "how": "text2",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "kikosushiramen.com": {
    "w": [
@@ -95677,7 +95680,7 @@
     ]
    ],
    "how": "text2",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "ahilincroft.com": {
    "w": [
@@ -95849,7 +95852,7 @@
     ]
    ],
    "how": "text2",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "sakananj.com": {
    "w": [
@@ -96892,7 +96895,7 @@
     ]
    ],
    "how": "text2",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "kokorohouseoframen.com": {
    "w": [
@@ -97026,7 +97029,7 @@
     ]
    ],
    "how": "text2",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "simplynoodlesnyc.com": {
    "w": [
@@ -97074,7 +97077,7 @@
     ]
    ],
    "how": "text2",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "dunhuangnoodle.com": {
    "w": [
@@ -97198,7 +97201,7 @@
     ]
    ],
    "how": "text2",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "linkthaibrooklyn.com": {
    "w": [
@@ -98075,7 +98078,7 @@
     ]
    ],
    "how": "text2",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "yokai-ramen.com": {
    "w": [
@@ -98242,7 +98245,7 @@
     ]
    ],
    "how": "text2",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "akita-ramen.com": {
    "w": [
@@ -98523,7 +98526,7 @@
     ]
    ],
    "how": "text2",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "seanskitchenkona.com": {
    "w": [
@@ -99156,7 +99159,7 @@
     ]
    ],
    "how": "text2",
-   "found": "2026-11-06"
+   "found": "2026-11-20"
   },
   "noesushimiami.com": {
    "w": [
@@ -99247,7 +99250,7 @@
     ]
    ],
    "how": "text2",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "tonisushi.com": {
    "w": [
@@ -100308,7 +100311,7 @@
     []
    ],
    "how": "text2",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "chihirosushi.com": {
    "w": [
@@ -100351,7 +100354,7 @@
     ]
    ],
    "how": "text2",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "ebaesla.com": {
    "w": [
@@ -100649,7 +100652,7 @@
     []
    ],
    "how": "text2",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "sushigala.com": {
    "w": [
@@ -101320,7 +101323,7 @@
     ]
    ],
    "how": "text2",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "sushicrushaz.com": {
    "w": [
@@ -101588,7 +101591,7 @@
     ]
    ],
    "how": "text2",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "soboba.com": {
    "w": [
@@ -102182,7 +102185,7 @@
     ]
    ],
    "how": "text2",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "ilovenoodsnola.com": {
    "w": [
@@ -102210,7 +102213,7 @@
     ]
    ],
    "how": "text2",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "jimotti.com": {
    "w": [
@@ -102436,7 +102439,7 @@
     ]
    ],
    "how": "text2",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "sushirobata.com": {
    "w": [
@@ -103668,7 +103671,7 @@
     ]
    ],
    "how": "text2",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "offthehookfb.com": {
    "w": [
@@ -104036,7 +104039,7 @@
     []
    ],
    "how": "text2",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "sohosushirancho.com": {
    "w": [
@@ -105038,7 +105041,7 @@
     ]
    ],
    "how": "text2",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "peterskitchensilverdale.com": {
    "w": [
@@ -105781,7 +105784,7 @@
     ]
    ],
    "how": "text2",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "kabukisushikc.com": {
    "w": [
@@ -105867,7 +105870,7 @@
     ]
    ],
    "how": "text2",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "kyotoatedwardsville.com": {
    "w": [
@@ -106291,7 +106294,7 @@
     ]
    ],
    "how": "text2",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "wasabiurbandale.com": {
    "w": [
@@ -106521,7 +106524,7 @@
     ]
    ],
    "how": "text2",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "globalmarketfoodhall.com": {
    "w": [
@@ -107100,7 +107103,7 @@
     ]
    ],
    "how": "text2",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "legacytokyo.com": {
    "w": [
@@ -107946,7 +107949,7 @@
     ]
    ],
    "how": "text2",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "sushithaionline.com": {
    "w": [
@@ -108162,7 +108165,7 @@
     ]
    ],
    "how": "text2",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "asianaracine.com": {
    "w": [
@@ -108264,7 +108267,7 @@
     ]
    ],
    "how": "text2",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "kotobukitoledo.com": {
    "w": [
@@ -108643,7 +108646,7 @@
     ]
    ],
    "how": "text2",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "enoodlesonline.com": {
    "w": [
@@ -108864,7 +108867,7 @@
     ]
    ],
    "how": "text2",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "nokusushi.com": {
    "w": [
@@ -109176,7 +109179,7 @@
     ]
    ],
    "how": "text2",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "ekibenbaltimore.com": {
    "w": [
@@ -109243,7 +109246,7 @@
     []
    ],
    "how": "text2",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "yokaimedina.com": {
    "w": [
@@ -109339,7 +109342,7 @@
     ]
    ],
    "how": "jsonld",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "thepacific.kitchen": {
    "w": [
@@ -109440,7 +109443,7 @@
     ]
    ],
    "how": "text2",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "otanihudson.com": {
    "w": [
@@ -109818,7 +109821,7 @@
     ]
    ],
    "how": "text2",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "morristown.sushiloungenj.com": {
    "w": [
@@ -110147,7 +110150,7 @@
     ]
    ],
    "how": "text2",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "noodlelove.com": {
    "w": [
@@ -110612,7 +110615,7 @@
     ]
    ],
    "how": "text2",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "sakanbento-japaneseexpress.com": {
    "w": [
@@ -111116,7 +111119,7 @@
     []
    ],
    "how": "text2",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "im-sushi.com": {
    "w": [
@@ -111366,7 +111369,7 @@
     ]
    ],
    "how": "text2",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "miraku-usa.com": {
    "w": [
@@ -111433,7 +111436,7 @@
     ]
    ],
    "how": "text2",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "noodledoodles.net": {
    "w": [
@@ -111620,7 +111623,7 @@
     ]
    ],
    "how": "text2",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "jasonsbbq.com": {
    "w": [
@@ -112232,7 +112235,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "ramenhousenampaid.com": {
    "w": [
@@ -112424,7 +112427,7 @@
     ]
    ],
    "how": "text2",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "tenkaramen.com": {
    "w": [
@@ -113156,7 +113159,7 @@
     ]
    ],
    "how": "text2",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "ninjabowlxpresstogo.com": {
    "w": [
@@ -113447,7 +113450,7 @@
     ]
    ],
    "how": "text2",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "osaesushiramenbistro.com": {
    "w": [
@@ -113768,7 +113771,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "kipporamen.com": {
    "w": [
@@ -114050,7 +114053,7 @@
     []
    ],
    "how": "text2",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "koku-ramen.com": {
    "w": [
@@ -114280,7 +114283,7 @@
     ]
    ],
    "how": "jsonld",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "toryumonarlington.com": {
    "w": [
@@ -115015,7 +115018,7 @@
     ]
    ],
    "how": "jsonld",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "ninjaramen2023.com": {
    "w": [
@@ -115111,7 +115114,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "bowlizakayagreeley.com": {
    "w": [
@@ -115159,7 +115162,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "ichiddofranklin.com": {
    "w": [
@@ -115671,7 +115674,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "kyuramendallas.com": {
    "w": [
@@ -116030,7 +116033,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "tanakaramencollegestation.com": {
    "w": [
@@ -116498,7 +116501,7 @@
     ]
    ],
    "how": "text2",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "housing.utexas.edu": {
    "w": [
@@ -116829,7 +116832,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "brightside.kitchen": {
    "w": [
@@ -117471,7 +117474,7 @@
     ]
    ],
    "how": "text2",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "wabisabiramen.com": {
    "w": [
@@ -118558,7 +118561,7 @@
     ]
    ],
    "how": "text2",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "umamijp.com": {
    "w": [
@@ -118632,7 +118635,7 @@
     [
      [
       420,
-      1230
+      900
      ]
     ],
     [
@@ -118649,7 +118652,7 @@
     ]
    ],
    "how": "text2",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "misosushigrill.com": {
    "w": [
@@ -120535,7 +120538,7 @@
     ]
    ],
    "how": "text2",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "jadedumpling719.com": {
    "w": [
@@ -120578,7 +120581,7 @@
     ]
    ],
    "how": "text2",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "noodlepointor.com": {
    "w": [
@@ -120669,7 +120672,7 @@
     ]
    ],
    "how": "text2",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "chicken4uwarrenton.com": {
    "w": [
@@ -120889,7 +120892,7 @@
     ]
    ],
    "how": "text2",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "gaolhao.com": {
    "w": [
@@ -126020,7 +126023,7 @@
     ]
    ],
    "how": "text2",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "umamilex.com": {
    "w": [
@@ -126068,7 +126071,7 @@
     ]
    ],
    "how": "text2",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "jbcct.com": {
    "w": [
@@ -126111,7 +126114,7 @@
     ]
    ],
    "how": "text2",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "shikihalfmoonbay.com": {
    "w": [
@@ -126159,7 +126162,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "sushiukai.com": {
    "w": [
@@ -126207,7 +126210,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "luckycatskills.com": {
    "w": [
@@ -126250,7 +126253,7 @@
     ]
    ],
    "how": "jsonld",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "kaiasdanville.com": {
    "w": [
@@ -126346,7 +126349,7 @@
     ]
    ],
    "how": "jsonld",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "weiwestnyc.com": {
    "w": [
@@ -126394,7 +126397,7 @@
     ]
    ],
    "how": "jsonld",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "sipnslurptime.cloveronline.com": {
    "w": [
@@ -126437,7 +126440,7 @@
     []
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "hanramyun.com": {
    "w": [
@@ -126485,7 +126488,7 @@
     ]
    ],
    "how": "jsonld",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "maricopayummynoodles.com": {
    "w": [
@@ -126528,7 +126531,7 @@
     ]
    ],
    "how": "text2",
-   "found": "2026-11-06"
+   "found": "2026-11-20"
   },
   "misushinoodles.com": {
    "w": [
@@ -126566,7 +126569,7 @@
     []
    ],
    "how": "text2",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "iyasushi.com": {
    "w": [
@@ -126614,7 +126617,7 @@
     ]
    ],
    "how": "jsonld",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "aztennoodles.com": {
    "w": [
@@ -131009,7 +131012,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "miyazakisushi.com": {
    "w": [
@@ -131019,7 +131022,12 @@
       1260
      ]
     ],
-    [],
+    [
+     [
+      660,
+      1260
+     ]
+    ],
     [
      [
       660,
@@ -131052,7 +131060,7 @@
     ]
    ],
    "how": "jsonld",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "yamirestaurant.com": {
    "w": [
@@ -131107,7 +131115,7 @@
     ]
    ],
    "how": "jsonld",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "sakurasmtx.com": {
    "w": [
@@ -131155,7 +131163,7 @@
     ]
    ],
    "how": "jsonld",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "sushi-valley.com": {
    "w": [
@@ -131214,7 +131222,7 @@
     []
    ],
    "how": "text2",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "yoonbusangukbap.com": {
    "w": [
@@ -131262,7 +131270,7 @@
     ]
    ],
    "how": "microdata",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "masaabilene.com": {
    "w": [
@@ -131310,7 +131318,7 @@
     ]
    ],
    "how": "jsonld",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "masatx.com": {
    "w": [
@@ -131358,7 +131366,7 @@
     ]
    ],
    "how": "jsonld",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "oyogusushi.weebly.com": {
    "w": [
@@ -131406,7 +131414,7 @@
     ]
    ],
    "how": "text2",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "asiangardendacula.com": {
    "w": [
@@ -131449,7 +131457,7 @@
     ]
    ],
    "how": "jsonld",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "kmannaofficial.com": {
    "w": [
@@ -131492,7 +131500,7 @@
     []
    ],
    "how": "text2",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "bentosushifairoaks.com": {
    "w": [
@@ -131540,7 +131548,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "wzbistro.com": {
    "w": [
@@ -131583,7 +131591,7 @@
     ]
    ],
    "how": "jsonld",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "tokyowallawalla.com": {
    "w": [
@@ -131631,7 +131639,7 @@
     ]
    ],
    "how": "text2",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "ginzahibachi.com": {
    "w": [
@@ -131679,7 +131687,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "ariyoshinyc.com": {
    "w": [
@@ -131722,7 +131730,7 @@
     ]
    ],
    "how": "text2",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "njsushi.com": {
    "w": [
@@ -131770,7 +131778,7 @@
     ]
    ],
    "how": "jsonld",
-   "found": "2026-11-06"
+   "found": "2026-11-20"
   },
   "fussion-sushi.com": {
    "w": [
@@ -131818,7 +131826,7 @@
     ]
    ],
    "how": "text2",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "sumomadison.com": {
    "w": [
@@ -131858,7 +131866,7 @@
     []
    ],
    "how": "text2",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "izarobatatx.com": {
    "w": [
@@ -131906,7 +131914,7 @@
     ]
    ],
    "how": "text2",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "kokoramenpoke.com": {
    "w": [
@@ -136117,7 +136125,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "orderotorosushi.com": {
    "w": [
@@ -136160,7 +136168,7 @@
     []
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "kotetsuhawaii.com": {
    "w": [
@@ -136208,7 +136216,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "hanenyc.com": {
    "w": [
@@ -136284,7 +136292,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "lilbowlthai.com": {
    "w": [
@@ -136312,7 +136320,7 @@
     ]
    ],
    "how": "jsonld",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "katanariverview.com": {
    "w": [
@@ -136355,7 +136363,7 @@
     ]
    ],
    "how": "jsonld",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "ginzagourmetteriyakihousefresno.gastrobars.com": {
    "w": [
@@ -136398,7 +136406,7 @@
     []
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "sushihashi.com": {
    "w": [
@@ -136446,7 +136454,7 @@
     ]
    ],
    "how": "text2",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "bigbowlslittleplates.com": {
    "w": [
@@ -136489,7 +136497,7 @@
     ]
    ],
    "how": "jsonld",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "komeyahouston.com": {
    "w": [
@@ -137166,6 +137174,54 @@
    ],
    "how": "jsonld",
    "found": "2026-11-19"
+  },
+  "rockandrollsushi.com": {
+   "w": [
+    [
+     [
+      660,
+      1260
+     ]
+    ],
+    [
+     [
+      660,
+      1260
+     ]
+    ],
+    [
+     [
+      660,
+      1260
+     ]
+    ],
+    [
+     [
+      660,
+      1260
+     ]
+    ],
+    [
+     [
+      660,
+      1320
+     ]
+    ],
+    [
+     [
+      660,
+      1320
+     ]
+    ],
+    [
+     [
+      660,
+      1260
+     ]
+    ]
+   ],
+   "how": "text",
+   "found": "2026-11-20"
   }
  },
  "page_hours": {
@@ -138139,7 +138195,7 @@
     ]
    ],
    "how": "jsonld",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "tatsuramen.com/tatsu-ramen-melrose": {
    "w": [
@@ -138187,7 +138243,7 @@
     ]
    ],
    "how": "jsonld",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "tsujita.com/westchase-tx": {
    "w": [
@@ -139218,7 +139274,7 @@
     ]
    ],
    "how": "text2",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "kyuramen.com/locations/arcadia": {
    "w": [
@@ -139266,7 +139322,7 @@
     ]
    ],
    "how": "text2",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "taishokenusa.com/milpitas": {
    "w": [
@@ -139333,7 +139389,7 @@
     ]
    ],
    "how": "jsonld",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "taishokenusa.com/nyc": {
    "w": [
@@ -139400,7 +139456,7 @@
     ]
    ],
    "how": "jsonld",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "zenramensushiburrito.com/cartersville": {
    "w": [
@@ -140393,7 +140449,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "sohomb.com/myrtle-beach-soho-steak-and-seafood-sushi-bar-21st-soho-north": {
    "w": [
@@ -140463,12 +140519,7 @@
       1350
      ]
     ],
-    [
-     [
-      690,
-      1350
-     ]
-    ],
+    [],
     [
      [
       690,
@@ -140489,7 +140540,7 @@
     ]
    ],
    "how": "text2",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "wagamama.us/restaurants/new-york/midtown": {
    "w": [
@@ -140511,12 +140562,7 @@
       1350
      ]
     ],
-    [
-     [
-      690,
-      1350
-     ]
-    ],
+    [],
     [
      [
       690,
@@ -140537,7 +140583,7 @@
     ]
    ],
    "how": "text2",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "wagamama.us/restaurants/boston/boston-prudential-center": {
    "w": [
@@ -140559,12 +140605,7 @@
       1350
      ]
     ],
-    [
-     [
-      690,
-      1350
-     ]
-    ],
+    [],
     [
      [
       690,
@@ -140585,7 +140626,7 @@
     ]
    ],
    "how": "text2",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "wagamama.us/restaurants/new-york/murray-hill": {
    "w": [
@@ -140607,12 +140648,7 @@
       1350
      ]
     ],
-    [
-     [
-      690,
-      1350
-     ]
-    ],
+    [],
     [
      [
       690,
@@ -140633,7 +140669,7 @@
     ]
    ],
    "how": "text2",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "statestreetmarket.com/menu/orenchi-ramen": {
    "w": [
@@ -141296,7 +141332,7 @@
     ]
    ],
    "how": "text2",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "group.bishamon-ten.com/midoh": {
    "w": [
@@ -143275,7 +143311,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "kurasushi.com/locations/aventura-fl": {
    "w": [
@@ -143323,7 +143359,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "kurasushi.com/locations/orlando-fl-waterford-lakes-town-center": {
    "w": [
@@ -143371,7 +143407,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "kurasushi.com/locations/wellington-fl": {
    "w": [
@@ -143419,7 +143455,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "kurasushi.com/locations/san-diego-ca-mission-valley": {
    "w": [
@@ -143473,25 +143509,31 @@
    "w": [
     [
      [
-      660,
+      630,
       1260
      ]
     ],
     [
      [
-      660,
+      630,
       1260
      ]
     ],
     [
      [
-      660,
+      630,
       1260
      ]
     ],
     [
      [
-      660,
+      630,
+      1260
+     ]
+    ],
+    [
+     [
+      630,
       1260
      ]
     ],
@@ -143503,19 +143545,13 @@
     ],
     [
      [
-      630,
+      660,
       1320
-     ]
-    ],
-    [
-     [
-      630,
-      1260
      ]
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "kurasushi.com/locations/san-antonio-tx": {
    "w": [
@@ -143563,7 +143599,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "kurasushi.com/locations/sunset-valley-tx": {
    "w": [
@@ -143659,7 +143695,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "kurasushi.com/locations/pflugerville-tx": {
    "w": [
@@ -143755,7 +143791,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "kurasushi.com/locations/carrollton-tx": {
    "w": [
@@ -143803,7 +143839,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "kurasushi.com/locations/torrance-ca": {
    "w": [
@@ -143851,7 +143887,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "kurasushi.com/locations/los-angeles-ca-sawtelle": {
    "w": [
@@ -143899,7 +143935,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "kurasushi.com/locations/cypress-ca": {
    "w": [
@@ -143947,7 +143983,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "kurasushi.com/locations/garden-grove-ca": {
    "w": [
@@ -143969,12 +144005,7 @@
       1290
      ]
     ],
-    [
-     [
-      690,
-      1290
-     ]
-    ],
+    [],
     [
      [
       690,
@@ -143995,7 +144026,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "kurasushi.com/locations/los-angeles-ca-little-tokyo": {
    "w": [
@@ -144043,7 +144074,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "kurasushi.com/locations/sherman-oaks-ca": {
    "w": [
@@ -144091,7 +144122,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "kurasushi.com/locations/arcadia-ca": {
    "w": [
@@ -144139,7 +144170,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "kurasushi.com/locations/temecula-ca": {
    "w": [
@@ -144235,7 +144266,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "kurasushi.com/locations/phoenix-az-camelback": {
    "w": [
@@ -144283,7 +144314,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "kurasushi.com/locations/irvine-ca": {
    "w": [
@@ -144331,7 +144362,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "kurasushi.com/locations/orange-ca": {
    "w": [
@@ -144427,7 +144458,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "kurasushi.com/locations/rancho-cucamonga-ca": {
    "w": [
@@ -144475,7 +144506,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "kurasushi.com/locations/sugar-land": {
    "w": [
@@ -144571,7 +144602,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "kurasushi.com/locations/katy-tx": {
    "w": [
@@ -144619,7 +144650,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "kurasushi.com/locations/houston-tx-midtown": {
    "w": [
@@ -144667,7 +144698,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "kurasushi.com/locations/the-woodlands-tx": {
    "w": [
@@ -144763,7 +144794,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "kurasushi.com/locations/frisco-tx": {
    "w": [
@@ -144811,7 +144842,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "kurasushi.com/locations/doraville-ga": {
    "w": [
@@ -144859,7 +144890,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "kurasushi.com/locations/union-city-ca": {
    "w": [
@@ -144907,7 +144938,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "kurasushi.com/locations/pleasanton-ca": {
    "w": [
@@ -144955,7 +144986,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "kurasushi.com/locations/sacramento-ca-arden": {
    "w": [
@@ -145003,7 +145034,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "kurasushi.com/locations/las-vegas-nv": {
    "w": [
@@ -145034,7 +145065,7 @@
     [
      [
       690,
-      1260
+      1320
      ]
     ],
     [
@@ -145051,7 +145082,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "kurasushi.com/locations/modesto-ca": {
    "w": [
@@ -145099,7 +145130,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "kurasushi.com/locations/beaverton-or": {
    "w": [
@@ -145147,7 +145178,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "kurasushi.com/locations/tacoma-wa": {
    "w": [
@@ -145195,7 +145226,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "kurasushi.com/locations/bellevue-wa": {
    "w": [
@@ -145243,7 +145274,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "kurasushi.com/locations/tulsa-ok": {
    "w": [
@@ -145291,7 +145322,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "kurasushi.com/locations/boulder-co": {
    "w": [
@@ -145387,7 +145418,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "kurasushi.com/locations/oakbrook-terrace-il": {
    "w": [
@@ -145435,7 +145466,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "kurasushi.com/locations/troy-mi": {
    "w": [
@@ -145483,7 +145514,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "kurasushi.com/locations/charlotte-nc": {
    "w": [
@@ -145579,7 +145610,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "kurasushi.com/locations/washington-dc": {
    "w": [
@@ -145610,24 +145641,24 @@
     [
      [
       690,
+      1320
+     ]
+    ],
+    [
+     [
+      660,
+      1320
+     ]
+    ],
+    [
+     [
+      660,
       1290
-     ]
-    ],
-    [
-     [
-      660,
-      1320
-     ]
-    ],
-    [
-     [
-      660,
-      1320
      ]
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "kurasushi.com/locations/pittsburgh-pa": {
    "w": [
@@ -145675,7 +145706,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "kurasushi.com/locations/philadelphia-pa": {
    "w": [
@@ -145723,7 +145754,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "kurasushi.com/locations/lawrenceville-nj": {
    "w": [
@@ -145867,7 +145898,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "kurasushi.com/locations/parsippany-nj": {
    "w": [
@@ -145963,7 +145994,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "kurasushi.com/locations/fort-lee-nj": {
    "w": [
@@ -146011,7 +146042,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "kurasushi.com/locations/carle-place-ny": {
    "w": [
@@ -146059,7 +146090,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "kurasushi.com/locations/framingham-ma": {
    "w": [
@@ -146107,7 +146138,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "kurasushi.com/locations/watertown-ma": {
    "w": [
@@ -146155,7 +146186,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "locations.noodles.com/fl/orlando/12101-university-blvd": {
    "w": [
@@ -160358,7 +160389,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "wholefoodsmarket.com/stores/downtownmiami": {
    "w": [
@@ -160454,7 +160485,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "locations.noodles.com/az/surprise/e1359": {
    "w": [
@@ -160641,7 +160672,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "kurasushi.com/locations/fishers-in": {
    "w": [
@@ -160689,7 +160720,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "kurasushi.com/locations/cherry-hill-nj": {
    "w": [
@@ -160737,7 +160768,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "kurasushi.com/locations/novi-mi": {
    "w": [
@@ -160759,12 +160790,7 @@
       1260
      ]
     ],
-    [
-     [
-      660,
-      1260
-     ]
-    ],
+    [],
     [
      [
       660,
@@ -160785,7 +160811,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "kurasushi.com/locations/lake-grove-ny": {
    "w": [
@@ -160833,7 +160859,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "kurasushi.com/locations/naperville-il": {
    "w": [
@@ -160881,7 +160907,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "kurasushi.com/locations/webster-tx": {
    "w": [
@@ -160929,7 +160955,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "kurasushi.com/locations/euless-tx": {
    "w": [
@@ -160977,7 +161003,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "kurasushi.com/locations/cerritos-ca": {
    "w": [
@@ -161025,7 +161051,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "kurasushi.com/locations/san-jose-ca": {
    "w": [
@@ -161073,7 +161099,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "kurasushi.com/locations/cupertino-ca": {
    "w": [
@@ -161121,7 +161147,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "kurasushi.com/locations/san-francisco-ca-stonestown": {
    "w": [
@@ -161169,7 +161195,7 @@
     ]
    ],
    "how": "text",
-   "found": "2026-11-13"
+   "found": "2026-11-20"
   },
   "cyrusramsey.com/places/melanies-kitchen-asian-cuisine": {
    "w": [
