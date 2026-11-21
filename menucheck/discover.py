@@ -349,9 +349,9 @@ def build_published(state: dict, optout: set[str]) -> tuple[list[dict], Counter]
     out, why = [], Counter()
     hidden = load_not_ramen()
 
-    def add(entry: dict, f: str, extra: dict | None = None):
+    def add(entry: dict, f: str, extra: dict | None = None, always: bool = False):
         p = {"name": entry["name"], "lat": entry["lat"], "lon": entry["lon"], "website": entry.get("website")}
-        if opted_out(p["website"], optout) or known.has(p):
+        if opted_out(p["website"], optout) or (known.has(p) and not always):
             return
         if f != "web" and is_not_ramen(entry["name"], entry.get("address"), hidden):   # vouched shops are never hidden
             why["not ramen (hidden)"] += 1
@@ -362,8 +362,10 @@ def build_published(state: dict, optout: set[str]) -> tuple[list[dict], Counter]
                     "a": entry.get("address"), "w": entry.get("website"), "f": f, **(extra or {})})
 
     # Shops checked in person come first: that's the best word there is.
+    # Always published, even if Overture lists it too: a hand-added entry carries the right page and hours,
+    # and the app merges the two listings into one.
     for p in state.get("vouched", []):
-        add(p, "web", {"v": 1})
+        add(p, "web", {"v": 1}, always=True)
     # Chains first (their own site is the best word on where they are), then Overture, then new websites.
     for name, rec in sorted(state.get("chains", {}).items()):
         for p in rec.get("places", []):
