@@ -105,6 +105,7 @@ def check_group(crawler: Crawler, places: list[dict]) -> list[tuple[dict, dict]]
         if combined.dishes > v.dishes:
             v, url = combined, (url if v.dishes else site.pages[-1].url)
         rec = {"kind": v.kind, "dishes": v.dishes, "broths": v.broths, "items": v.menu_items,
+               **({"styles": v.styles} if v.styles and v.kind != "none" else {}),
                "menu": url if v.kind != "none" else None, "err": None,
                "examples": v.examples, "reason": v.reason, "rv": RULES_VERSION}
     return [(p, rec) for p in places]
@@ -213,6 +214,7 @@ def publish(state, places_state, current, candidates, release, found, dry_run, q
             "id": pid, "n": s["name"], "la": s["lat"], "lo": s["lon"], "a": s.get("address"),
             "w": clean_url(s.get("website")), "m": clean_url(s.get("menu")), "k": s["kind"], "d": s["dishes"],
             **({"b": s["broths"]} if s.get("broths", 0) >= 2 else {}),
+            **({"st": s["styles"]} if s.get("styles") else {}),
             "c": s["checked"],
         }
         for pid, s in sorted(places_state.items())

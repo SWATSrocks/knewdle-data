@@ -15,7 +15,7 @@ Only facts are kept (how many ramen dishes, which kind of place), never the menu
 from __future__ import annotations
 
 import re
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 # A dish line must contain one of these. "ramen" can't start mid-word (Sacramento), but may be
 # followed by letters (Ramenya). Specific styles count even without the word "ramen".
@@ -76,6 +76,40 @@ TOPPINGS = re.compile(
 WINDOW = 4  # a dish's description usually fits on the next few lines
 
 
+# Ramen styles a menu lists (ids match the app's Knewdle Knowledge cards). Read from ramen dish lines and the
+# few lines under them, so "miso soup" on a sushi menu doesn't count.
+STYLE_PATTERNS = {
+    "shoyu": r"shoyu|soy sauce ramen",
+    "shio": r"shio(?! ?ya)|salt ramen",
+    "miso": r"miso",
+    "tonkotsu": r"tonkotsu|hakata|pork bone broth",
+    "iekei": r"iekei|ie-kei|ie kei",
+    "tsukemen": r"tsukemen|dipping ramen|dipping noodles?",
+    "tantanmen": r"tan ?tan(?: ?men)?|dan ?dan",
+    "jiro": r"jiro",
+    "tori_paitan": r"paitan|chicken paitan|creamy chicken",
+    "mazesoba": r"maze ?soba|mazemen|maze-men|abura ?soba|brothless",
+    "hiyashi": r"hiyashi|cold ramen|chilled ramen",
+    "kitakata": r"kitakata",
+    "niboshi": r"niboshi|sardine",
+    "vegan": r"vegan|vegetarian|veggie|plant[- ]based",
+}
+_STYLE_RX = {k: re.compile(rf"(?<![a-z])(?:{v})", re.I) for k, v in STYLE_PATTERNS.items()}
+
+
+def styles_in(lines: list[str], dish_lines: set[str]) -> list[str]:
+    """Styles named in ramen dish lines (plus the next 2 lines of each, where descriptions sit)."""
+    found = set()
+    for i, line in enumerate(lines):
+        if line not in dish_lines:
+            continue
+        window = " ".join(lines[i:i + 3])
+        for k, rx in _STYLE_RX.items():
+            if rx.search(window):
+                found.add(k)
+    return sorted(found)
+
+
 @dataclass
 class Verdict:
     kind: str            # "shop" | "serves" | "none"
@@ -84,6 +118,7 @@ class Verdict:
     examples: list[str]  # up to 3 dish names, for the log only (never published)
     broths: int = 0      # broth choices offered for a single ramen bowl (0 when not applicable)
     reason: str = ""     # which rule decided it (for the log)
+    styles: list[str] = field(default_factory=list)   # ramen styles the menu lists (see STYLE_PATTERNS)
 
 
 def _broths_in(text: str) -> tuple[set[str], set[str]]:
@@ -191,19 +226,21 @@ def classify(text: str, name: str = "") -> Verdict:
 
     n = len(dishes)
     size = max(priced, n)
+    found_styles = styles_in(lines, set(dishes.values()))
     # "Ramen-focused" needs a menu we could actually size (8+ priced items) where ramen is a real share.
     focused_menu = priced >= 8 and n / size >= 0.25
     noodle_place = bool(NOODLE_NAME.search(name or ""))  # e.g. "Bao and Broth", "Menya Hana"
     if n >= 5 and (focused_menu or noodle_place):
-        return Verdict("shop", n, priced, list(dishes.values())[:3], reason="5+ ramen dishes")
+        return Verdict("shop", n, priced, list(dishes.values())[:3], reason="5+ ramen dishes", styles=found_styles)
     if n >= 2:
-        return Verdict("serves", n, priced, list(dishes.values())[:3], reason="2+ ramen dishes")
+        return Verdict("serves", n, priced, list(dishes.values())[:3], reason="2+ ramen dishes", styles=found_styles)
     single = _single_bowl(lines)
     if single:
         rule, broths, line = single
         return Verdict("serves", 1, priced, [line], broths=broths,
-                       reason="1 bowl, %d broth choices" % broths if rule == "choices" else "1 genuine ramen bowl")
+                       reason="1 bowl, %d broth choices" % broths if rule == "choices" else "1 genuine ramen bowl",
+                       styles=styles_in(lines, {line}))
     one = _one_dish(lines, dishes, priced)
     if one:
-        return Verdict("serves", 1, priced, [one], reason="1 ramen dish")
+        return Verdict("serves", 1, priced, [one], reason="1 ramen dish", styles=styles_in(lines, {one}))
     return Verdict("none", n, priced, list(dishes.values())[:3])
