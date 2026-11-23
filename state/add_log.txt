@@ -1,42 +1,42 @@
-Vouched shops: 5
+Vouched shops: 6
   (vouched: 0s)
 {
-  "generated": "2026-11-21",
-  "published": 1287,
+  "generated": "2026-11-23",
+  "published": 1427,
   "by_way_found": {
     "web": 8,
-    "chain": 59,
+    "chain": 60,
     "hall": 11,
-    "noodle": 82,
+    "noodle": 87,
     "site": 52,
-    "name": 15,
+    "name": 16,
     "brand": 2,
-    "fsq": 1058,
+    "fsq": 1191,
     "not ramen (hidden)": 2
   },
   "vouched": {
-    "published": 5
+    "published": 6
   }
 }
 Added by hand: 1 website(s)
   reading 0 of them this run
   (web: 0s)
 {
-  "generated": "2026-11-21",
-  "published": 1287,
+  "generated": "2026-11-23",
+  "published": 1427,
   "by_way_found": {
     "web": 8,
-    "chain": 59,
+    "chain": 60,
     "hall": 11,
-    "noodle": 82,
+    "noodle": 87,
     "site": 52,
-    "name": 15,
+    "name": 16,
     "brand": 2,
-    "fsq": 1058,
+    "fsq": 1191,
     "not ramen (hidden)": 2
   },
   "vouched": {
-    "published": 5
+    "published": 6
   },
   "web": {}
 }
