@@ -16,9 +16,58 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  fetch:
+  # Geofabrik's downloads slowed to about 1 MB/s (US West alone took 53 minutes), so the five regions no longer
+  # fit in one job. Each region now downloads in its own job, side by side, and keeps only its ramen.
+  region:
     runs-on: ubuntu-latest
-    timeout-minutes: 90
+    timeout-minutes: 170
+    strategy:
+      fail-fast: false
+      matrix:
+        r: [us-west, us-midwest, us-northeast, us-south, us/puerto-rico]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: sudo apt-get update -qq && sudo apt-get install -y -qq osmium-tool
+      - name: Download and filter ${{ matrix.r }}
+        env:
+          R: ${{ matrix.r }}
+        run: |
+          set -e
+          W=$( [ -d /mnt ] && [ -w /mnt ] && echo /mnt/osm || echo "$RUNNER_TEMP/osm" ); sudo mkdir -p "$W"; sudo chown "$USER" "$W"
+          # Retry refused connections and dropped downloads too (Geofabrik sometimes turns connections away for a bit)
+          curl -fsSL --retry 6 --retry-delay 60 --retry-connrefused --retry-all-errors \
+            -A "knewdle-data (https://github.com/SWATSrocks/knewdle-data)" \
+            -o "$W/r.osm.pbf" "https://download.geofabrik.de/north-america/$R-latest.osm.pbf"
+          ls -la "$W/r.osm.pbf"
+          osmium tags-filter --overwrite -o "$W/f.osm.pbf" "$W/r.osm.pbf" nwr/amenity=restaurant,fast_food,food_court
+          rm -f "$W/r.osm.pbf"
+          osmium export --overwrite -f geojsonseq -a type,id --geometry-types=point,polygon -o "$W/f.geojsonseq" "$W/f.osm.pbf"
+          mkdir -p out
+          python -c "import sys,json; from menucheck.osm import element
+          n=k=0
+          with open(sys.argv[1],encoding='utf-8') as f, open(sys.argv[2],'w',encoding='utf-8') as o:
+              for line in f:
+                  line=line.strip().lstrip(chr(30))
+                  if not line: continue
+                  n+=1
+                  try: ok=element(json.loads(line))
+                  except Exception: ok=None
+                  if ok: k+=1; o.write(line+chr(10))
+          print(n,'restaurants,',k,'ramen')" "$W/f.geojsonseq" "out/ramen.geojsonseq"
+          echo "NAME=$(echo "$R" | tr / -)" >> "$GITHUB_ENV"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: osm-${{ env.NAME }}
+          path: out/ramen.geojsonseq
+          retention-days: 2
+
+  publish:
+    needs: region
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -26,27 +75,13 @@ jobs:
           python-version: "3.12"
           cache: pip
       - run: pip install -r requirements.txt
-      - run: sudo apt-get update -qq && sudo apt-get install -y -qq osmium-tool
-      - name: Download and filter each US region (one at a time, so the disk never fills)
-        run: |
-          set -e
-          W=$( [ -d /mnt ] && [ -w /mnt ] && echo /mnt/osm || echo "$RUNNER_TEMP/osm" ); sudo mkdir -p "$W"; sudo chown "$USER" "$W"
-          df -h "$W" | tail -1
-          : > "$W/all.geojsonseq"
-          for r in us-west us-midwest us-northeast us-south us/puerto-rico; do
-            echo "== $r"
-            curl -fsSL --retry 3 -A "knewdle-data (https://github.com/SWATSrocks/knewdle-data)" \
-              -o "$W/r.osm.pbf" "https://download.geofabrik.de/north-america/$r-latest.osm.pbf"
-            ls -la "$W/r.osm.pbf"
-            osmium tags-filter --overwrite -o "$W/f.osm.pbf" "$W/r.osm.pbf" nwr/amenity=restaurant,fast_food,food_court
-            rm -f "$W/r.osm.pbf"
-            osmium export --overwrite -f geojsonseq -a type,id --geometry-types=point,polygon -o "$W/f.geojsonseq" "$W/f.osm.pbf"
-            cat "$W/f.geojsonseq" >> "$W/all.geojsonseq"
-            rm -f "$W/f.osm.pbf" "$W/f.geojsonseq"
-          done
-          echo "OSM_FILE=$W/all.geojsonseq" >> "$GITHUB_ENV"
+      - uses: actions/download-artifact@v4
+        with:
+          path: parts
       - name: Pick out the ramen
-        run: python -u -m menucheck.osm "$OSM_FILE"
+        run: |
+          cat parts/*/ramen.geojsonseq > all.geojsonseq
+          python -u -m menucheck.osm all.geojsonseq
       - name: Publish
         run: |
           git config user.name "knewdle-menu-check"
