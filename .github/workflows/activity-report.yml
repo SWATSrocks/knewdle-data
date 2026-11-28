@@ -1,0 +1,35 @@
+# Read-only: shop activity, stamps, ratings and visits in the app's anonymous counts. Run by hand.
+name: Activity report
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  report:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ratings
+    env:
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: Totals
+        run: |
+          q() { echo "== $1"; npx -y wrangler@4 d1 execute knewdle-ratings --remote --json --command "$2" | python3 -c "
+          import sys,json
+          for r in json.load(sys.stdin)[0]['results']: print('  ' + ' | '.join(str(v) for v in r.values()))"; }
+          q "Events by kind, last 30 days (events, shops)" "SELECT kind, SUM(n), COUNT(DISTINCT shop) FROM shop_stats WHERE day >= date('now','-30 days') GROUP BY kind ORDER BY 2 DESC"
+          q "Events by day, last 21 days (seen/open/go/site/stamp)" "SELECT day, SUM(CASE WHEN kind='seen' THEN n END), SUM(CASE WHEN kind='open' THEN n END), SUM(CASE WHEN kind='go' THEN n END), SUM(CASE WHEN kind='site' THEN n END), SUM(CASE WHEN kind='stamp' THEN n END) FROM shop_stats WHERE day >= date('now','-21 days') GROUP BY day ORDER BY day"
+          q "Every stamp ever (day, shop, n)" "SELECT day, shop, n FROM shop_stats WHERE kind='stamp' ORDER BY day DESC LIMIT 50"
+          q "Stamp visitors by month (people)" "SELECT month, COUNT(*) FROM shop_visitors GROUP BY month ORDER BY month"
+          q "Bowls logged" "SELECT month, SUM(n) FROM shop_bowls GROUP BY month"
+          q "Ratings (only offered after a stamp): total, last 30 days" "SELECT COUNT(*), SUM(updated >= date('now','-30 days')) FROM ratings"
+          q "Ratings by month" "SELECT substr(updated,1,7), COUNT(*) FROM ratings GROUP BY 1 ORDER BY 1"
+          q "In-person reports by kind and month" "SELECT kind, substr(updated,1,7), COUNT(*) FROM reports GROUP BY 1,2 ORDER BY 2,1"
+          q "Leaderboard players (players, total shops)" "SELECT COUNT(*), SUM(all_shops), MAX(all_shops) FROM lb_players"
+          q "Top shops by directions taps, last 30 days" "SELECT s.shop, COALESCE(i.name,''), SUM(s.n) FROM shop_stats s LEFT JOIN shop_info i ON i.shop=s.shop WHERE s.kind='go' AND s.day >= date('now','-30 days') GROUP BY s.shop ORDER BY 3 DESC LIMIT 15"
