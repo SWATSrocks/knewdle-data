@@ -1,5 +1,8 @@
 """Which ramen styles each ramen shop serves, read from its own website menu (published as docs/styles.json).
 
+Also notes the shop's own "join the waitlist" link when its website posts one (styles.json "wait"), for the app's
+Join the waitlist button. We only read the shop's own site; the app just opens that link.
+
     python -m menucheck.styles [--max-sites 6000] [--workers 24] [--focus lat,lon] [--dry-run]
 
 Covers every shop the app can show that has a website: places from the menu check, OpenStreetMap ramen shops
@@ -70,6 +73,7 @@ def read_styles(crawler: Crawler, website: str, name: str) -> dict:
     if not site.ok:
         return {"err": site.error or "unreachable"}
     best = []
+    wait = next((p.waitlist for p in site.pages if p.waitlist), None)
     for page in site.pages:
         v = classify(page.text, name)
         if v.kind != "none" and len(v.styles) > len(best):
@@ -77,7 +81,10 @@ def read_styles(crawler: Crawler, website: str, name: str) -> dict:
     combined = classify("\n".join(p.text for p in site.pages), name)
     if combined.kind != "none":
         best = sorted(set(best) | set(combined.styles))
-    return {"styles": best}
+    rec = {"styles": best, "wk": 1}
+    if wait:
+        rec["wait"] = wait
+    return rec
 
 
 def main() -> int:
@@ -101,7 +108,8 @@ def main() -> int:
         if any(host == o or host.endswith("." + o) for o in optout):
             continue
         prev = seen.get(k)
-        if prev is None or days_since(prev.get("checked")) >= RECHECK_DAYS:
+        # "wk": read since waitlist links were added (sites read before that get one more read now).
+        if prev is None or not prev.get("wk") or days_since(prev.get("checked")) >= RECHECK_DAYS:
             due.append((0 if prev is None else 1, prev.get("checked", "") if prev else "", k))
     due.sort()
     if args.focus.strip():
@@ -138,11 +146,12 @@ def main() -> int:
         if k not in all_sites:
             del seen[k]
     published = {k: v["styles"] for k, v in sorted(seen.items()) if v.get("styles")}
-    print(f"Done: {done} read in {time.time() - t0:.0f}s; {len(published)} sites with known styles")
+    waits = {k: v["wait"] for k, v in sorted(seen.items()) if v.get("wait")}
+    print(f"Done: {done} read in {time.time() - t0:.0f}s; {len(published)} sites with known styles, {len(waits)} with a waitlist link")
     if args.dry_run:
         return 0
     STATE.write_text(json.dumps(state, separators=(",", ":")))
-    OUT.write_text(json.dumps({"v": 1, "generated": today(), "sites": published}, separators=(",", ":")))
+    OUT.write_text(json.dumps({"v": 1, "generated": today(), "sites": published, "wait": waits}, separators=(",", ":")))
     return 0
 
 

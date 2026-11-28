@@ -20,6 +20,8 @@ from urllib.parse import urljoin, urlparse
 import requests
 from bs4 import BeautifulSoup
 
+from .waitlist import find_waitlist
+
 BOT_NAME = "KnewdleNOW-MenuCheck"
 USER_AGENT = f"{BOT_NAME}/1.0 (+{{info_url}})"
 
@@ -62,6 +64,7 @@ MENU_HINT = re.compile(r"menu|food|dinner|lunch|ramen|noodle|eat|kitchen", re.IG
 class Page:
     url: str
     text: str
+    waitlist: str | None = None   # the shop's own "join the waitlist" link on this page, if any
 
 
 @dataclass
@@ -199,10 +202,16 @@ class Crawler:
         return r
 
     def _page_text(self, r: requests.Response) -> tuple[str, list[str]]:
+        text, links, _ = self._page_parts(r)
+        return text, links
+
+    def _page_parts(self, r: requests.Response) -> tuple[str, list[str], str | None]:
+        """Page text, menu-ish links, and the shop's own waitlist link (if it posts one)."""
         ctype = r.headers.get("content-type", "").lower()
         if "pdf" in ctype or r.url.lower().split("?")[0].endswith(".pdf"):
-            return _pdf_text(r.content), []
+            return _pdf_text(r.content), [], None
         soup = BeautifulSoup(r.content, "html.parser")
+        wait = find_waitlist(soup, r.url)
         for tag in soup(["script", "style", "noscript", "svg", "iframe"]):
             tag.decompose()
         links = []
@@ -212,7 +221,7 @@ class Crawler:
             if href.startswith("http") and (MENU_HINT.search(label) or MENU_HINT.search(urlparse(href).path)):
                 links.append(href)
         text = soup.get_text("\n", strip=True)
-        return text, links
+        return text, links, wait
 
     def read_site(self, website: str) -> CrawlResult:
         url = website if website.startswith("http") else "https://" + website
@@ -238,8 +247,8 @@ class Crawler:
         if home is None:
             return CrawlResult(False, error=last_error)
 
-        home_text, links = self._page_text(home)
-        result = CrawlResult(True, [Page(home.url, home_text)])
+        home_text, links, wait = self._page_parts(home)
+        result = CrawlResult(True, [Page(home.url, home_text, wait)])
         site = _site_key(_host(home.url))
         seen = {_norm(home.url)}
         queue = _rank_menu_links(links)
@@ -268,9 +277,9 @@ class Crawler:
                 continue
             if r is None:
                 continue
-            text, sub_links = self._page_text(r)
+            text, sub_links, wait = self._page_parts(r)
             if text:
-                result.pages.append(Page(r.url, text))
+                result.pages.append(Page(r.url, text, wait))
             # A "Menus" page often just links to the real menu (a PDF or a "Dinner" page): look there next.
             deeper = [u for u in _rank_menu_links(sub_links) if _norm(u) not in seen and u not in queue]
             queue = deeper + queue

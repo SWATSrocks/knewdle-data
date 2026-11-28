@@ -24,7 +24,7 @@ import * as featured from "./featured.js";
  *                   src/medium = the Play install link's utm tags, e.g. "instagram"/"qr"; nothing about the person)
  *   GET  /pulse?key=PULSE_KEY -> {"total", "today", "day", "last", "sources_today", "recent"}  (404 without the key)
  *   POST /events {"device", "events": [{k: shop key, name, la, lo, t: kind, d: day, w?, h?, s?}]} -> per-shop daily totals
- *                   for the shops' reports (seen/open/go/site/menu/share/call/stamp/bowl); nothing per person is kept.
+ *                   for the shops' reports (seen/open/go/site/menu/share/call/stamp/bowl/wait); nothing per person is kept.
  *   GET  /pulse/shops?key=PULSE_KEY&days=30 -> every shop with activity and its counts;  /pulse/shop?…&shop=<key> -> one shop's detail.
  *   GET  /pulse/origin?key=PULSE_KEY -> {"stores": {"Google Play": n, …}, "copies": [...], "copies_total"}: which store installed
  *                   each copy, and copies that aren't the real app (another package name, or a signing key no Play install has).
@@ -482,7 +482,7 @@ function sameKey(a, b) {
   return x === 0;
 }
 // ---- Shop insights (for the shops' monthly reports) ----
-const EVENT_KINDS = new Set(["seen", "open", "go", "site", "menu", "share", "call", "stamp", "bowl"]);
+const EVENT_KINDS = new Set(["seen", "open", "go", "site", "menu", "share", "call", "stamp", "bowl", "wait"]);
 const EVENT_POSTS_PER_DEVICE_PER_DAY = 40;
 const SHOP_KEY = /^[a-z0-9.\-]{1,120}@-?\d{1,3}\.\d{2},-?\d{1,3}\.\d{2}$/;
 function cleanName(v) { return String(v || "").replace(/[\u0000-\u001f<>]/g, "").trim().slice(0, 80); }
@@ -557,7 +557,7 @@ async function pulseShops(env, days) {
     const m = meta.get(r.shop) || {};
     const pt = shopPoint(r.shop);
     const o = out.get(r.shop) || { shop: r.shop, name: m.name || r.shop.split("@")[0], lat: m.lat ?? (pt ? pt[0] : null), lon: m.lon ?? (pt ? pt[1] : null),
-      seen: 0, open: 0, go: 0, site: 0, menu: 0, share: 0, call: 0, stamp: 0, people: 0, repeat: 0 };
+      seen: 0, open: 0, go: 0, site: 0, menu: 0, share: 0, call: 0, wait: 0, stamp: 0, people: 0, repeat: 0 };
     o[r.kind] = r.n;
     out.set(r.shop, o);
   }
