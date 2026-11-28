@@ -26,3 +26,8 @@ def test_find_on_page():
     assert find_waitlist(page('<a href="https://www.yelp.com/biz/x">Yelp</a>'), "https://s.com/") is None
     # A reservations link that happens to be on a waitlist-capable service is not a waitlist
     assert find_waitlist(page('<a href="https://www.opentable.com/r/x?waitlist=1">Reservations</a>'), "https://s.com/") is None
+
+
+def test_yelp_widget_cleaned():
+    html = '<iframe src="https://www.yelp.com/waitlist/amakara-dublin/widget?theme=dark"></iframe>'
+    assert find_waitlist(page(html), "https://s.com/") == "https://www.yelp.com/waitlist/amakara-dublin"

@@ -43,6 +43,14 @@ def is_waitlist_url(url: str, label: str = "") -> bool:
     return False
 
 
+def clean(url: str) -> str:
+    """A Yelp waitlist embedded as a widget ("/waitlist/x/widget?theme=dark") -> its normal page."""
+    if "yelp.com/waitlist/" in url.lower():
+        url = url.split("?")[0]
+        url = re.sub(r"/widget/?$", "", url)
+    return url
+
+
 def find_waitlist(soup, base: str) -> str | None:
     """The first waitlist link (or embedded waitlist widget) on a parsed page, else None."""
     for a in soup.find_all("a", href=True):
@@ -51,9 +59,9 @@ def find_waitlist(soup, base: str) -> str | None:
         if NOT_IT.search(label):
             continue
         if is_waitlist_url(href, label):
-            return href
+            return clean(href)
     for f in soup.find_all("iframe", src=True):
         src = urljoin(base, f["src"]).split("#")[0]
         if is_waitlist_url(src):
-            return src
+            return clean(src)
     return None
