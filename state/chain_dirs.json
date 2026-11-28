@@ -1,7 +1,7 @@
 {
  "Noodles & Company": {
   "last": {
-   "date": "2026-11-27",
+   "date": "2026-11-28",
    "hidden": 7,
    "listings": 452,
    "missing": 7
@@ -31,7 +31,7 @@
     ]
    },
    "co": {
-    "checked": "2026-11-22",
+    "checked": "2026-11-28",
     "stores": [
      "arvada/6408-yank-way",
      "arvada/8071-wadsworth-blvd",
@@ -123,7 +123,7 @@
     ]
    },
    "il": {
-    "checked": "2026-11-22",
+    "checked": "2026-11-28",
     "stores": [
      "arlington-heights/66-s-arlington-heights-road",
      "aurora/2365-n-farnsworth",
@@ -173,7 +173,7 @@
     ]
    },
    "in": {
-    "checked": "2026-11-22",
+    "checked": "2026-11-28",
     "stores": [
      "bloomington/2560-e-3rd-st",
      "bloomington/517-e-kirkwood-avenue",
@@ -388,7 +388,7 @@
     ]
    },
    "or": {
-    "checked": "2026-11-22",
+    "checked": "2026-11-28",
     "stores": [
      "beaverton/4655-sw-griffith-dr",
      "clackamas/12190-se-82nd-ave",
@@ -397,7 +397,7 @@
     ]
    },
    "pa": {
-    "checked": "2026-11-22",
+    "checked": "2026-11-28",
     "stores": [
      "camp-hill/164-south-32nd-street",
      "cranberry-township/2030-mackenzie-way",
@@ -478,7 +478,7 @@
     ]
    },
    "wi": {
-    "checked": "2026-11-22",
+    "checked": "2026-11-28",
     "stores": [
      "appleton/3719-east-calumet",
      "appleton/4333-wisconsin-ave-and-hwy-41",
