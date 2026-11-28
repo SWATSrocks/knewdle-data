@@ -3,7 +3,9 @@ import * as featured from "./featured.js";
  * Knewdle NOW ratings: a tiny free Cloudflare Worker.
  *
  *   POST /rate      {"shop": "...", "stars": 1-5, "device": "..."}   -> {"ok": true}
- *   GET  /averages  -> {"generated": "...", "shops": [{"k": shop, "avg": 4.6, "n": 12}, ...]}  (3+ ratings only)
+ *   GET  /averages  -> {"generated": "...", "shops": [{"k": shop, "avg": 4.6, "n": 12}, ...],
+ *                       "bowls": [{"k": shop, "s": "tonkotsu", "avg": 4.5, "n": 7}, ...]}  (3+ ratings only)
+ *   POST /rate-bowl {"shop": "...", "style": "tonkotsu", "stars": 1-5, "device": "..."} -> {"ok": true}
  *   POST /report    {"shop": "...", "device": "...", "kind": "closed" | "closed-here" | "open-here", "name": "Shop name"} -> {"ok": true}
  *                   ("closed-here": the phone passed the in-person check, the same one as Passport stamps)
  *                   "open-here": the phone was at the shop and found it open (arrival check or Passport stamp)
@@ -110,6 +112,44 @@ async function rate(request, env) {
     ).bind(who, day),
     // Old limit rows are useless after a day.
     env.DB.prepare("DELETE FROM limits WHERE day < ?").bind(day),
+  ]);
+  return json({ ok: true });
+}
+
+const STYLE = /^[a-z_]{2,30}$/;
+const BOWL_RATINGS_PER_DEVICE_PER_DAY = 40;
+
+// One phone's rating of one bowl style at one shop (the app offers it only for bowls logged on a stamped visit).
+async function rateBowl(request, env) {
+  let body;
+  try {
+    body = await request.json();
+  } catch {
+    return json({ ok: false, error: "bad request" }, 400);
+  }
+  const shop = String(body.shop || "").toLowerCase();
+  const device = String(body.device || "");
+  const style = String(body.style || "");
+  const stars = Number(body.stars);
+  if (!SHOP.test(shop) || !DEVICE.test(device) || !STYLE.test(style) || style === "other" ||
+      !Number.isInteger(stars) || stars < 1 || stars > 5) {
+    return json({ ok: false, error: "bad rating" }, 400);
+  }
+  const day = new Date().toISOString().slice(0, 10);
+  const who = await sha256((request.headers.get("cf-connecting-ip") || "unknown") + "|" + day);
+  const row = await env.DB.prepare("SELECT count FROM limits WHERE who = ? AND day = ?").bind(who, day).first();
+  if (row && row.count >= PER_ADDRESS_PER_DAY) return json({ ok: false, error: "too many today" }, 429);
+  const mine = await env.DB.prepare("SELECT COUNT(*) AS c FROM bowl_ratings WHERE device = ? AND updated = ?")
+    .bind(device, day).first();
+  if (mine && mine.c >= BOWL_RATINGS_PER_DEVICE_PER_DAY) return json({ ok: false, error: "too many today" }, 429);
+  await env.DB.batch([
+    env.DB.prepare(
+      "INSERT INTO bowl_ratings (shop, device, style, stars, updated) VALUES (?, ?, ?, ?, ?) " +
+        "ON CONFLICT (shop, device, style) DO UPDATE SET stars = excluded.stars, updated = excluded.updated"
+    ).bind(shop, device, style, stars, day),
+    env.DB.prepare(
+      "INSERT INTO limits (who, day, count) VALUES (?, ?, 1) ON CONFLICT (who, day) DO UPDATE SET count = count + 1"
+    ).bind(who, day),
   ]);
   return json({ ok: true });
 }
@@ -299,10 +339,16 @@ async function pulseFix(request, env) {
 }
 
 async function averages(env) {
-  const { results } = await env.DB.prepare(
-    "SELECT shop AS k, ROUND(AVG(stars), 1) AS avg, COUNT(*) AS n FROM ratings GROUP BY shop HAVING COUNT(*) >= ?"
-  ).bind(MIN_RATINGS).all();
-  return json({ generated: new Date().toISOString(), min: MIN_RATINGS, shops: results },
+  const [{ results }, bowls] = await Promise.all([
+    env.DB.prepare(
+      "SELECT shop AS k, ROUND(AVG(stars), 1) AS avg, COUNT(*) AS n FROM ratings GROUP BY shop HAVING COUNT(*) >= ?"
+    ).bind(MIN_RATINGS).all(),
+    env.DB.prepare(
+      "SELECT shop AS k, style AS s, ROUND(AVG(stars), 1) AS avg, COUNT(*) AS n FROM bowl_ratings " +
+        "GROUP BY shop, style HAVING COUNT(*) >= ?"
+    ).bind(MIN_RATINGS).all(),
+  ]);
+  return json({ generated: new Date().toISOString(), min: MIN_RATINGS, shops: results, bowls: bowls.results || [] },
     200, { "cache-control": "public, max-age=900" });
 }
 
@@ -808,6 +854,7 @@ export default {
     }
     try {
       if (url.pathname === "/rate" && request.method === "POST") return await rate(request, env);
+      if (url.pathname === "/rate-bowl" && request.method === "POST") return await rateBowl(request, env);
       if (url.pathname === "/averages" && request.method === "GET") return await averages(env);
       if (url.pathname === "/report" && request.method === "POST") return await report(request, env);
       if (url.pathname === "/unreport" && request.method === "POST") return await unreport(request, env);

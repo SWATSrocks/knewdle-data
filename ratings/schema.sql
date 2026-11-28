@@ -166,3 +166,15 @@ CREATE TABLE IF NOT EXISTS featured_events (
   v     TEXT
 );
 CREATE INDEX IF NOT EXISTS featured_events_ts ON featured_events (ts);
+
+-- Verified bowl ratings: one 1-5 rating per phone per shop per ramen style (only offered after a Passport stamp
+-- with that bowl logged). Averages are published per shop and style with 3+ ratings.
+CREATE TABLE IF NOT EXISTS bowl_ratings (
+  shop    TEXT NOT NULL,
+  device  TEXT NOT NULL,
+  style   TEXT NOT NULL,
+  stars   INTEGER NOT NULL CHECK (stars BETWEEN 1 AND 5),
+  updated TEXT NOT NULL,
+  PRIMARY KEY (shop, device, style)
+);
+CREATE INDEX IF NOT EXISTS bowl_ratings_by_device ON bowl_ratings (device, updated);

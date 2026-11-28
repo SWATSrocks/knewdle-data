@@ -108,6 +108,16 @@ jobs:
             --command "SELECT shop, stars FROM ratings WHERE device = 'smoke-test-device-0001'"
           npx -y wrangler@4 d1 execute knewdle-ratings --remote \
             --command "DELETE FROM ratings WHERE device = 'smoke-test-device-0001'"
+          # A bowl rating round trip (bad style refused), then clean it up.
+          code=$(curl -s -o /dev/null -w "%{http_code}" -X POST "$BASE/rate-bowl" -H "content-type: application/json" \
+            -d '{"shop":"test.knewdle@0.00,0.00","style":"Bad Style!","stars":4,"device":"smoke-test-device-0001"}')
+          echo "bad bowl rating answered HTTP $code (expected 400)"; [ "$code" = "400" ]
+          curl -fsS -X POST "$BASE/rate-bowl" -H "content-type: application/json" \
+            -d '{"shop":"test.knewdle@0.00,0.00","style":"tonkotsu","stars":4,"device":"smoke-test-device-0001"}' ; echo
+          npx -y wrangler@4 d1 execute knewdle-ratings --remote \
+            --command "SELECT shop, style, stars FROM bowl_ratings WHERE device = 'smoke-test-device-0001'" | grep -q tonkotsu
+          npx -y wrangler@4 d1 execute knewdle-ratings --remote \
+            --command "DELETE FROM bowl_ratings WHERE device = 'smoke-test-device-0001'"
           # A closed-report round trip, then clean it up.
           curl -fsS -X POST "$BASE/report" -H "content-type: application/json" \
             -d '{"shop":"test.knewdle@0.00,0.00","kind":"closed","name":"Test","device":"smoke-test-device-0001"}' ; echo
